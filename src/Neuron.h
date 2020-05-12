@@ -6,7 +6,7 @@
 //charge: current charge of Neuron
 //criticalCharge: charge needed for current Neuron to pulse
 //pulse: charge that current Neuron sends to its recievers
-//recievers: Neurons that current Neuron pulses
+//recievers: indexes of Neurons in the network that current Neuron pulses
 
 #ifndef NEURON
 #define NEURON
@@ -23,16 +23,18 @@ class Neuron{
 	
 	//constructors
 	Neuron() = default;
-	Neuron(int c, int cc,int p): charge(c), criticalCharge(cc), pulse(p) {}
+	Neuron(int cc,int p): criticalCharge(cc), pulse(p) {}
 	
-
+	//displays the current Neuron's info
 	const std::string info() const;
+
+	Neuron& operator=(const Neuron &);
 
 	private:
 	int charge{0};
 	int criticalCharge{1};
 	int pulse{1};
-	std::forward_list<Neuron> *recievers{nullptr};
+	std::forward_list<int> *recievers{nullptr};
 
 };
 

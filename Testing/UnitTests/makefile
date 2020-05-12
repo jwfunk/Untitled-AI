@@ -1,11 +1,18 @@
 CXX=g++
 CXXFLAGS=-Wall
 CXXFLAGS+=-std=c++11
-all:build
+all:neuron network
 ../../src/Neuron.o: ../../src/Neuron.cpp ../../src/Neuron.h
+
+../../src/Network.o: ../../src/Network.cpp ../../src/Network.h
 clean:
 	-rm ../../src/Neuron.o
-	-rm test
+	-rm neuronUnitTests
+	-rm ../../src/Network.o
+	-rm networkUnitTests
 
-build: NeuronUnitTests.cpp ../../src/Neuron.o
-	$(CXX) $(CXXFLAGS) -o test NeuronUnitTests.cpp ../../src/Neuron.o
+neuron: NeuronUnitTests.cpp ../../src/Neuron.o
+	$(CXX) $(CXXFLAGS) -o neuronUnitTests NeuronUnitTests.cpp ../../src/Neuron.o
+
+network: NetworkUnitTests.cpp ../../src/Network.o
+	$(CXX) $(CXXFLAGS) -o networkUnitTests NetworkUnitTests.cpp ../../src/Network.o ../../src/Neuron.o
