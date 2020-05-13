@@ -11,8 +11,8 @@
 #ifndef NETWORK
 #define NETWORK
 
-#define INITSIZE 32
-#define MAZSIZE 2048
+#define INITSIZE 64
+#define MAXSIZE 2048
 
 #include "Neuron.h"
 #include <forward_list>

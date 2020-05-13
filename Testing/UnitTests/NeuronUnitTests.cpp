@@ -3,7 +3,7 @@
 int main(){
 
 
-	std::cout << "Neuron Unit Tests\n\n";
+	std::cout << "\n\nNeuron Unit Tests\n\n";
 
 	//Constructor tests
 	std::cout << "Default Constructor Test: ";
