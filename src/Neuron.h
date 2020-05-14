@@ -24,6 +24,13 @@ class Neuron{
 	//constructors
 	Neuron() = default;
 	Neuron(int cc,int p): criticalCharge(cc), pulse(p) {}
+
+	
+	//Adds specified int to recievers list. Currently allows duplicates
+	int addReciever(int);
+
+	//Removes all instances of specified int from recievers list if it exists
+	int removeReciever(int);
 	
 	//displays the current Neuron's info
 	const std::string info() const;

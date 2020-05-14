@@ -3,6 +3,11 @@
 
 #include "Network.h"
 
+Network::Network(){
+	inputs = new std::forward_list<int>;
+	outputs = new std::forward_list<int>;
+}
+
 std::ostream& operator<<(std::ostream &os, const Network &i){
 
 	os << i.info();
@@ -60,6 +65,31 @@ int Network::addNeuron(const Neuron n){
 		neurons = newneurons;
 		this->addNeuron(n);
 		return 0;
+	}
+	return 1;
+}
+
+int Network::removeNeuron(int i){
+	if(i >= size || i < 0)
+		return 1;
+	if(index[i / 32] & 1<<(i % 32)){
+		index[i / 32] &= ~(1<<(i % 32));
+		//inputs->remove(i);
+		//outputs->remove(i);
+		for(int j = 0;j < size;j++){
+			if(index[j / 32] & 1<<(j % 32))
+				neurons[j].removeReciever(i);
+		}
+	}
+	return 0;
+	
+}
+
+int Network::addInput(int i){
+	if(i >= size || i < 0)
+                return 1;
+	if(index[i / 32] & 1<<(i % 32)){
+		inputs->push_front(i);
 	}
 	return 1;
 }

@@ -2,7 +2,6 @@
 //Neuron.cpp
 
 #include "Neuron.h"
-#include <iterator>
 
 std::ostream& operator<<(std::ostream &os, const Neuron &i){
 	os << i.info();
@@ -10,13 +9,7 @@ std::ostream& operator<<(std::ostream &os, const Neuron &i){
 }
 
 const std::string Neuron::info() const {
-	std::string r = "Charge: " + std::to_string(charge) + "\nCritical Charge: " + std::to_string(criticalCharge) + "\nPulse: " + std::to_string(pulse) + "\nRecievers: ";
-	std::forward_list <int> :: iterator it;
-        if(recievers != nullptr)
-		for(it = recievers->begin(); it != recievers->end(); ++it){
-			r += std::to_string(*it) + ",";
-		}
-	r += "-1";
+	std::string r = "Charge: " + std::to_string(charge) + "\nCritical Charge: " + std::to_string(criticalCharge) + "\nPulse: " + std::to_string(pulse);
 	return r;
 }
 
@@ -24,12 +17,6 @@ int Neuron::addReciever(int i) {
 	if(recievers == nullptr)
 		recievers = new std::forward_list<int>;
 	recievers->push_front(i);
-	return 0;
-}
-
-int Neuron::removeReciever(int i) {
-	if(recievers != nullptr)
-		recievers->remove(i);
 	return 0;
 }
 

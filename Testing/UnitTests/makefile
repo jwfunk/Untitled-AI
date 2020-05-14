@@ -1,6 +1,7 @@
 CXX=g++
 CXXFLAGS=-Wall
 CXXFLAGS+=-std=c++11
+CXXFLAGS+=-ggdb3
 all:neuron network
 ../../src/Neuron.o: ../../src/Neuron.cpp ../../src/Neuron.h
 

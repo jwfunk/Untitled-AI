@@ -25,7 +25,7 @@ class Network {
 	public:
 
 	//constructors
-	Network() = default;
+	Network();
 
 	//Adds the given neuron to the network. Returns 0 on success and 1 on failure
 	int addNeuron(const Neuron);
