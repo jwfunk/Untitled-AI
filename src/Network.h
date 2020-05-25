@@ -11,6 +11,7 @@
 #ifndef NETWORK
 #define NETWORK
 
+#define MAXITERATIONS 1000
 #define INITSIZE 64
 #define MAXSIZE 2048
 
@@ -18,6 +19,7 @@
 #include <forward_list>
 #include <string>
 
+enum structure {AND,OR,XOR,NOT,PAND,POR};
 class Network {
 
 	friend std::ostream& operator<<(std::ostream&, const Network&);
@@ -33,15 +35,43 @@ class Network {
 	//Removes the Neuron at neurons[int]. Returns 0 on success and 1 on failure
 	int removeNeuron(int);
 
-	//Adds the int to inputs. Returns 0 on success and 1 on failure
+	//Adds logic gate structure specified by structure enum
+	//first two ints are input Neurons to structure
+	//Second int isn't used if unary structure
+	//Third int is output Neuron of structure
+	int addStructure(structure,int,int,int);
+
+	//Adds the int to inputs. Returns 0 on success and 1 on failure. Can be duplicate inputs
 	int addInput(int);
 
 	//Removes the int from inputs. Returns 0 on success and 1 on failure
 	int removeInput(int);
 
+	//Adds the int to outputs. Returns 0 on success and 1 on failure
+	int addOutput(int);
+
+	//Removes the int from outputs. Returns 0 on success and 1 on failure
+	int removeOutput(int);
+
+	//given list must be the same length as inputs or returns -1
+	//Activates input neurons if given list has a 1 for the specified index
+	//ex:
+	//inputs: 1 3 5 6
+	//given:  0 1 1 0
+	//Neurons 3 and 5 pulse in beginning
+	//processes until an output neuron fires or maximum time hits
+	//returns index of output neuron or -1 if max time is hit
+	int process(std::forward_list<int>*);
+
+	//Clears the charges of all Neurons in the network
+	void clear();
+
 	const std::string info() const;
 
 	private:
+
+	//returns the next free location in neurons or -1 if full
+        int nextLocation();
 	
 	std::forward_list<int> *inputs{nullptr};
 	std::forward_list<int> *outputs{nullptr};

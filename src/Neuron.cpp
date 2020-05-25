@@ -38,7 +38,10 @@ Neuron& Neuron::operator=(const Neuron &i){
 		this->charge = i.charge;
 		this->criticalCharge = i.criticalCharge;
 		this->pulse = i.pulse;
-		this->recievers = i.recievers;
+		std::forward_list <int> :: iterator it;
+		if(i.recievers != nullptr)
+			for(it = i.recievers->begin(); it != i.recievers->end(); ++it)
+				(*this).addReciever(*it);
 	}
 	return *this;
 }
