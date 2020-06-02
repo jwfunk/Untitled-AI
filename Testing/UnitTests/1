@@ -497,8 +497,11 @@ Network& Network::operator=(const Network &i){
 	                delete[] index;
 	        }
 	        inputs->clear();
+	        delete(inputs);
 	        outputs->clear();
+	        delete(outputs);
 		size = i.size;
+
 		neurons = new Neuron[size];
 		index = new int[size / 32];
 			
@@ -509,16 +512,16 @@ Network& Network::operator=(const Network &i){
 			neurons[j] = i.neurons[j];
 		}
 		
-		//inputs = new std::forward_list<int>;
-        	//outputs = new std::forward_list<int>;               
+		inputs = new std::forward_list<int>;
+        	outputs = new std::forward_list<int>;               
 		//for(auto it = i.inputs->begin();it != i.inputs->end();++it){
 		//	inputs->push_front(*it);
 		//} 
 		//for(auto it = i.outputs->begin();it != i.outputs->end();++it){
 		//	outputs->push_front(*it);
 		//}
-		*inputs = *(i.inputs);
-		*outputs = *(i.outputs);
+		inputs = i.inputs;
+		outputs = i.outputs;
         }
         return *this;
 }

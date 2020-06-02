@@ -14,6 +14,7 @@
 #define MAXITERATIONS 1000
 #define INITSIZE 64
 #define MAXSIZE 2048
+#define NMUTATIONS 4
 
 #include "Neuron.h"
 #include <forward_list>
@@ -66,12 +67,23 @@ class Network {
 	//Clears the charges of all Neurons in the network
 	void clear();
 
+	//mutates a random aspect of the Network
+	void mutate();
+
 	const std::string info() const;
+
+	Network& operator=(const Network &);
+
+	~Network();
 
 	private:
 
 	//returns the next free location in neurons or -1 if full
         int nextLocation();
+
+	int expendable(int);
+
+	int anyExpendable();
 	
 	std::forward_list<int> *inputs{nullptr};
 	std::forward_list<int> *outputs{nullptr};

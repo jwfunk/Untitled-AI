@@ -35,13 +35,15 @@ int Neuron::removeReciever(int i) {
 
 Neuron& Neuron::operator=(const Neuron &i){
 	if(this != &i){
-		this->charge = i.charge;
+		this->charge = 0;
 		this->criticalCharge = i.criticalCharge;
 		this->pulse = i.pulse;
 		std::forward_list <int> :: iterator it;
 		if(i.recievers != nullptr)
 			for(it = i.recievers->begin(); it != i.recievers->end(); ++it)
 				(*this).addReciever(*it);
+		else
+			recievers = nullptr;
 	}
 	return *this;
 }

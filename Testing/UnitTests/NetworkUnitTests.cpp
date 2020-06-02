@@ -675,6 +675,15 @@ int main(){
                 results.push_back(1);
         }
 
+	test++;
+        std::cout << "\t" << test << " Testing assignment operator: ";
+	Network t1 = Network();
+	Network t2 = t1;
+	t1.addNeuron(n3);
+	t2.addNeuron(n3);
+	t2.mutate();
+	std::cout << t1;
+
 	int total = 0;
 	int passed = 0;
 	std::list <int> :: iterator it; 

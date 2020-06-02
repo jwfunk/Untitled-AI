@@ -12,7 +12,7 @@
 #define TRAINER
 
 #include "Network.h"
-#include "Neurons.h"
+#include "Neuron.h"
 #include <utility>
 #include <iostream>
 #include <vector>
@@ -22,7 +22,7 @@
 //Given a vector of pairs
 //pair.first is a forward list representing a vector of inputs for the network
 //pair.second is the expected result for the input
-//enum is the number of enumerations the training method will go through
-void trainTargetLearning(std::vector<std::pair<std::forward_list<int>,int> >,int);
+//enumerations is the number of enumerations the training method will go through
+void trainTargetLearning(Network&,std::vector<std::pair<std::forward_list<int>,int> >&,int);
 
 #endif
