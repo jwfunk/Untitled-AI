@@ -318,9 +318,10 @@ int Network::process(std::forward_list<int> *given){
 
 		return -1;
 	}
-	
+	int changed;	
 	//Process the Data
 	for(int i = 0;i < MAXITERATIONS;i++){
+		changed = 0;
 		for(int j = 0;j < size;j++){
                         if(index[j / 32] & 1<<(j % 32))
                                 if(neurons[j].charge >= neurons[j].criticalCharge){
@@ -329,6 +330,7 @@ int Network::process(std::forward_list<int> *given){
 							neurons[*it1].charge += neurons[j].pulse;
 						}
 					neurons[j].charge -= neurons[j].criticalCharge;
+					changed = 1;
 				}
                 }
 
@@ -337,7 +339,10 @@ int Network::process(std::forward_list<int> *given){
 				(*this).clear();//clear network charges
 				return *it1;
 			}
-		
+		if(!changed){
+			(*this).clear();
+			return -1;
+		}
 	}
 	(*this).clear();	
 	return -1;
@@ -352,7 +357,31 @@ void Network::clear(){
 
 void Network::mutate(){
 	for(int m = 0;m < NMUTATIONS;m++){
-		int choice = std::rand() % 12;
+		
+		int choice;
+		int mutation = std::rand() % (4 * size + 7);
+		if(mutation < size)
+			choice = 2;
+		if(mutation >= size && mutation < (2 * size))
+			choice = 3;
+		if(mutation >= (2 * size) && mutation < (3 * size))
+			choice = 10;
+		if(mutation >= (3 * size) && mutation < (4 * size))
+			choice = 1;
+		if(mutation == (4 * size))
+			choice = 0;
+		if(mutation == (4 * size + 1))
+			choice = 4;
+		if(mutation == (4 * size + 2))
+                        choice = 5;
+		if(mutation == (4 * size + 3))
+                        choice = 6;
+		if(mutation == (4 * size + 4))
+                        choice = 7;
+		if(mutation == (4 * size + 5))
+                        choice = 8;
+		if(mutation == (4 * size + 6))
+                        choice = 9;
 		switch(choice){
 			case 0://add Neuron
 			{
@@ -387,8 +416,10 @@ void Network::mutate(){
 					modify = std::rand() % size;
 				if((std::rand() % 2))
 					neurons[modify].criticalCharge += 1;
-				else
-					neurons[modify].criticalCharge -= 1;
+				else{
+					if(neurons[modify].criticalCharge != 1)
+						neurons[modify].criticalCharge -= 1;
+				}
 				return;
 			}
 			case 3://modify pulse
@@ -477,6 +508,17 @@ void Network::mutate(){
                                 (*this).addStructure(PAND,sender1,0,reciever);
 				return;
                         }
+			case 10://add reciever
+			{
+				int sender = std::rand() % size;
+                                while(!(index[sender / 32] & 1<<(sender % 32)))
+                                        sender = std::rand() % size;
+                                int reciever = std::rand() % size;
+                                while(!(index[reciever / 32] & 1<<(reciever % 32)))
+                                        reciever = std::rand() % size;
+                                neurons[sender].addReciever(reciever);
+                                return;
+			}
 		}		
 	}
 }

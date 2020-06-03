@@ -12,14 +12,15 @@ void trainTargetLearning( Network &n, std::vector<std::pair<std::forward_list<in
 	std::srand(std::time(0));
 	std::cout << "Training network for " << enumerations << " enumerations:\n";
 	for(int i = 0;i < enumerations;i++){
-		int iterations = 1000;
+		int iterations = 300000;
 		Network copy;
 		double accuracy, copyAccuracy;
+		double total;
+
 		for(int j = 0;j < iterations;j++){
 			std::cout << "\r";
 			accuracy = 0;
-			double total = 0;
-			
+			total = 0;
 			for(auto it = targetData.begin(); it != targetData.end();++it){
 				if(n.process(&((*it).first)) == (*it).second){
 					accuracy++;
@@ -57,7 +58,7 @@ void trainTargetLearning( Network &n, std::vector<std::pair<std::forward_list<in
 			if(copyAccuracy > accuracy){
 				n = copy;
 			}			
-		}
+		} 
 		std::cout << "\n\n";
 	}
 	std::ofstream file;
