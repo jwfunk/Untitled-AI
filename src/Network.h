@@ -85,8 +85,8 @@ class Network {
 
 	int anyExpendable();
 	
-	std::forward_list<int> *inputs{nullptr};
-	std::forward_list<int> *outputs{nullptr};
+	std::forward_list<int> inputs;
+	std::forward_list<int> outputs;
 	Neuron *neurons{nullptr};
 	int size{0};
 	int *index{nullptr};

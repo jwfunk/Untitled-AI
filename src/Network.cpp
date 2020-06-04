@@ -7,8 +7,7 @@
 #include <ctime>
 
 Network::Network(){
-	inputs = new std::forward_list<int>;
-	outputs = new std::forward_list<int>;
+
 }
 
 std::ostream& operator<<(std::ostream &os, const Network &i){
@@ -21,11 +20,11 @@ const std::string Network::info() const {
 	if(size == 0)
 		return "Empty Network";
 	std::string r = "Inputs: ";
-	std::forward_list <int> :: iterator it;
-	for(it = inputs->begin(); it != inputs->end(); ++it)
+	
+	for(auto it = inputs.begin(); it != inputs.end(); ++it)
 		r += std::to_string(*it) + ",";
 	r += "-1\nOutputs: ";
-	for(it = outputs->begin(); it != outputs->end(); ++it)
+	for(auto it = outputs.begin(); it != outputs.end(); ++it)
 		r += std::to_string(*it) + ",";
 	r += "-1\n";
 	int e = 0;	
@@ -247,8 +246,8 @@ int Network::removeNeuron(int i){
 		return 1;
 	if(index[i / 32] & 1<<(i % 32)){
 		index[i / 32] &= ~(1<<(i % 32));
-		inputs->remove(i);
-		outputs->remove(i);
+		inputs.remove(i);
+		outputs.remove(i);
 		for(int j = 0;j < size;j++){
 			if(index[j / 32] & 1<<(j % 32))
 				neurons[j].removeReciever(i);
@@ -262,14 +261,14 @@ int Network::addInput(int i){
 	if(i >= size || i < 0)
                 return 1;
 	if(index[i / 32] & 1<<(i % 32)){
-		inputs->push_front(i);
+		inputs.push_front(i);
 		return 0;
 	}
 	return 1;
 }
 
 int Network::removeInput(int i){
-	inputs->remove(i);
+	inputs.remove(i);
 	return 0;
 }
 
@@ -277,7 +276,7 @@ int Network::addOutput(int i){
 	if(i >= size || i < 0)
                 return 1;
         if(index[i / 32] & 1<<(i % 32)){
-                outputs->push_front(i);
+                outputs.push_front(i);
 		neurons[i].pulse = neurons[i].criticalCharge;
 		neurons[i].addReciever(i);
                 return 0;
@@ -286,17 +285,17 @@ int Network::addOutput(int i){
 }
 
 int Network::removeOutput(int i){
-	outputs->remove(i);
+	outputs.remove(i);
 	return 0;
 }
 
 int Network::process(std::forward_list<int> *given){
 
 	//Activate input Neurons
-	std::forward_list <int> :: iterator it1;
+	
 	std::forward_list <int> :: iterator it2;
 	it2 = given->begin();
-	for(it1 = inputs->begin(); it1 != inputs->end(); ++it1){
+	for(auto it1 = inputs.begin(); it1 != inputs.end(); ++it1){
 		if(it2 == given->end()){
 			(*this).clear();//clear the network
 			return -1;
@@ -318,7 +317,7 @@ int Network::process(std::forward_list<int> *given){
                         if(index[j / 32] & 1<<(j % 32))
                                 if(neurons[j].charge >= neurons[j].criticalCharge){
 					
-					for(it1 = neurons[j].recievers.begin();it1 != neurons[j].recievers.end();++it1){
+					for(auto it1 = neurons[j].recievers.begin();it1 != neurons[j].recievers.end();++it1){
 						neurons[*it1].charge += neurons[j].pulse;
 					}
 					neurons[j].charge -= neurons[j].criticalCharge;
@@ -326,7 +325,7 @@ int Network::process(std::forward_list<int> *given){
 				}
                 }
 
-		for(it1 = outputs->begin();it1 != outputs->end();++it1)
+		for(auto it1 = outputs.begin();it1 != outputs.end();++it1)
 			if(neurons[*it1].charge >= neurons[*it1].criticalCharge){
 				(*this).clear();//clear network charges
 				return *it1;
@@ -342,8 +341,8 @@ int Network::process(std::forward_list<int> *given){
 
 void Network::clear(){
 	for(int j = 0;j < size;j++){
-                        if(index[j / 32] & 1<<(j % 32))
-				neurons[j].charge = 0;
+                if(index[j / 32] & 1<<(j % 32))
+			neurons[j].charge = 0;
 	}
 }
 
@@ -523,8 +522,6 @@ Network& Network::operator=(const Network &i){
 	        if(index != nullptr){
 	                delete[] index;
 	        }
-	        inputs->clear();
-	        outputs->clear();
 		size = i.size;
 		neurons = new Neuron[size];
 		index = new int[size / 32];
@@ -536,16 +533,8 @@ Network& Network::operator=(const Network &i){
 			neurons[j] = i.neurons[j];
 		}
 		
-		//inputs = new std::forward_list<int>;
-        	//outputs = new std::forward_list<int>;               
-		//for(auto it = i.inputs->begin();it != i.inputs->end();++it){
-		//	inputs->push_front(*it);
-		//} 
-		//for(auto it = i.outputs->begin();it != i.outputs->end();++it){
-		//	outputs->push_front(*it);
-		//}
-		*inputs = *(i.inputs);
-		*outputs = *(i.outputs);
+		inputs = i.inputs;
+		outputs = i.outputs;
         }
         return *this;
 }
@@ -556,20 +545,14 @@ Network::~Network(){
 	}
 	if(index != nullptr){
 		delete[] index;
-	}
-	if(inputs != nullptr)
-		delete(inputs);
-	if(outputs != nullptr)
-		delete(outputs);
-	inputs = nullptr;
-	outputs = nullptr;	
+	}	
 }
 
 int Network::expendable(int e){
-	for(auto it = inputs->begin();it != inputs->end();++it)
+	for(auto it = inputs.begin();it != inputs.end();++it)
         	if(*it == e) 
 	                return 0;
-        for(auto it = outputs->begin();it != outputs->end();++it)
+        for(auto it = outputs.begin();it != outputs.end();++it)
                 if(*it == e)
                         return 0;
 	return 1;
