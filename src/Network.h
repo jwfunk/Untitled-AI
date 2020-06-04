@@ -11,10 +11,10 @@
 #ifndef NETWORK
 #define NETWORK
 
-#define MAXITERATIONS 100
+#define MAXITERATIONS 50
 #define INITSIZE 64
 #define MAXSIZE 2048
-#define NMUTATIONS 20
+#define NMUTATIONS 100
 
 #include "Neuron.h"
 #include <forward_list>

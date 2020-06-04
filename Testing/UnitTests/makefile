@@ -1,8 +1,8 @@
 CXX=gcc-9
 CXXFLAGS=-Wall
 CXXFLAGS+=-std=c++11
-#CXXFLAGS+=-ggdb3
-CXXFLAGS+=-g
+CXXFLAGS+=-ggdb3
+#CXXFLAGS+=-g
 CXXFLAGS+=-lstdc++
 all:neuron network trainer
 ../../src/Neuron.o: ../../src/Neuron.cpp ../../src/Neuron.h

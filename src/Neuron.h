@@ -41,7 +41,7 @@ class Neuron{
 	int charge{0};
 	int criticalCharge{1};
 	int pulse{1};
-	std::forward_list<int> *recievers{nullptr};
+	std::forward_list<int> recievers;
 
 };
 

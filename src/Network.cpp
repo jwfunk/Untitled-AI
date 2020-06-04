@@ -233,12 +233,6 @@ int Network::addNeuron(const Neuron n){
 		for(int i = 0;i < size / 2;i++)
 			newneurons[i] = neurons[i];
 		delete[] index;
-		for(int j = 0;j < size / 2;j++){
-                        if(neurons[j].recievers != nullptr){
-                                //neurons[j].recievers->clear();
-                                delete(neurons[j].recievers);
-                        }
-                }
 		delete[] neurons;
 		index = newindex;
 		neurons = newneurons;
@@ -253,8 +247,6 @@ int Network::removeNeuron(int i){
 		return 1;
 	if(index[i / 32] & 1<<(i % 32)){
 		index[i / 32] &= ~(1<<(i % 32));
-		delete(neurons[i].recievers);
-		neurons[i].recievers = nullptr;
 		inputs->remove(i);
 		outputs->remove(i);
 		for(int j = 0;j < size;j++){
@@ -325,10 +317,10 @@ int Network::process(std::forward_list<int> *given){
 		for(int j = 0;j < size;j++){
                         if(index[j / 32] & 1<<(j % 32))
                                 if(neurons[j].charge >= neurons[j].criticalCharge){
-					if(neurons[j].recievers != nullptr)
-						for(it1 = neurons[j].recievers->begin();it1 != neurons[j].recievers->end();++it1){
-							neurons[*it1].charge += neurons[j].pulse;
-						}
+					
+					for(it1 = neurons[j].recievers.begin();it1 != neurons[j].recievers.end();++it1){
+						neurons[*it1].charge += neurons[j].pulse;
+					}
 					neurons[j].charge -= neurons[j].criticalCharge;
 					changed = 1;
 				}
@@ -395,7 +387,6 @@ void Network::mutate(){
                                         sender = std::rand() % size;
 				neurons[sender].addReciever((*this).nextLocation());
 				(*this).addNeuron(n);
-				delete(n.recievers);
 				return;
 			}
 			case 1://remove Neuron
@@ -527,12 +518,6 @@ Network& Network::operator=(const Network &i){
         
 	if(this != &i){
 		if(neurons != nullptr){
-			for(int j = 0;j < size;j++){
-				if(neurons[j].recievers != nullptr){
-					neurons[j].recievers->clear();
-					delete(neurons[j].recievers);
-				}
-			}
 	                delete[] neurons;
 	        }
 	        if(index != nullptr){
@@ -567,22 +552,17 @@ Network& Network::operator=(const Network &i){
 
 Network::~Network(){
 	if(neurons != nullptr){
-		for(int j = 0;j < size;j++){
-                        if(neurons[j].recievers != nullptr){
-                                neurons[j].recievers->clear();
-                                delete(neurons[j].recievers);
-                        }
-                }
 		delete[] neurons;
 	}
 	if(index != nullptr){
 		delete[] index;
 	}
-	inputs->clear();
-	delete(inputs);
-	outputs->clear();
-	delete(outputs);
-	
+	if(inputs != nullptr)
+		delete(inputs);
+	if(outputs != nullptr)
+		delete(outputs);
+	inputs = nullptr;
+	outputs = nullptr;	
 }
 
 int Network::expendable(int e){

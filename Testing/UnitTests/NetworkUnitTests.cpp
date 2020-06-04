@@ -348,10 +348,10 @@ int main(){
 	n1 = Neuron(1,1000);
 	n1.addReciever(1);
 	nn.addNeuron(n1);
-	n1 = Neuron(MAXITERATIONS + 1,1);
+	n1 = Neuron(1,1);
 	n1.addReciever(2);
 	nn.addNeuron(n1);
-	n1 = Neuron();
+	n1 = Neuron(MAXITERATIONS + 1,1);
 	nn.addNeuron(n1);
 	nn.addInput(0);
 	nn.addOutput(2);	
@@ -363,7 +363,7 @@ int main(){
                 results.push_back(0);
         }
         else{
-                std::cout << "Failed\n";
+                std::cout << "Failed\nExpected: -1\nActual: " << nn.process(f) << "\n";
                 results.push_back(1);
         }
 	
@@ -678,7 +678,8 @@ int main(){
 	test++;
         std::cout << "\t" << test << " Testing assignment operator: ";
 	Network t1 = Network();
-	Network t2 = t1;
+	Network t2 = Network();
+	t2 = t1;
 	t1.addNeuron(n3);
 	t2.addNeuron(n3);
 	t2.mutate();
