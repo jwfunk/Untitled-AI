@@ -5,7 +5,7 @@
 #include <iterator>
 #include <cstdlib>
 #include <ctime>
-
+#include <list>
 Network::Network(){
 
 }
@@ -294,14 +294,17 @@ int Network::process(std::forward_list<int> *given){
 	//Activate input Neurons
 	
 	std::forward_list <int> :: iterator it2;
+	std::list <int> active;
 	it2 = given->begin();
 	for(auto it1 = inputs.begin(); it1 != inputs.end(); ++it1){
 		if(it2 == given->end()){
 			(*this).clear();//clear the network
 			return -1;
 		}
-		if(*it2)
+		if(*it2){
 			neurons[*it1].charge = neurons[*it1].criticalCharge;
+			active.push_back(*it1);
+		}
 		++it2;
 	}
 	if(it2 != given->end()){
@@ -309,8 +312,42 @@ int Network::process(std::forward_list<int> *given){
 
 		return -1;
 	}
-	int changed;	
+	active.push_back(-1);
+	//int changed;	
 	//Process the Data
+	int iterations = 0;
+	auto i = active.begin();
+	//std::cout << *this;
+	while(i != active.end()){
+		if(*i == -1){
+			for(auto it1 = outputs.begin();it1 != outputs.end();++it1)//possible improvement here
+                         	if(neurons[*it1].charge >= neurons[*it1].criticalCharge){
+                                 	(*this).clear();//clear network charges
+                                 	return *it1;
+                         	}
+		}
+		else{
+		if(neurons[*i].charge >= neurons[*i].criticalCharge){
+				//std::cout << *i << "\n";
+				for(auto it1 = neurons[*i].recievers.begin();it1 != neurons[*i].recievers.end();++it1){
+                	                neurons[*it1].charge += neurons[*i].pulse;
+					active.push_back(*it1);
+                	        }
+                	        neurons[*i].charge -= neurons[*i].criticalCharge;
+				if(neurons[*i].charge >= neurons[*i].criticalCharge)
+					active.push_back(*i);
+				active.push_back(-1);
+			}
+		}
+		
+		if(iterations > MAXITERATIONS){
+			(*this).clear();
+        		return -1;
+		}
+		iterations++;
+		++i;
+	}
+	/*
 	for(int i = 0;i < MAXITERATIONS;i++){
 		changed = 0;
 		for(int j = 0;j < size;j++){
@@ -335,6 +372,7 @@ int Network::process(std::forward_list<int> *given){
 			return -1;
 		}
 	}
+	*/
 	(*this).clear();	
 	return -1;
 }

@@ -288,5 +288,5 @@ int main(){
         p.first = state59;
         p.second = 21;
         v.push_back(p);
-	trainTargetLearning(tttFirstMove,v,100);
+	trainTargetLearning(tttFirstMove,v,10);
 }
