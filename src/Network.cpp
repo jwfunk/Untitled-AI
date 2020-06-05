@@ -5,7 +5,7 @@
 #include <iterator>
 #include <cstdlib>
 #include <ctime>
-#include <list>
+#include <queue>
 Network::Network(){
 
 }
@@ -294,7 +294,7 @@ int Network::process(std::forward_list<int> *given){
 	//Activate input Neurons
 	
 	std::forward_list <int> :: iterator it2;
-	std::list <int> active;
+	std::queue <int> active;
 	it2 = given->begin();
 	for(auto it1 = inputs.begin(); it1 != inputs.end(); ++it1){
 		if(it2 == given->end()){
@@ -303,7 +303,7 @@ int Network::process(std::forward_list<int> *given){
 		}
 		if(*it2){
 			neurons[*it1].charge = neurons[*it1].criticalCharge;
-			active.push_back(*it1);
+			active.push(*it1);
 		}
 		++it2;
 	}
@@ -312,14 +312,16 @@ int Network::process(std::forward_list<int> *given){
 
 		return -1;
 	}
-	active.push_back(-1);
+	active.push(-1);
 	//int changed;	
 	//Process the Data
 	int iterations = 0;
-	auto i = active.begin();
+	
 	//std::cout << *this;
-	while(i != active.end()){
-		if(*i == -1){
+	while(!active.empty()){
+		int i = active.front();
+		active.pop();
+		if(i == -1){
 			for(auto it1 = outputs.begin();it1 != outputs.end();++it1)//possible improvement here
                          	if(neurons[*it1].charge >= neurons[*it1].criticalCharge){
                                  	(*this).clear();//clear network charges
@@ -327,16 +329,16 @@ int Network::process(std::forward_list<int> *given){
                          	}
 		}
 		else{
-		if(neurons[*i].charge >= neurons[*i].criticalCharge){
+		if(neurons[i].charge >= neurons[i].criticalCharge){
 				//std::cout << *i << "\n";
-				for(auto it1 = neurons[*i].recievers.begin();it1 != neurons[*i].recievers.end();++it1){
-                	                neurons[*it1].charge += neurons[*i].pulse;
-					active.push_back(*it1);
+				for(auto it1 = neurons[i].recievers.begin();it1 != neurons[i].recievers.end();++it1){
+                	                neurons[*it1].charge += neurons[i].pulse;
+					active.push(*it1);
                 	        }
-                	        neurons[*i].charge -= neurons[*i].criticalCharge;
-				if(neurons[*i].charge >= neurons[*i].criticalCharge)
-					active.push_back(*i);
-				active.push_back(-1);
+                	        neurons[i].charge -= neurons[i].criticalCharge;
+				if(neurons[i].charge >= neurons[i].criticalCharge)
+					active.push(i);
+				active.push(-1);
 			}
 		}
 		
@@ -345,7 +347,7 @@ int Network::process(std::forward_list<int> *given){
         		return -1;
 		}
 		iterations++;
-		++i;
+		
 	}
 	/*
 	for(int i = 0;i < MAXITERATIONS;i++){
