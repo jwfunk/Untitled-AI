@@ -11,7 +11,8 @@
 #ifndef NETWORK
 #define NETWORK
 
-#define MAXITERATIONS 100
+#define TRAINERITERATIONS 10000
+#define MAXITERATIONS 1000
 #define INITSIZE 64
 #define MAXSIZE 2048
 #define NMUTATIONS 10
@@ -19,6 +20,7 @@
 #include "Neuron.h"
 #include <forward_list>
 #include <string>
+#include <vector>
 
 enum structure {AND,OR,XOR,NOT,PAND,POR};
 class Network {
@@ -64,16 +66,16 @@ class Network {
 	//returns index of output neuron or -1 if max time is hit
 	int process(std::forward_list<int>*);
 
-	//Clears the charges of all Neurons in the network
-	void clear();
-
 	//mutates a random aspect of the Network
 	void mutate();
 
+	//displays information of the network
 	const std::string info() const;
 
+	//copy assignment
 	Network& operator=(const Network &);
 
+	//destructor
 	~Network();
 
 	private:
@@ -81,10 +83,20 @@ class Network {
 	//returns the next free location in neurons or -1 if full
         int nextLocation();
 
+	//returns a vector of the number of next locations specified by the int parameter or NULL if not enough space
+	std::vector<int> nextLocations(int);
+
+	//returns 1 if neuron at int is not an input or output
+	//otherwise returns 0
 	int expendable(int);
 
+	//returns 1 if any neuron is not an input or output
+	//0 otherwise
 	int anyExpendable();
 	
+	//Clears the charges of all Neurons in the network
+        void clear();
+
 	std::forward_list<int> inputs;
 	std::forward_list<int> outputs;
 	Neuron *neurons{nullptr};

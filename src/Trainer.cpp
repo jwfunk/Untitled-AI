@@ -12,6 +12,7 @@ Timer timerProcess;
 Timer timerMutate;
 Timer timerTotal;
 Timer timerCopy;
+
 void trainTargetLearning( Network &n, std::vector<std::pair<std::forward_list<int>,int> > &targetData, int enumerations) {
 	std::srand(std::time(0));
 	std::cout << "Training network for " << enumerations << " enumerations:\n";

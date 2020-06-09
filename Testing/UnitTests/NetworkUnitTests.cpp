@@ -497,21 +497,25 @@ int main(){
 
 	test++;
 	std::cout << "\t" << test << " Processing NOT structure with 1 inputs: ";
-        nn = Network();
+        Network nnn = Network();
         n3 = Neuron();
-        nn.addNeuron(n3);
+        nnn.addNeuron(n3);
+	n3 = Neuron(1,3);
 	n3.addReciever(2);
-        nn.addNeuron(n3);
-	n3.removeReciever(2);
-	nn.addNeuron(n3);
-        nn.addStructure(NOT,0,1,2);
-        nn.addInput(0);
-	nn.addInput(1);
-        nn.addOutput(2);
+        nnn.addNeuron(n3);
+	n3 = Neuron();
+	n3.addReciever(3);
+	nnn.addNeuron(n3);
+	n3 = Neuron(3,1);
+	nnn.addNeuron(n3);
+	nnn.addStructure(NOT,0,0,3);
+        nnn.addInput(0);
+	nnn.addInput(1);
+        nnn.addOutput(3);
         f = new std::forward_list<int>;
         f->push_front(1);
         f->push_front(1);
-        if(nn.process(f) == -1){
+        if(nnn.process(f) == -1){
                 std::cout << "Passed\n";
                 results.push_back(0);
         }
@@ -525,7 +529,7 @@ int main(){
         f = new std::forward_list<int>;
         f->push_front(0);
         f->push_front(1);
-        if(nn.process(f) == 2){
+        if(nnn.process(f) == 3){
                 std::cout << "Passed\n";
                 results.push_back(0);
         }

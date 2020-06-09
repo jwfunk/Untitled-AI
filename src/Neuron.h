@@ -35,6 +35,7 @@ class Neuron{
 	//displays the current Neuron's info
 	const std::string info() const;
 
+	//copy assignment operator
 	Neuron& operator=(const Neuron &);
 
 	private:
