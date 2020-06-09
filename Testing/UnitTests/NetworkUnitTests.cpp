@@ -687,7 +687,14 @@ int main(){
 	t1.addNeuron(n3);
 	t2.addNeuron(n3);
 	t2.mutate();
-	std::cout << t1;
+	if(t1.info() == t2.info()){
+		std::cout << "Failed\n";
+                results.push_back(1);
+	}
+	else{
+		std::cout << "Passed\n";
+                results.push_back(0);
+	}
 
 	int total = 0;
 	int passed = 0;

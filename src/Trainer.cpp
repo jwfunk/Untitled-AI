@@ -7,28 +7,18 @@
 #include <cstdlib>
 #include <ctime>
 #include <fstream>
-#include "Timer.h"
-Timer timerProcess;
-Timer timerMutate;
-Timer timerTotal;
-Timer timerCopy;
 
 void trainTargetLearning( Network &n, std::vector<std::pair<std::forward_list<int>,int> > &targetData, int enumerations) {
 	std::srand(std::time(0));
 	std::cout << "Training network for " << enumerations << " enumerations:\n";
-	timerTotal.Reset();
-	timerMutate.Reset();
-	timerProcess.Reset();
-	timerCopy.Reset();
-	timerTotal.Start();
+	
 	double accuracy = 0;
         double total = 0;
         for(auto it = targetData.begin(); it != targetData.end();++it){
-                timerProcess.Restart();
+                
                 if(n.process(&((*it).first)) == (*it).second){
                 	accuracy++;
                 }
-                timerProcess.Pause();
         	total++;
         }
 	accuracy /= total;
@@ -57,34 +47,34 @@ void trainTargetLearning( Network &n, std::vector<std::pair<std::forward_list<in
 				return;
 			}
 
-			timerCopy.Restart();
+
 			copy = n;
-			timerCopy.Pause();
-			timerMutate.Restart();
+
+
 			copy.mutate();
-			timerMutate.Pause();
+
 			copyAccuracy = 0; 
 			for(auto it = targetData.begin(); it != targetData.end();++it){
-				timerProcess.Restart();
+
                                 if(copy.process(&((*it).first)) == (*it).second)
                                         copyAccuracy++;
-				timerProcess.Pause();
+
                         }
                         copyAccuracy /= total;
 			if(copyAccuracy > accuracy){
-				timerCopy.Restart();
+
 				n = copy;
 				accuracy = copyAccuracy;
-				timerCopy.Pause();
+
 			}			
 		} 
 		std::cout << "\n\n";
 	}
-	timerTotal.Pause();
-	timerTotal.Print("Total time :");
-	timerProcess.Print("Process time :");
-	timerMutate.Print("Mutate time :");
-	timerCopy.Print("Copy time :");
+
+
+
+
+	
 	std::ofstream file;
 	file.open("../test.txt");
 	file << n;
