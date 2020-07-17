@@ -21,6 +21,8 @@
 #include <forward_list>
 #include <string>
 #include <vector>
+#include <utility>
+#include <stack>
 
 enum structure {AND,OR,XOR,NOT,PAND,POR};
 class Network {
@@ -67,7 +69,9 @@ class Network {
 	int process(std::forward_list<int>*);
 
 	//mutates a random aspect of the Network
-	void mutate();
+	void mutate(int);
+
+	void mutateTarget(std::pair<std::forward_list<int>, int >&);
 
 	//displays information of the network
 	const std::string info() const;
@@ -97,6 +101,11 @@ class Network {
 	//Clears the charges of all Neurons in the network
         void clear();
 
+	void inputTree(std::vector<int>&, std::pair<std::forward_list<int>,int >&);
+
+	void recursiveInputTree(int*, std::pair<std::forward_list<int>, int>&, int);
+
+	std::stack<int> available;
 	std::forward_list<int> inputs;
 	std::forward_list<int> outputs;
 	Neuron *neurons{nullptr};

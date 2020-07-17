@@ -161,35 +161,39 @@ int Network::addNeuron(const Neuron n){
 			index[i] = 0;
 		index[0] = 1;
 		size = INITSIZE;
+		available = std::stack<int>();
+		for(int i = INITSIZE - 1;i > 0;i--){
+			available.push(i);
+		}
 		return 0;
 	}
-	for(int i = 0;i < size / 32;i++){
-		if(index[i] != -1){
-			for(int j = 0;j < 32;j++){
-				if(!(index[i] & (1<<j))){//Free spot in bitmap
-					neurons[(i * 32) + j] = n;
-					index[i] |= 1<<j;
-					return 0;
-				}
+	if(!available.empty()){
+		neurons[available.top()] = n;
+		index[available.top() / 32] |= 1<<(available.top() % 32);
+		available.pop();
+		return 0;
+	}
+	else{
+		if(size < MAXSIZE){
+			size *= 2;
+			int *newindex = new int[size / 32];
+			Neuron *newneurons = new Neuron[size];
+			for(int i = 0;i < size / 2;i++)
+                        	newneurons[i] = neurons[i];
+			for(int i = 0;i < size / 64;i++){
+                	        newindex[i] = index[i];
+                	        newindex[i + size / 64] = 0;
+                	}
+			delete[] neurons;
+			delete[] index;
+			neurons = newneurons;
+			index = newindex;
+			for(int i = 0;i < size / 2;i++){
+				available.push(size - i - 1);
 			}
+			std::cout << available.top();
+                	return this->addNeuron(n);
 		}
-	}
-	if(size < MAXSIZE){
-		size *= 2;
-		int *newindex = new int[size / 32];
-		Neuron *newneurons = new Neuron[size];
-		for(int i = 0;i < size / 64;i++){
-			newindex[i] = index[i];
-			newindex[i + size / 64] = 0;
-		}
-		for(int i = 0;i < size / 2;i++)
-			newneurons[i] = neurons[i];
-		delete[] index;
-		delete[] neurons;
-		index = newindex;
-		neurons = newneurons;
-		this->addNeuron(n);
-		return 0;
 	}
 	return 1;
 }
@@ -205,6 +209,7 @@ int Network::removeNeuron(int i){
 			if(index[j / 32] & 1<<(j % 32))
 				neurons[j].removeReciever(i);
 		}
+		available.push(i);
 	}
 	return 0;
 	
@@ -306,33 +311,232 @@ int Network::process(std::forward_list<int> *given){
 	return -1;
 }
 
-void Network::mutate(){
-	for(int m = 0;m < NMUTATIONS;m++){
-		
-		int choice;
-		int mutation = std::rand() % (4 * size + 7);
-		if(mutation < size)
-			choice = 2;
-		if(mutation >= size && mutation < (2 * size))
-			choice = 3;
-		if(mutation >= (2 * size) && mutation < (3 * size))
-			choice = 10;
-		if(mutation >= (3 * size) && mutation < (4 * size))
-			choice = 1;
-		if(mutation == (4 * size))
-			choice = 0;
-		if(mutation == (4 * size + 1))
-			choice = 4;
-		if(mutation == (4 * size + 2))
+void Network::mutateTarget(std::pair<std::forward_list<int>, int >& target){
+	std::vector<int> iTree;
+	inputTree(iTree,target);
+	int present = 0;
+	int inputSize = 0;
+	for(auto it = iTree.begin();it != iTree.end();++it){
+		if(*it == target.second)
+			present = 1;
+		++inputSize;
+	}
+	int choice = 0;
+	if(present){
+		int mutation = std::rand() % (4 * inputSize + 7);
+                if(mutation < inputSize)
+                        choice = 2;
+                if(mutation >= inputSize && mutation < (2 * inputSize))
+                        choice = 3;
+                if(mutation >= (2 * inputSize) && mutation < (3 * inputSize))
+                        choice = 10;
+                if(mutation >= (3 * inputSize) && mutation < (4 * inputSize))
+                        choice = 1;
+                if(mutation == (4 * inputSize))
+                        choice = 0;
+                if(mutation == (4 * inputSize + 1))
+                        choice = 4;
+                if(mutation == (4 * inputSize + 2))
                         choice = 5;
-		if(mutation == (4 * size + 3))
+                if(mutation == (4 * inputSize + 3))
                         choice = 6;
-		if(mutation == (4 * size + 4))
+                if(mutation == (4 * inputSize + 4))
                         choice = 7;
-		if(mutation == (4 * size + 5))
+                if(mutation == (4 * inputSize + 5))
                         choice = 8;
-		if(mutation == (4 * size + 6))
+                if(mutation == (4 * inputSize + 6))
+                        choice = 9;				
+	}
+	else{
+		int mutation = std::rand() % (inputSize + 5);
+                if(mutation < size)
+                        choice = 10;
+                if(mutation == size)
+                        choice = 0;
+                if(mutation == (size + 1))
+                        choice = 4;
+                if(mutation == (size + 2))
+                        choice = 5;
+                if(mutation == (size + 3))
+                        choice = 6;
+                if(mutation == (size + 4))
+                        choice = 8;
+                if(mutation == (size + 5))
                         choice = 9;
+	}
+		switch(choice){
+			case 0://add Neuron
+			{
+				Neuron n = Neuron();
+				int reciever = iTree[std::rand() % inputSize];
+				while(!(index[reciever / 32] & 1<<(reciever % 32)))
+					reciever = iTree[std::rand() % inputSize];
+				n.addReciever(reciever);
+				int sender = iTree[std::rand() % inputSize];
+                                while(!(index[sender / 32] & 1<<(sender % 32)))
+                                        sender = iTree[std::rand() % inputSize];
+				neurons[sender].addReciever((*this).nextLocation());
+				(*this).addNeuron(n);
+				return;
+			}
+			case 1://remove Neuron
+			{
+				/*
+				int remove = iTree[std::rand() % inputSize];
+				if(!anyExpendable())
+					return;		
+				while(!(index[remove / 32] & 1<<(remove % 32)) || !expendable(remove)){
+                                        remove = iTree[std::rand() % inputSize];
+				}
+				(*this).removeNeuron(remove);
+				*/
+				return;
+			}
+			case 2://modify cc
+			{
+				int modify = iTree[std::rand() % inputSize];
+				while(!(index[modify / 32] & 1<<(modify % 32)))
+					modify = iTree[std::rand() % inputSize];
+				if((std::rand() % 2))
+					neurons[modify].criticalCharge += 1;
+				else{
+					if(neurons[modify].criticalCharge != 1)
+						neurons[modify].criticalCharge -= 1;
+				}
+				return;
+			}
+			case 3://modify pulse
+			{
+				int modify = iTree[std::rand() % inputSize];
+                                while(!(index[modify / 32] & 1<<(modify % 32)))
+                                        modify = iTree[std::rand() % inputSize];
+                                if((std::rand() % 2))
+                                        neurons[modify].pulse += 1;
+                                else
+                                        neurons[modify].pulse -= 1;
+				return;
+			}
+			case 4://add AND structure
+			{
+				int sender1 = iTree[std::rand() % inputSize];
+				while(!(index[sender1 / 32] & 1<<(sender1 % 32)))
+                                        sender1 = iTree[std::rand() % inputSize];
+				int sender2 = iTree[std::rand() % inputSize];
+				while(!(index[sender2 / 32] & 1<<(sender2 % 32)))
+                                        sender2 = iTree[std::rand() % inputSize];
+				int reciever = iTree[std::rand() % inputSize];
+				while(!(index[reciever / 32] & 1<<(reciever % 32)))
+                                        reciever = iTree[std::rand() % inputSize];
+				(*this).addStructure(AND,sender1,sender2,reciever);
+				return;
+			}
+			case 5://add OR structure
+			{
+				int sender1 = iTree[std::rand() % inputSize];
+                                while(!(index[sender1 / 32] & 1<<(sender1 % 32)))
+                                        sender1 = iTree[std::rand() % inputSize];
+                                int sender2 = iTree[std::rand() % inputSize];
+                                while(!(index[sender2 / 32] & 1<<(sender2 % 32)))
+                                        sender2 = iTree[std::rand() % inputSize];
+                                int reciever = iTree[std::rand() % inputSize];
+                                while(!(index[reciever / 32] & 1<<(reciever % 32)))
+                                        reciever = iTree[std::rand() % inputSize];
+                                (*this).addStructure(OR,sender1,sender2,reciever);
+				return;
+			}
+			case 6://add XOR structure
+			{
+				int sender1 = iTree[std::rand() % inputSize];
+                                while(!(index[sender1 / 32] & 1<<(sender1 % 32)))
+                                        sender1 = iTree[std::rand() % inputSize];
+                                int sender2 = iTree[std::rand() % inputSize];
+                                while(!(index[sender2 / 32] & 1<<(sender2 % 32)))
+                                        sender2 = iTree[std::rand() % inputSize];
+                                int reciever = iTree[std::rand() % inputSize];
+                                while(!(index[reciever / 32] & 1<<(reciever % 32)))
+                                        reciever = iTree[std::rand() % inputSize];
+                                (*this).addStructure(XOR,sender1,sender2,reciever);
+				return;
+			}
+			case 7://add NOT structure
+			{
+				int sender1 = iTree[std::rand() % inputSize];
+                                while(!(index[sender1 / 32] & 1<<(sender1 % 32)))
+                                        sender1 = iTree[std::rand() % inputSize];
+                                int reciever = iTree[std::rand() % inputSize];
+                                while(!(index[reciever / 32] & 1<<(reciever % 32)))
+                                        reciever = iTree[std::rand() % inputSize];
+                                (*this).addStructure(NOT,sender1,0,reciever);
+				return;
+			}
+			case 8://add POR structure
+			{
+                                int sender1 = iTree[std::rand() % inputSize];
+                                while(!(index[sender1 / 32] & 1<<(sender1 % 32)))
+                                        sender1 = iTree[std::rand() % inputSize];
+                                int reciever = iTree[std::rand() % inputSize];
+                                while(!(index[reciever / 32] & 1<<(reciever % 32)))
+                                        reciever = iTree[std::rand() % inputSize];
+                                (*this).addStructure(POR,sender1,0,reciever);
+				return;
+                        }
+			case 9://add PAND structure
+			{
+                                int sender1 = iTree[std::rand() % inputSize];
+                                while(!(index[sender1 / 32] & 1<<(sender1 % 32)))
+                                        sender1 = iTree[std::rand() % inputSize];
+                                int reciever = iTree[std::rand() % inputSize];
+                                while(!(index[reciever / 32] & 1<<(reciever % 32)))
+                                        reciever = iTree[std::rand() % inputSize];
+                                (*this).addStructure(PAND,sender1,0,reciever);
+				return;
+                        }
+			case 10://add reciever
+			{
+				int sender = std::rand() % size;
+                                while(!(index[sender / 32] & 1<<(sender % 32)))
+                                        sender = std::rand() % size;
+                                int reciever = iTree[std::rand() % inputSize];
+                                while(!(index[reciever / 32] & 1<<(reciever % 32)))
+                                        reciever = iTree[std::rand() % inputSize];
+                                neurons[sender].addReciever(reciever);
+                                return;
+			}
+		}		
+            
+}
+
+void Network::mutate(int choice = -1){
+	if(choice == -1){
+		int mutation = std::rand() % (5 * size + 7);
+                if(mutation < size)
+                        choice = 2;
+                if(mutation >= size && mutation < (2 * size))
+                        choice = 3; 
+                if(mutation >= (2 * size) && mutation < (3 * size))
+                        choice = 10;
+                if(mutation >= (3 * size) && mutation < (4 * size))
+                        choice = 1;
+		if(mutation >= (4 * size) && mutation < (5 * size))
+                        choice = 11; 
+                if(mutation == (5 * size))
+                        choice = 0; 
+                if(mutation == (5 * size + 1))
+                        choice = 4; 
+                if(mutation == (5 * size + 2))
+                        choice = 5; 
+                if(mutation == (5 * size + 3))
+                        choice = 6; 
+                if(mutation == (5 * size + 4))
+                        choice = 7; 
+                if(mutation == (5 * size + 5))
+                        choice = 8; 
+                if(mutation == (5 * size + 6))
+                        choice = 9;
+	}
+	
+		
+		//std::cout << choice << "-\n";	
 		switch(choice){
 			case 0://add Neuron
 			{
@@ -350,9 +554,9 @@ void Network::mutate(){
 			}
 			case 1://remove Neuron
 			{
-				int remove = std::rand() % size;
 				if(!anyExpendable())
 					return;		
+				int remove = std::rand() % size;
 				while(!(index[remove / 32] & 1<<(remove % 32)) || !expendable(remove)){
                                         remove = std::rand() % size;
 				}
@@ -469,8 +673,26 @@ void Network::mutate(){
                                 neurons[sender].addReciever(reciever);
                                 return;
 			}
+			case 11://remove reciever
+			{
+				int target = std::rand() % size;
+				while(!(index[target / 32] & 1<<(target % 32)))
+                                        target = std::rand() % size;
+				int rsize = 0;
+				if(neurons[target].recievers.empty())
+					return;
+				for(auto it = neurons[target].recievers.begin(); it != neurons[target].recievers.end(); ++it){
+					rsize++;
+				}
+				int remove = std::rand() % rsize;
+				auto it = neurons[target].recievers.begin();
+				for(int i = 0;i < remove;i++)
+					++it;
+				neurons[target].removeReciever(*it);		
+				return;	
+			}
 		}		
-	}
+	
 }
 
 Network& Network::operator=(const Network &i){
@@ -495,6 +717,7 @@ Network& Network::operator=(const Network &i){
 		
 		inputs = i.inputs;
 		outputs = i.outputs;
+		available = i.available;
         }
         return *this;
 }
@@ -529,15 +752,8 @@ int Network::anyExpendable(){
 int Network::nextLocation(){
 	if(size == 0)
 		return 0;
-	for(int i = 0;i < size / 32;i++){
-                if(index[i] != -1){
-                        for(int j = 0;j < 32;j++){
-                                if(!(index[i] & (1<<j))){//Free spot in bitmap
-					return (i * 32) + j;
-				}
-			}
-		}
-	}
+	if(!available.empty())
+		return available.top();
 	if(size < MAXSIZE){
 		return size;
 	}
@@ -554,16 +770,18 @@ std::vector<int> Network::nextLocations(int locations){
 		}
 		return result;	
 	}
-	for(int i = 0;i < size / 32;i++){ 
-                if(index[i] != -1){
-                        for(int j = 0;j < 32;j++){
-				if(!(index[i] & (1<<j))){//Free spot in bitmap
-					result.push_back((i * 32) + j);
-					locations--;
-					if(locations == 0)
-						return result;
-				}
+	std::stack<int> temp;
+	while(!available.empty()){
+		temp.push(available.top());
+		result.push_back(available.top());
+		locations--;
+		available.pop();
+		if(locations == 0){
+			while(!temp.empty()){
+				available.push(temp.top());
+				temp.pop();
 			}
+			return result;
 		}
 	}
 	if(size + locations <= MAXSIZE){
@@ -583,3 +801,31 @@ void Network::clear(){
 	}
 }
 
+void Network::inputTree(std::vector<int>& tree, std::pair<std::forward_list<int>,int >& data){
+	int bitmap[size/32];
+	for(int i = 0;i < size/32;i++)
+		bitmap[i] = 0;
+	int i = 0;
+	for(auto it = data.first.begin();it != data.first.end();++it){
+		if(*it)
+			if(index[i / 32] & (1<<(i % 32)) && !(bitmap[i / 32] & (1<<(i % 32))))
+				recursiveInputTree(bitmap, data, i);
+		
+		++i;
+	}
+	for(int i = 0;i < size / 32;i++){
+		for(int j = 0;j < 32;j++){
+			if(bitmap[i] & (1<<(j % 32)))
+				tree.push_back((i * 32) + j);
+		}
+	}
+}
+
+void Network::recursiveInputTree(int* bitmap,std::pair<std::forward_list<int>, int >& data, int current){
+	bitmap[current / 32] |= 1<<(current % 32);
+
+	for(auto it = neurons[current].recievers.begin();it != neurons[current].recievers.end();++it){
+		if(!(bitmap[*it / 32] & (1<<(*it % 32))))
+			recursiveInputTree(bitmap, data, *it);
+	}
+}

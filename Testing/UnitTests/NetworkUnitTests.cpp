@@ -50,8 +50,7 @@ int main(){
 	std::cout << "\t" << test << " Adding max neurons to array test: ";
 	n = Network();
 	int fail = 0;
-	for(int i = 0;i < MAXSIZE;i++){
-		
+	for(int i = 0;i < MAXSIZE;i++){	
 		if(n.addNeuron(n1)){
 			std::cout << "Failed\n";
 			results.push_back(1);
@@ -66,9 +65,11 @@ int main(){
 
 	test++;
 	std::cout << "\t" << test << " Adding more than max neurons test: ";
-	if(!n.addNeuron(n1)){
+	int r = n.addNeuron(n1);
+	if(!r){
                 std::cout << "Failed\n";
 		results.push_back(1);
+		std::cout << "Expected: 1\nActual: " << r << "\n";
 	}
         else{	
                	std::cout << "Passed\n";
@@ -686,7 +687,7 @@ int main(){
 	t2 = t1;
 	t1.addNeuron(n3);
 	t2.addNeuron(n3);
-	t2.mutate();
+	t2.mutate(-1);
 	if(t1.info() == t2.info()){
 		std::cout << "Failed\n";
                 results.push_back(1);

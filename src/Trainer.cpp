@@ -50,8 +50,9 @@ void trainTargetLearning( Network &n, std::vector<std::pair<std::forward_list<in
 
 			copy = n;
 
-
-			copy.mutate();
+			for(int i = 0;i < NMUTATIONS;i++)
+				copy.mutate(-1);
+			copy.mutateTarget(targetData[0]);
 
 			copyAccuracy = 0; 
 			for(auto it = targetData.begin(); it != targetData.end();++it){
