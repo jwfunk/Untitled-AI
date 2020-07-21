@@ -23,6 +23,15 @@
 //pair.first is a forward list representing a vector of inputs for the network
 //pair.second is the expected result for the input
 //enumerations is the number of enumerations the training method will go through
-void trainTargetLearning(Network&,std::vector<std::pair<std::forward_list<int>,int> >&,int);
 
+class Trainer{
+
+	public:
+
+	static void trainPrecisionLearning( Network &, std::vector<std::pair<std::forward_list<int>,int> > &, int);
+
+	static void trainTargetLearning(Network&,std::vector<std::pair<std::forward_list<int>,int> >&,int);
+
+	
+};
 #endif

@@ -15,7 +15,7 @@
 #define MAXITERATIONS 1000
 #define INITSIZE 64
 #define MAXSIZE 2048
-#define NMUTATIONS 10
+#define NMUTATIONS 3
 
 #include "Neuron.h"
 #include <forward_list>
@@ -27,6 +27,7 @@
 enum structure {AND,OR,XOR,NOT,PAND,POR};
 class Network {
 
+	friend class Trainer;
 	friend std::ostream& operator<<(std::ostream&, const Network&);
 	
 	public:
@@ -104,6 +105,10 @@ class Network {
 	void inputTree(std::vector<int>&, std::pair<std::forward_list<int>,int >&);
 
 	void recursiveInputTree(int*, std::pair<std::forward_list<int>, int>&, int);
+
+	void outputTree(std::vector<int>&, int);
+
+	void recursiveOutputTree(int*, std::forward_list<int>*,int);
 
 	std::stack<int> available;
 	std::forward_list<int> inputs;

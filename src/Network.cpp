@@ -7,7 +7,7 @@
 #include <ctime>
 #include <queue>
 Network::Network(){
-
+	size = 0;
 }
 
 std::ostream& operator<<(std::ostream &os, const Network &i){
@@ -28,13 +28,11 @@ const std::string Network::info() const {
 		r += std::to_string(*it) + ",";
 	r += "-1\n";
 	int e = 0;	
-	for(int i = 0;i < size / 32;i++){
-		for(int j = 0;j < 32;j++){
-			if((index[i] & (1<<j))){
-				r += "Neuron: " + std::to_string(j + (32 * i)) + "\n" + neurons[(i * 32) + j].info() + "\n";
+	for(int i = 0;i < size;i++){
+			if((index[i / 32] & (1<<(i % 32)))){
+				r += "Neuron: " + std::to_string(i) + "\n" + neurons[i].info() + "\n";
 				e = 1;	
 			}
-		}
 	}
 	if(e == 0)
 		return "Empty Network";	
@@ -313,9 +311,13 @@ int Network::process(std::forward_list<int> *given){
 
 void Network::mutateTarget(std::pair<std::forward_list<int>, int >& target){
 	std::vector<int> iTree;
+	std::vector<int> oTree;
+	iTree.clear();
+	oTree.clear();
 	inputTree(iTree,target);
 	int present = 0;
 	int inputSize = 0;
+	int outputSize = 0;
 	for(auto it = iTree.begin();it != iTree.end();++it){
 		if(*it == target.second)
 			present = 1;
@@ -348,7 +350,11 @@ void Network::mutateTarget(std::pair<std::forward_list<int>, int >& target){
                         choice = 9;				
 	}
 	else{
-		int mutation = std::rand() % (inputSize + 5);
+		outputTree(oTree,target.second);
+		for(auto it = oTree.begin();it != oTree.end();++it){
+        	        ++outputSize;
+        	}
+		int mutation = std::rand() % (size + 5);
                 if(mutation < size)
                         choice = 10;
                 if(mutation == size)
@@ -368,9 +374,17 @@ void Network::mutateTarget(std::pair<std::forward_list<int>, int >& target){
 			case 0://add Neuron
 			{
 				Neuron n = Neuron();
-				int reciever = iTree[std::rand() % inputSize];
-				while(!(index[reciever / 32] & 1<<(reciever % 32)))
-					reciever = iTree[std::rand() % inputSize];
+				int reciever;
+				if(present){
+                                        reciever = iTree[std::rand() % inputSize];
+                                        while(!(index[reciever / 32] & 1<<(reciever % 32)))
+                                                reciever = iTree[std::rand() % inputSize];
+                                }
+                                else{
+                                        reciever = oTree[std::rand() % outputSize];
+                                        while(!(index[reciever / 32] & 1<<(reciever % 32)))
+                                                reciever = oTree[std::rand() % outputSize];
+                                }
 				n.addReciever(reciever);
 				int sender = iTree[std::rand() % inputSize];
                                 while(!(index[sender / 32] & 1<<(sender % 32)))
@@ -424,9 +438,17 @@ void Network::mutateTarget(std::pair<std::forward_list<int>, int >& target){
 				int sender2 = iTree[std::rand() % inputSize];
 				while(!(index[sender2 / 32] & 1<<(sender2 % 32)))
                                         sender2 = iTree[std::rand() % inputSize];
-				int reciever = iTree[std::rand() % inputSize];
-				while(!(index[reciever / 32] & 1<<(reciever % 32)))
-                                        reciever = iTree[std::rand() % inputSize];
+				int reciever;
+				if(present){
+					reciever = iTree[std::rand() % inputSize];
+					while(!(index[reciever / 32] & 1<<(reciever % 32)))
+                                	        reciever = iTree[std::rand() % inputSize];
+				}
+				else{
+					reciever = oTree[std::rand() % outputSize];
+                                        while(!(index[reciever / 32] & 1<<(reciever % 32)))
+                                                reciever = oTree[std::rand() % outputSize];
+				}
 				(*this).addStructure(AND,sender1,sender2,reciever);
 				return;
 			}
@@ -438,9 +460,17 @@ void Network::mutateTarget(std::pair<std::forward_list<int>, int >& target){
                                 int sender2 = iTree[std::rand() % inputSize];
                                 while(!(index[sender2 / 32] & 1<<(sender2 % 32)))
                                         sender2 = iTree[std::rand() % inputSize];
-                                int reciever = iTree[std::rand() % inputSize];
-                                while(!(index[reciever / 32] & 1<<(reciever % 32)))
+				int reciever;
+                                if(present){
                                         reciever = iTree[std::rand() % inputSize];
+                                        while(!(index[reciever / 32] & 1<<(reciever % 32)))
+                                                reciever = iTree[std::rand() % inputSize];
+                                }
+                                else{
+                                        reciever = oTree[std::rand() % outputSize];
+                                        while(!(index[reciever / 32] & 1<<(reciever % 32)))
+                                                reciever = oTree[std::rand() % outputSize];
+                                }
                                 (*this).addStructure(OR,sender1,sender2,reciever);
 				return;
 			}
@@ -452,9 +482,17 @@ void Network::mutateTarget(std::pair<std::forward_list<int>, int >& target){
                                 int sender2 = iTree[std::rand() % inputSize];
                                 while(!(index[sender2 / 32] & 1<<(sender2 % 32)))
                                         sender2 = iTree[std::rand() % inputSize];
-                                int reciever = iTree[std::rand() % inputSize];
-                                while(!(index[reciever / 32] & 1<<(reciever % 32)))
+				int reciever;
+                                if(present){
                                         reciever = iTree[std::rand() % inputSize];
+                                        while(!(index[reciever / 32] & 1<<(reciever % 32)))
+                                                reciever = iTree[std::rand() % inputSize];
+                                }
+                                else{
+                                        reciever = oTree[std::rand() % outputSize];
+                                        while(!(index[reciever / 32] & 1<<(reciever % 32)))
+                                                reciever = oTree[std::rand() % outputSize];
+                                }
                                 (*this).addStructure(XOR,sender1,sender2,reciever);
 				return;
 			}
@@ -474,9 +512,17 @@ void Network::mutateTarget(std::pair<std::forward_list<int>, int >& target){
                                 int sender1 = iTree[std::rand() % inputSize];
                                 while(!(index[sender1 / 32] & 1<<(sender1 % 32)))
                                         sender1 = iTree[std::rand() % inputSize];
-                                int reciever = iTree[std::rand() % inputSize];
-                                while(!(index[reciever / 32] & 1<<(reciever % 32)))
+				int reciever;
+                                if(present){
                                         reciever = iTree[std::rand() % inputSize];
+                                        while(!(index[reciever / 32] & 1<<(reciever % 32)))
+                                                reciever = iTree[std::rand() % inputSize];
+                                }
+                                else{
+                                        reciever = oTree[std::rand() % outputSize];
+                                        while(!(index[reciever / 32] & 1<<(reciever % 32)))
+                                                reciever = oTree[std::rand() % outputSize];
+                                }
                                 (*this).addStructure(POR,sender1,0,reciever);
 				return;
                         }
@@ -485,9 +531,17 @@ void Network::mutateTarget(std::pair<std::forward_list<int>, int >& target){
                                 int sender1 = iTree[std::rand() % inputSize];
                                 while(!(index[sender1 / 32] & 1<<(sender1 % 32)))
                                         sender1 = iTree[std::rand() % inputSize];
-                                int reciever = iTree[std::rand() % inputSize];
-                                while(!(index[reciever / 32] & 1<<(reciever % 32)))
+				int reciever;
+                                if(present){
                                         reciever = iTree[std::rand() % inputSize];
+                                        while(!(index[reciever / 32] & 1<<(reciever % 32)))
+                                                reciever = iTree[std::rand() % inputSize];
+                                }
+                                else{
+                                        reciever = oTree[std::rand() % outputSize];
+                                        while(!(index[reciever / 32] & 1<<(reciever % 32)))
+                                                reciever = oTree[std::rand() % outputSize];
+                                }
                                 (*this).addStructure(PAND,sender1,0,reciever);
 				return;
                         }
@@ -496,9 +550,18 @@ void Network::mutateTarget(std::pair<std::forward_list<int>, int >& target){
 				int sender = std::rand() % size;
                                 while(!(index[sender / 32] & 1<<(sender % 32)))
                                         sender = std::rand() % size;
-                                int reciever = iTree[std::rand() % inputSize];
-                                while(!(index[reciever / 32] & 1<<(reciever % 32)))
+				int reciever;
+                                if(present){
                                         reciever = iTree[std::rand() % inputSize];
+                                        while(!(index[reciever / 32] & 1<<(reciever % 32)))
+                                                reciever = iTree[std::rand() % inputSize];
+                                }
+                                else{
+                                        reciever = oTree[std::rand() % outputSize];
+                                        while(!(index[reciever / 32] & 1<<(reciever % 32))){
+                                                reciever = oTree[std::rand() % outputSize];
+					}
+                                }
                                 neurons[sender].addReciever(reciever);
                                 return;
 			}
@@ -533,10 +596,11 @@ void Network::mutate(int choice = -1){
                         choice = 8; 
                 if(mutation == (5 * size + 6))
                         choice = 9;
+		if(mutation == (5 * size + 7))
+			choice = 12;
 	}
 	
 		
-		//std::cout << choice << "-\n";	
 		switch(choice){
 			case 0://add Neuron
 			{
@@ -691,6 +755,23 @@ void Network::mutate(int choice = -1){
 				neurons[target].removeReciever(*it);		
 				return;	
 			}
+			case 12://extend inputs processing time by 2
+			{
+				for(auto it = inputs.begin();it != inputs.end();++it){
+					std::vector<int> input = nextLocations(2);
+					if(input.empty())
+						return;
+					Neuron n1 = neurons[*it];
+					n1.criticalCharge = 2;
+					(*this).addNeuron(n1);
+					Neuron n2 = Neuron();
+					n2.addReciever(input[0]);
+					(*this).addNeuron(n2);
+					neurons[*it].pulse = 2;
+					neurons[*it].recievers = std::forward_list<int>();
+					neurons[*it].addReciever(input[1]);
+				}
+			}
 		}		
 	
 }
@@ -801,6 +882,26 @@ void Network::clear(){
 	}
 }
 
+void Network::outputTree(std::vector<int>& tree,int target){
+	int bitmap[size/32];
+	std::forward_list<int> data[size];
+	for(int i = 0;i < size;i++){
+                if(index[i / 32] & (1<<(i % 32))){
+			for(auto it = neurons[i].recievers.begin();it != neurons[i].recievers.end();++it){
+				data[*it].push_front(i);
+			}
+		}
+	}
+        for(int i = 0;i < size/32;i++)
+                bitmap[i] = 0;
+        recursiveOutputTree(bitmap, data, target);
+        for(int i = 0;i < size;i++){
+                if(bitmap[i / 32] & (1<<(i % 32))){
+                        tree.push_back(i);
+		}
+        }
+}
+
 void Network::inputTree(std::vector<int>& tree, std::pair<std::forward_list<int>,int >& data){
 	int bitmap[size/32];
 	for(int i = 0;i < size/32;i++)
@@ -813,11 +914,9 @@ void Network::inputTree(std::vector<int>& tree, std::pair<std::forward_list<int>
 		
 		++i;
 	}
-	for(int i = 0;i < size / 32;i++){
-		for(int j = 0;j < 32;j++){
-			if(bitmap[i] & (1<<(j % 32)))
-				tree.push_back((i * 32) + j);
-		}
+	for(int i = 0;i < size;i++){
+		if(bitmap[i / 32] & (1<<(i % 32)))
+			tree.push_back(i);
 	}
 }
 
@@ -828,4 +927,13 @@ void Network::recursiveInputTree(int* bitmap,std::pair<std::forward_list<int>, i
 		if(!(bitmap[*it / 32] & (1<<(*it % 32))))
 			recursiveInputTree(bitmap, data, *it);
 	}
+}
+
+void Network::recursiveOutputTree(int* bitmap,std::forward_list<int>* data, int current){
+        bitmap[current / 32] |= 1<<(current % 32);
+
+        for(auto it = data[current].begin();it != data[current].end();++it){
+                if(!(bitmap[*it / 32] & (1<<(*it % 32))))
+                        recursiveOutputTree(bitmap, data, *it);
+        }
 }

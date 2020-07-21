@@ -16,6 +16,7 @@
 #include <forward_list>
 class Neuron{
 
+	friend class Trainer;
 	friend class Network;
 	friend std::ostream& operator<<(std::ostream&, const Neuron&);
 
