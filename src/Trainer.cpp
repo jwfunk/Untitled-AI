@@ -9,7 +9,7 @@
 #include <fstream>
 #include <forward_list>
 
-void Trainer::trainPrecisionLearning( Network &n, std::vector<std::pair<std::forward_list<int>,int> > &targetData, int enumerations) {
+void Trainer::trainPrecisionLearning( Network &n, std::vector<std::pair<std::forward_list<int>,int> > &targetData) {
 	std::srand(std::time(0));
 	int size;
 	std::forward_list<int> inputs;
@@ -76,31 +76,33 @@ void Trainer::trainPrecisionLearning( Network &n, std::vector<std::pair<std::for
 			}
 		}
 		std::cout << "\n";
-		int negator = 0;
-		for(int i = 0;i < n.size;i++){
-			if(n.index[i / 32] & 1<<(i % 32)){
-				for(auto itt = n.neurons[i].recievers.begin();itt != n.neurons[i].recievers.end();++itt){
-					if(*itt == locs[2] && n.neurons[i].pulse < 0)
-						negator = i;
+		if(!contributers.empty()){
+			int negator = 0;
+			for(int i = 0;i < n.size;i++){
+				if(n.index[i / 32] & 1<<(i % 32)){
+					for(auto itt = n.neurons[i].recievers.begin();itt != n.neurons[i].recievers.end();++itt){
+						if(*itt == locs[2] && n.neurons[i].pulse < 0)
+							negator = i;
+					}
 				}
 			}
-		}
-		if(negator){
-			for(auto itt = contributers.begin();itt != contributers.end();++itt){
-				n.neurons[*itt].removeReciever(negator);
-				n.neurons[*itt].addReciever(negator);
+			if(negator){
+				for(auto itt = contributers.begin();itt != contributers.end();++itt){
+					n.neurons[*itt].removeReciever(negator);
+					n.neurons[*itt].addReciever(negator);
+				}
 			}
-		}
-		else{
-			Neuron n4 = Neuron();
-			n4.addReciever(locs[2]);
-			n4.pulse = -2;
-			int loc4 = n.nextLocation();
-			if(loc4 == -1)
-				return;
-			n.addNeuron(n4);
-			for(auto itt = contributers.begin();itt != contributers.end();++itt){
-				n.neurons[*itt].addReciever(loc4);
+			else{
+				Neuron n4 = Neuron();
+				n4.addReciever(locs[2]);
+				n4.pulse = -2;
+				int loc4 = n.nextLocation();
+				if(loc4 == -1)
+					return;
+				n.addNeuron(n4);
+				for(auto itt = contributers.begin();itt != contributers.end();++itt){
+					n.neurons[*itt].addReciever(loc4);
+				}
 			}
 		}
 	}

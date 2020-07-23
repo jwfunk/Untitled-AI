@@ -28,7 +28,7 @@ class Trainer{
 
 	public:
 
-	static void trainPrecisionLearning( Network &, std::vector<std::pair<std::forward_list<int>,int> > &, int);
+	static void trainPrecisionLearning( Network &, std::vector<std::pair<std::forward_list<int>,int> > &);
 
 	static void trainTargetLearning(Network&,std::vector<std::pair<std::forward_list<int>,int> >&,int);
 

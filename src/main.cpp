@@ -73,8 +73,20 @@ void convert(std::forward_list<int>&data,int *board,int t){
 
 int main(){
         Network n = Network();
+	
+	for(int i = 0;i < 19;i++){
+                n.addNeuron(Neuron());
+        }
+        for(int i = 0;i < 19;i++)
+                n.addInput(18 - i);
+        for(int i = 0;i < 9;i++){
+                n.addNeuron(Neuron());
+        }
+        for(int i = 0;i < 9;i++)
+                n.addOutput(27 - i);
 
         std::vector<std::pair<std::forward_list<int>,int> > targetData;
+	std::vector<std::pair<std::forward_list<int>,int> > nextData;
         TicTacToe t = TicTacToe();
         while(1){
                 std::cout << t.display();
@@ -88,8 +100,11 @@ int main(){
                         if(!contains(targetData,data)){
                                 std::pair<std::forward_list<int>,int> p;
                                 p.first = data;
-                                p.second = move;
+                                p.second = move + 19;
                                 targetData.push_back(p);
+				nextData.push_back(p);
+				Trainer::trainPrecisionLearning(n,nextData);
+				nextData.clear();
                         }
                         if(t.move(move) == 1)
                                 t.reset();
@@ -97,20 +112,15 @@ int main(){
                 else{
 			std::forward_list<int> data;
                         convert(data,t.getBoard(),t.getTurn());
-			if(contains(targetData,data)){
-				std::cout << "seen\n";
-				int move = locate(targetData,data);
-				if(t.move(move))
-					t.reset();
+				int move = n.process(&data) - 19;
+				if(move == -1 || t.move(move) == -1){
+					move = std::rand() % 9;
+                	        	int r = 0;
+                	        	if((r = t.move(move)) == -1)
+                	        	        move = std::rand() % 9;
+                	        	if(r == 1)
+                	        	        t.reset();
 			}
-			else{
-				int move = std::rand() % 9;
-                	        int r = 0;
-                	        if((r = t.move(move)) == -1)
-                	                move = std::rand() % 9;
-                	        if(r == 1)
-                	                t.reset();
-			}
-                }
-        }
+        	}
+	}
 }
