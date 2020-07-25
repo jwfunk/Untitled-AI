@@ -6,6 +6,9 @@
 #include <cstdlib>
 #include <ctime>
 #include <queue>
+#include <fstream>
+
+
 Network::Network(){
 	size = 0;
 }
@@ -22,10 +25,10 @@ const std::string Network::info() const {
 	std::string r = "Inputs: ";
 	
 	for(auto it = inputs.begin(); it != inputs.end(); ++it)
-		r += std::to_string(*it) + ",";
+		r += std::to_string(*it) + " ";
 	r += "-1\nOutputs: ";
 	for(auto it = outputs.begin(); it != outputs.end(); ++it)
-		r += std::to_string(*it) + ",";
+		r += std::to_string(*it) + " ";
 	r += "-1\n";
 	int e = 0;	
 	for(int i = 0;i < size;i++){
@@ -39,6 +42,94 @@ const std::string Network::info() const {
 	return r;
 }
 
+void Network::save(std::string file){
+	std::fstream fs;
+	fs.open(file,std::ios::out);	
+	fs << (*this).info();
+}
+
+int Network::load(std::string file){
+	(*this) = Network();
+	std::fstream fs;
+	fs.open(file,std::ios::in);
+	std::string buffer;
+	fs >> buffer;
+	int i;
+	fs >> i;
+	std::forward_list<int> in;
+	while(i != -1){
+		in.push_front(i);
+		fs >> i;
+	}
+	fs >> buffer;	
+	std::forward_list<int> ou;
+	fs >> i;	
+	while(i != -1){
+		ou.push_front(i);
+		fs >> i;
+	}
+	neurons = new Neuron[INITSIZE];
+        index = new int[INITSIZE / 32];
+        for(int i = 0;i < INITSIZE / 32;i++)
+        	index[i] = 0;
+        size = INITSIZE;
+        available = std::stack<int>();
+	while(!fs.eof()){
+		fs >> buffer;
+		int loc;
+		fs >> loc;
+		fs >> buffer;
+		int charge;
+		fs >> charge;
+		fs >> buffer;
+		fs >> buffer;
+		int ccharge;
+		fs >> ccharge;
+		fs >> buffer;
+		int pulse;
+		fs >> pulse;
+		std::forward_list<int> rec;
+		fs >> buffer;
+		fs >> i;
+		while(i != -1){
+			rec.push_front(i);
+			fs >> i;
+		}
+		if(loc >= size){
+			int oldSize = size;
+			while(loc >= size)
+				size *= 2;
+			int *newindex = new int[size / 32];
+                        Neuron *newneurons = new Neuron[size];
+                        for(int i = 0;i < oldSize;i++)
+                                newneurons[i] = neurons[i];
+                        for(int i = 0;i < oldSize;i++){
+                                newindex[i] = index[i]; 
+                        }
+			for(int i = oldSize;i < size;i++){
+				newindex[i] = 0;
+			}
+                        delete[] neurons;
+                        delete[] index;
+                        neurons = newneurons;
+                        index = newindex;	
+		}
+		neurons[loc].charge = charge;
+		neurons[loc].criticalCharge = ccharge;
+		neurons[loc].pulse = pulse;
+		for(auto it = rec.begin();it != rec.end();++it)
+			neurons[loc].addReciever(*it);
+		index[loc / 32] |= 1<<(loc % 32);
+	}
+	for(int i = size - 1;i >= 0;i--)
+		if(!(index[i / 32] & 1<<(i % 32)))
+			available.push(i);
+	for(auto it = in.begin();it != in.end();++it)
+		(*this).addInput(*it);
+	for(auto it = ou.begin();it != ou.end();++it)
+                (*this).addOutput(*it);
+	return 0;			
+}
 
 int Network::addStructure(structure s, int i1, int i2, int i3){
 	switch(s){
@@ -189,7 +280,6 @@ int Network::addNeuron(const Neuron n){
 			for(int i = 0;i < size / 2;i++){
 				available.push(size - i - 1);
 			}
-			std::cout << available.top();
                 	return this->addNeuron(n);
 		}
 	}

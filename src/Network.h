@@ -83,6 +83,10 @@ class Network {
 	//destructor
 	~Network();
 
+	void save(std::string);
+
+	int load(std::string);
+
 	private:
 
 	//returns the next free location in neurons or -1 if full

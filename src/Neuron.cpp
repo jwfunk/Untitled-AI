@@ -13,7 +13,7 @@ const std::string Neuron::info() const {
 	std::string r = "Charge: " + std::to_string(charge) + "\nCritical Charge: " + std::to_string(criticalCharge) + "\nPulse: " + std::to_string(pulse) + "\nRecievers: ";
         
 	for(auto it = recievers.begin(); it != recievers.end(); ++it){
-		r += std::to_string(*it) + ",";
+		r += std::to_string(*it) + " ";
 	}
 	r += "-1";
 	return r;

@@ -23,9 +23,7 @@ void Trainer::trainPrecisionLearning( Network &n, std::vector<std::pair<std::for
 				size++;
 			}
 			i++;
-			std::cout << *itt << " ";
 		}
-		std::cout << "\n";
 		std::vector<int> locs = n.nextLocations(3);
                 if(locs.empty())
                 	return;
@@ -116,7 +114,7 @@ void Trainer::trainPrecisionLearning( Network &n, std::vector<std::pair<std::for
                 total++;
         }
         accuracy /= total;
-	std::cout << "\n\n" << (accuracy * 100) << "% accuracy\n" << n;
+	std::cout << "\n\n" << (accuracy * 100) << "% accuracy\n";
 }
 
 void Trainer::trainTargetLearning( Network &n, std::vector<std::pair<std::forward_list<int>,int> > &targetData, int enumerations) {
