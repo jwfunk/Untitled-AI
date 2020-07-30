@@ -86,11 +86,16 @@ std::string train(Network &n,std::vector<std::pair<std::forward_list<int>,int> >
                 if(turn == 1){
                         std::forward_list<int> data;
                         convert(data,t.getBoard(),t.getTurn());
-                        std::cout << "make your move\n";
                         int move;
+			int r;
+			std::cout << "make your move\n";
                         std::cin >> move;
-                        if(!contains(targetData,data)){
-                                std::pair<std::forward_list<int>,int> p;
+			if(move == -1)
+				return "";
+                        while((r = t.move(move)) == -1)
+                                std::cin >> move;
+			if(!contains(targetData,data)){
+				std::pair<std::forward_list<int>,int> p;
                                 p.first = data;
                                 p.second = move + 19;
                                 targetData.push_back(p);
@@ -99,7 +104,7 @@ std::string train(Network &n,std::vector<std::pair<std::forward_list<int>,int> >
                                 	Trainer::trainPrecisionLearning(n,nextData);
                                 nextData.clear();
                         }
-                        if(t.move(move) == 1)
+                        if(r == 1)
                                 t.reset();
                 }
                 else{
@@ -127,6 +132,7 @@ std::string train(Network &n,std::vector<std::pair<std::forward_list<int>,int> >
 }
 
 std::string newTicTacToe(Network& n){
+	n = Network();
 	for(int i = 0;i < 19;i++){
                 n.addNeuron(Neuron());
         }
@@ -153,10 +159,14 @@ int main(){
 	while(buffer != "-1"){
 		if(buffer == "1")
 			message = std::to_string(n.load("test.txt"));
-		if(buffer == "2")
+		if(buffer == "2"){
 			message = newTicTacToe(n);
+			targetData.clear();
+		}
 		if(buffer == "3")
 			message = train(n,targetData);
+		if(buffer == "4")
+			message = n.info();
 		clear();
 		std::cout << "Menu: " + message + "\n\t1. Load Test.txt\n\t2. New\n\t3. Train\n\t-1. Exit\n";
 		std::cin >> buffer;

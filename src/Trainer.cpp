@@ -16,7 +16,6 @@ void Trainer::trainPrecisionLearning( Network &n, std::vector<std::pair<std::for
 	for(auto it = targetData.begin();it != targetData.end();++it){
 		size = 0;
 		int i = 0;
-		inputs.clear();
 		for(auto itt = (*it).first.begin();itt != (*it).first.end();++itt){
 			if(*itt == 1){
 				inputs.push_front(i);
@@ -27,22 +26,6 @@ void Trainer::trainPrecisionLearning( Network &n, std::vector<std::pair<std::for
 		std::vector<int> locs = n.nextLocations(3);
                 if(locs.empty())
                 	return;
-		for(auto itt = inputs.begin();itt != inputs.end();++itt){
-			n.neurons[*itt].addReciever(locs[0]);
-		}	
-		Neuron n1 = Neuron();
-		n1.addReciever(locs[1]);
-		n1.criticalCharge = size;
-		n1.pulse = 2;
-		n.addNeuron(n1);
-		Neuron n2 = Neuron();
-		n2.addReciever(locs[2]);
-		n.addNeuron(n2);
-		Neuron n3 = Neuron();
-		n3.criticalCharge = 2;
-		n3.addReciever((*it).second);
-		n.addNeuron(n3);
-		
 		int bitmap[n.size / 32];
 		for(int i = 0;i < n.size / 32;i++)
 			bitmap[i] = 0;
@@ -51,13 +34,41 @@ void Trainer::trainPrecisionLearning( Network &n, std::vector<std::pair<std::for
 				bitmap[*reciterator / 32] |= 1<<((*reciterator) % 32);
 			}
 		}
+
 		bitmap[locs[0] / 32] &= ~(1 << (locs[0] % 32));
 		std::forward_list<int> contributers;
+
+		int covered = 0;
+
+		if(inputs.front() == 0 && !n.neurons[0].recievers.empty())
+			covered = 1;
 		for(int i = 0;i < n.size;i++){
 			if(bitmap[i / 32] & 1<<(i % 32)){
 				std::vector<int> oTree;
 				n.outputTree(oTree,i);
+				int inputsCheck[size + 1];
+                                for(int k = 0;k < size + 1;k++){
+                                        inputsCheck[k] = 0;
+                                }
 				for(auto itt = oTree.begin();itt != oTree.end();++itt){
+					//Identify if case handled
+					int outside = 1;
+					int j = 1;				
+					for(auto ittt = inputs.begin();ittt != inputs.end();++ittt){
+						if(n.neurons[*itt].pulse < 0)
+							outside = 0;
+						if(*ittt == *itt){
+							outside = 0;
+							inputsCheck[j] = 1;	
+						}
+						j++;
+					}
+					if(i == *itt)
+						outside = 0;
+					if(outside)
+						inputsCheck[0] = 1;
+					//Identify if case handled				
+	
 					int contains = 0;
 					for(auto inputit = inputs.begin();inputit != inputs.end();++inputit){
 						if(*inputit == *itt)
@@ -71,7 +82,38 @@ void Trainer::trainPrecisionLearning( Network &n, std::vector<std::pair<std::for
 						contributers.push_front(*itt);
 					}
 				}
+
+				//Identify if case handled
+				int all = 1;
+				for(int i = 1;i < size + 1;i++){
+					if(inputsCheck[i] == 0)
+						all = 0;
+				}
+				if(inputsCheck[0] == 1)
+					all = 0;
+				if(all)
+					covered = 1;
+				//Identify if case handled
 			}
+		}
+
+		
+		if(!covered){
+			for(auto itt = inputs.begin();itt != inputs.end();++itt){
+                	        n.neurons[*itt].addReciever(locs[0]);
+                	}
+			Neuron n1 = Neuron();
+			n1.addReciever(locs[1]);
+			n1.criticalCharge = size;
+			n1.pulse = 2;
+			n.addNeuron(n1);
+			Neuron n2 = Neuron();
+			n2.addReciever(locs[2]);
+			n.addNeuron(n2);
+			Neuron n3 = Neuron();
+			n3.criticalCharge = 2;
+			n3.addReciever((*it).second);
+			n.addNeuron(n3);
 		}
 		std::cout << "\n";
 		if(!contributers.empty()){

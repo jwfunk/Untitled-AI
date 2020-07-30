@@ -89,6 +89,7 @@ int Network::load(std::string file){
 		int pulse;
 		fs >> pulse;
 		std::forward_list<int> rec;
+		rec.clear();
 		fs >> buffer;
 		fs >> i;
 		while(i != -1){
@@ -103,10 +104,10 @@ int Network::load(std::string file){
                         Neuron *newneurons = new Neuron[size];
                         for(int i = 0;i < oldSize;i++)
                                 newneurons[i] = neurons[i];
-                        for(int i = 0;i < oldSize;i++){
+                        for(int i = 0;i < oldSize / 32;i++){
                                 newindex[i] = index[i]; 
                         }
-			for(int i = oldSize;i < size;i++){
+			for(int i = oldSize / 32;i < size / 32;i++){
 				newindex[i] = 0;
 			}
                         delete[] neurons;
@@ -125,9 +126,9 @@ int Network::load(std::string file){
 		if(!(index[i / 32] & 1<<(i % 32)))
 			available.push(i);
 	for(auto it = in.begin();it != in.end();++it)
-		(*this).addInput(*it);
+		inputs.push_front(*it);
 	for(auto it = ou.begin();it != ou.end();++it)
-                (*this).addOutput(*it);
+                outputs.push_front(*it);
 	return 0;			
 }
 

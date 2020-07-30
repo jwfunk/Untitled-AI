@@ -9,27 +9,27 @@ Neuron: 1
 Charge: 0
 Critical Charge: 1
 Pulse: 1
-Recievers: 116 112 111 107 100 96 95 91 87 83 79 75 71 67 62 58 54 50 46 37 34 31 -1
+Recievers: 48 44 40 34 31 -1
 Neuron: 2
 Charge: 0
 Critical Charge: 1
 Pulse: 1
-Recievers: 119 115 108 104 103 99 92 91 87 83 79 72 -1
+Recievers: 48 -1
 Neuron: 3
 Charge: 0
 Critical Charge: 1
 Pulse: 1
-Recievers: 116 115 111 107 103 99 95 91 87 83 79 75 71 67 59 58 54 47 -1
+Recievers: -1
 Neuron: 4
 Charge: 0
 Critical Charge: 1
 Pulse: 1
-Recievers: 119 115 111 107 103 99 95 91 87 83 79 75 71 63 62 55 -1
+Recievers: -1
 Neuron: 5
 Charge: 0
 Critical Charge: 1
 Pulse: 1
-Recievers: 119 115 108 104 103 99 92 88 84 80 76 72 68 63 59 55 51 47 43 37 -1
+Recievers: 51 47 43 34 -1
 Neuron: 6
 Charge: 0
 Critical Charge: 1
@@ -39,62 +39,62 @@ Neuron: 7
 Charge: 0
 Critical Charge: 1
 Pulse: 1
-Recievers: 119 115 108 107 103 99 92 88 87 80 79 75 71 67 62 58 54 50 46 37 34 -1
+Recievers: -1
 Neuron: 8
 Charge: 0
 Critical Charge: 1
 Pulse: 1
-Recievers: 116 112 -1
+Recievers: -1
 Neuron: 9
 Charge: 0
 Critical Charge: 1
 Pulse: 1
-Recievers: 116 112 100 -1
+Recievers: 48 44 -1
 Neuron: 10
 Charge: 0
 Critical Charge: 1
 Pulse: 1
-Recievers: 119 115 108 104 103 92 88 84 80 76 72 68 63 59 55 51 47 43 40 -1
+Recievers: 37 -1
 Neuron: 11
 Charge: 0
 Critical Charge: 1
 Pulse: 1
-Recievers: 116 112 111 107 100 99 95 91 87 83 79 75 71 67 59 58 54 47 43 -1
+Recievers: -1
 Neuron: 12
 Charge: 0
 Critical Charge: 1
 Pulse: 1
-Recievers: 119 115 111 107 103 99 92 88 87 83 79 75 71 67 62 58 54 50 46 37 -1
+Recievers: 51 47 43 34 -1
 Neuron: 13
 Charge: 0
 Critical Charge: 1
 Pulse: 1
-Recievers: 119 115 108 107 103 99 95 91 87 80 76 75 71 67 62 58 54 50 46 37 34 -1
+Recievers: -1
 Neuron: 14
 Charge: 0
 Critical Charge: 1
 Pulse: 1
-Recievers: 116 112 100 96 -1
+Recievers: 48 44 40 -1
 Neuron: 15
 Charge: 0
 Critical Charge: 1
 Pulse: 1
-Recievers: 116 115 111 107 103 99 95 91 87 83 79 72 71 67 62 58 54 50 46 37 34 31 -1
+Recievers: 48 47 43 34 31 -1
 Neuron: 16
 Charge: 0
 Critical Charge: 1
 Pulse: 1
-Recievers: 116 112 111 107 103 99 95 91 87 83 79 75 71 63 62 55 51 -1
+Recievers: -1
 Neuron: 17
 Charge: 0
 Critical Charge: 1
 Pulse: 1
-Recievers: 119 115 108 104 103 99 92 88 84 80 79 75 71 67 59 55 -1
+Recievers: 48 44 -1
 Neuron: 18
 Charge: 0
 Critical Charge: 1
 Pulse: 1
-Recievers: 119 115 108 104 103 99 92 91 87 83 79 72 68 63 62 58 54 47 -1
+Recievers: -1
 Neuron: 19
 Charge: 0
 Critical Charge: 1
@@ -169,7 +169,7 @@ Neuron: 33
 Charge: 0
 Critical Charge: 2
 Pulse: 1
-Recievers: 25 -1
+Recievers: 23 -1
 Neuron: 34
 Charge: 0
 Critical Charge: 4
@@ -184,10 +184,10 @@ Neuron: 36
 Charge: 0
 Critical Charge: 2
 Pulse: 1
-Recievers: 23 -1
+Recievers: 27 -1
 Neuron: 37
 Charge: 0
-Critical Charge: 6
+Critical Charge: 1
 Pulse: 2
 Recievers: 38 -1
 Neuron: 38
@@ -199,10 +199,10 @@ Neuron: 39
 Charge: 0
 Critical Charge: 2
 Pulse: 1
-Recievers: 27 -1
+Recievers: 23 -1
 Neuron: 40
 Charge: 0
-Critical Charge: 1
+Critical Charge: 2
 Pulse: 2
 Recievers: 41 -1
 Neuron: 41
@@ -214,384 +214,49 @@ Neuron: 42
 Charge: 0
 Critical Charge: 2
 Pulse: 1
-Recievers: 23 -1
+Recievers: 27 -1
 Neuron: 43
 Charge: 0
-Critical Charge: 3
-Pulse: 2
-Recievers: 44 -1
+Critical Charge: 1
+Pulse: -2
+Recievers: 42 -1
 Neuron: 44
-Charge: 0
-Critical Charge: 1
-Pulse: 1
-Recievers: 45 -1
-Neuron: 45
-Charge: 0
-Critical Charge: 2
-Pulse: 1
-Recievers: 21 -1
-Neuron: 46
-Charge: 0
-Critical Charge: 1
-Pulse: -2
-Recievers: 45 -1
-Neuron: 47
-Charge: 0
-Critical Charge: 5
-Pulse: 2
-Recievers: 48 -1
-Neuron: 48
-Charge: 0
-Critical Charge: 1
-Pulse: 1
-Recievers: 49 -1
-Neuron: 49
-Charge: 0
-Critical Charge: 2
-Pulse: 1
-Recievers: 25 -1
-Neuron: 50
-Charge: 0
-Critical Charge: 1
-Pulse: -2
-Recievers: 49 -1
-Neuron: 51
-Charge: 0
-Critical Charge: 3
-Pulse: 2
-Recievers: 52 -1
-Neuron: 52
-Charge: 0
-Critical Charge: 1
-Pulse: 1
-Recievers: 53 -1
-Neuron: 53
-Charge: 0
-Critical Charge: 2
-Pulse: 1
-Recievers: 22 -1
-Neuron: 54
-Charge: 0
-Critical Charge: 1
-Pulse: -2
-Recievers: 53 -1
-Neuron: 55
-Charge: 0
-Critical Charge: 5
-Pulse: 2
-Recievers: 56 -1
-Neuron: 56
-Charge: 0
-Critical Charge: 1
-Pulse: 1
-Recievers: 57 -1
-Neuron: 57
-Charge: 0
-Critical Charge: 2
-Pulse: 1
-Recievers: 24 -1
-Neuron: 58
-Charge: 0
-Critical Charge: 1
-Pulse: -2
-Recievers: 57 -1
-Neuron: 59
-Charge: 0
-Critical Charge: 5
-Pulse: 2
-Recievers: 60 -1
-Neuron: 60
-Charge: 0
-Critical Charge: 1
-Pulse: 1
-Recievers: 61 -1
-Neuron: 61
-Charge: 0
-Critical Charge: 2
-Pulse: 1
-Recievers: 25 -1
-Neuron: 62
-Charge: 0
-Critical Charge: 1
-Pulse: -2
-Recievers: 61 -1
-Neuron: 64
-Charge: 0
-Critical Charge: 5
-Pulse: 2
-Recievers: 64 -1
-Neuron: 65
-Charge: 0
-Critical Charge: 1
-Pulse: 1
-Recievers: 65 -1
-Neuron: 66
-Charge: 0
-Critical Charge: 2
-Pulse: 1
-Recievers: 24 -1
-Neuron: 67
-Charge: 0
-Critical Charge: 1
-Pulse: -2
-Recievers: 65 -1
-Neuron: 68
-Charge: 0
-Critical Charge: 3
-Pulse: 2
-Recievers: 69 -1
-Neuron: 69
-Charge: 0
-Critical Charge: 1
-Pulse: 1
-Recievers: 70 -1
-Neuron: 70
-Charge: 0
-Critical Charge: 2
-Pulse: 1
-Recievers: 20 -1
-Neuron: 71
-Charge: 0
-Critical Charge: 1
-Pulse: -2
-Recievers: 70 -1
-Neuron: 72
-Charge: 0
-Critical Charge: 5
-Pulse: 2
-Recievers: 73 -1
-Neuron: 73
-Charge: 0
-Critical Charge: 1
-Pulse: 1
-Recievers: 74 -1
-Neuron: 74
-Charge: 0
-Critical Charge: 2
-Pulse: 1
-Recievers: 26 -1
-Neuron: 75
-Charge: 0
-Critical Charge: 1
-Pulse: -2
-Recievers: 74 -1
-Neuron: 76
-Charge: 0
-Critical Charge: 3
-Pulse: 2
-Recievers: 77 -1
-Neuron: 77
-Charge: 0
-Critical Charge: 1
-Pulse: 1
-Recievers: 78 -1
-Neuron: 78
-Charge: 0
-Critical Charge: 2
-Pulse: 1
-Recievers: 25 -1
-Neuron: 79
-Charge: 0
-Critical Charge: 1
-Pulse: -2
-Recievers: 78 -1
-Neuron: 80
-Charge: 0
-Critical Charge: 5
-Pulse: 2
-Recievers: 81 -1
-Neuron: 81
-Charge: 0
-Critical Charge: 1
-Pulse: 1
-Recievers: 82 -1
-Neuron: 82
-Charge: 0
-Critical Charge: 2
-Pulse: 1
-Recievers: 21 -1
-Neuron: 83
-Charge: 0
-Critical Charge: 1
-Pulse: -2
-Recievers: 82 -1
-Neuron: 84
-Charge: 0
-Critical Charge: 3
-Pulse: 2
-Recievers: 85 -1
-Neuron: 85
-Charge: 0
-Critical Charge: 1
-Pulse: 1
-Recievers: 86 -1
-Neuron: 86
-Charge: 0
-Critical Charge: 2
-Pulse: 1
-Recievers: 25 -1
-Neuron: 87
-Charge: 0
-Critical Charge: 1
-Pulse: -2
-Recievers: 86 -1
-Neuron: 88
-Charge: 0
-Critical Charge: 5
-Pulse: 2
-Recievers: 89 -1
-Neuron: 89
-Charge: 0
-Critical Charge: 1
-Pulse: 1
-Recievers: 90 -1
-Neuron: 90
-Charge: 0
-Critical Charge: 2
-Pulse: 1
-Recievers: 20 -1
-Neuron: 91
-Charge: 0
-Critical Charge: 1
-Pulse: -2
-Recievers: 90 -1
-Neuron: 92
-Charge: 0
-Critical Charge: 7
-Pulse: 2
-Recievers: 93 -1
-Neuron: 93
-Charge: 0
-Critical Charge: 1
-Pulse: 1
-Recievers: 94 -1
-Neuron: 94
-Charge: 0
-Critical Charge: 2
-Pulse: 1
-Recievers: 24 -1
-Neuron: 95
-Charge: 0
-Critical Charge: 1
-Pulse: -2
-Recievers: 94 -1
-Neuron: 96
-Charge: 0
-Critical Charge: 2
-Pulse: 2
-Recievers: 97 -1
-Neuron: 97
-Charge: 0
-Critical Charge: 1
-Pulse: 1
-Recievers: 98 -1
-Neuron: 98
-Charge: 0
-Critical Charge: 2
-Pulse: 1
-Recievers: 27 -1
-Neuron: 99
-Charge: 0
-Critical Charge: 1
-Pulse: -2
-Recievers: 98 -1
-Neuron: 100
 Charge: 0
 Critical Charge: 4
 Pulse: 2
-Recievers: 101 -1
-Neuron: 101
+Recievers: 45 -1
+Neuron: 45
 Charge: 0
 Critical Charge: 1
 Pulse: 1
-Recievers: 102 -1
-Neuron: 102
+Recievers: 46 -1
+Neuron: 46
 Charge: 0
 Critical Charge: 2
 Pulse: 1
-Recievers: 26 -1
-Neuron: 103
+Recievers: 20 -1
+Neuron: 47
 Charge: 0
 Critical Charge: 1
 Pulse: -2
-Recievers: 102 -1
-Neuron: 104
-Charge: 0
-Critical Charge: 5
-Pulse: 2
-Recievers: 105 -1
-Neuron: 105
-Charge: 0
-Critical Charge: 1
-Pulse: 1
-Recievers: 106 -1
-Neuron: 106
-Charge: 0
-Critical Charge: 2
-Pulse: 1
-Recievers: 25 -1
-Neuron: 107
-Charge: 0
-Critical Charge: 1
-Pulse: -2
-Recievers: 106 -1
-Neuron: 108
-Charge: 0
-Critical Charge: 7
-Pulse: 2
-Recievers: 109 -1
-Neuron: 109
-Charge: 0
-Critical Charge: 1
-Pulse: 1
-Recievers: 110 -1
-Neuron: 110
-Charge: 0
-Critical Charge: 2
-Pulse: 1
-Recievers: 21 -1
-Neuron: 111
-Charge: 0
-Critical Charge: 1
-Pulse: -2
-Recievers: 110 -1
-Neuron: 112
+Recievers: 46 -1
+Neuron: 48
 Charge: 0
 Critical Charge: 6
 Pulse: 2
-Recievers: 113 -1
-Neuron: 113
+Recievers: 49 -1
+Neuron: 49
 Charge: 0
 Critical Charge: 1
 Pulse: 1
-Recievers: 114 -1
-Neuron: 114
+Recievers: 50 -1
+Neuron: 50
 Charge: 0
 Critical Charge: 2
 Pulse: 1
 Recievers: 21 -1
-Neuron: 115
+Neuron: 51
 Charge: 0
 Critical Charge: 1
 Pulse: -2
-Recievers: 114 -1
-Neuron: 116
-Charge: 0
-Critical Charge: 8
-Pulse: 2
-Recievers: 117 -1
-Neuron: 117
-Charge: 0
-Critical Charge: 1
-Pulse: 1
-Recievers: 118 -1
-Neuron: 118
-Charge: 0
-Critical Charge: 2
-Pulse: 1
-Recievers: 22 -1
-Neuron: 119
-Charge: 0
-Critical Charge: 1
-Pulse: -2
-Recievers: 118 -1
+Recievers: 50 -1
