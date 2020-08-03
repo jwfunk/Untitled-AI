@@ -11,27 +11,28 @@
 
 void Trainer::trainPrecisionLearning( Network &n, std::vector<std::pair<std::forward_list<int>,int> > &targetData) {
 	std::srand(std::time(0));
-	int size;
 	std::forward_list<int> inputs;
-	for(auto it = targetData.begin();it != targetData.end();++it){
-		size = 0;
-		int i = 0;
-		for(auto itt = (*it).first.begin();itt != (*it).first.end();++itt){
-			if(*itt == 1){
-				inputs.push_front(i);
-				size++;
+	for(auto targetIterator = targetData.begin();targetIterator != targetData.end();++targetIterator){
+		int inputsSize = 0;
+		int inputLoc = 0;
+		for(auto firstIterator = (*targetIterator).first.begin();firstIterator != (*targetIterator).first.end();++firstIterator){
+			if(*firstIterator == 1){
+				inputs.push_front(inputLoc);
+				inputsSize++;
 			}
-			i++;
+			inputLoc++;
 		}
 		std::vector<int> locs = n.nextLocations(3);
                 if(locs.empty())
                 	return;
-		int bitmap[n.size / 32];
-		for(int i = 0;i < n.size / 32;i++)
+		int bitmap[n.size / 16];//possibly change to increase speed
+		int bitmapSize = n.size * 2;
+		for(int i = 0;i < bitmapSize / 32;i++)
 			bitmap[i] = 0;
-		for(auto itt = inputs.begin();itt != inputs.end();++itt){
-			for(auto reciterator = n.neurons[*itt].recievers.begin();reciterator != n.neurons[*itt].recievers.end();++reciterator){
-				bitmap[*reciterator / 32] |= 1<<((*reciterator) % 32);
+		for(auto inputsIterator = inputs.begin();inputsIterator != inputs.end();++inputsIterator){
+			for(auto reciterator = n.neurons[*inputsIterator].recievers.begin();reciterator != n.neurons[*inputsIterator].recievers.end();++reciterator){
+				if(n.neurons[*reciterator].pulse > 0)
+					bitmap[*reciterator / 32] |= 1<<((*reciterator) % 32);
 			}
 		}
 
@@ -46,46 +47,42 @@ void Trainer::trainPrecisionLearning( Network &n, std::vector<std::pair<std::for
 			if(bitmap[i / 32] & 1<<(i % 32)){
 				std::vector<int> oTree;
 				n.outputTree(oTree,i);
-				int inputsCheck[size + 1];
-                                for(int k = 0;k < size + 1;k++){
-                                        inputsCheck[k] = 0;
+				int inputsCheck[inputsSize + 1];
+                                for(int j = 0;j < inputsSize + 1;j++){
+                                        inputsCheck[j] = 0;
                                 }
-				for(auto itt = oTree.begin();itt != oTree.end();++itt){
+				for(auto oIterator = oTree.begin();oIterator != oTree.end();++oIterator){
 					//Identify if case handled
 					int outside = 1;
 					int j = 1;				
-					for(auto ittt = inputs.begin();ittt != inputs.end();++ittt){
-						if(n.neurons[*itt].pulse < 0)
+					for(auto inputsIterator = inputs.begin();inputsIterator != inputs.end();++inputsIterator){
+						if(n.neurons[*oIterator].pulse < 0)
 							outside = 0;
-						if(*ittt == *itt){
+						if(*inputsIterator == *oIterator){
 							outside = 0;
 							inputsCheck[j] = 1;	
 						}
 						j++;
 					}
-					if(i == *itt)
+					if(i == *oIterator)
 						outside = 0;
 					if(outside)
 						inputsCheck[0] = 1;
 					//Identify if case handled				
 	
 					int contains = 0;
-					for(auto inputit = inputs.begin();inputit != inputs.end();++inputit){
-						if(*inputit == *itt)
+					for(auto contributersIterator = contributers.begin();contributersIterator != contributers.end();++contributersIterator){
+						if(*contributersIterator == *oIterator)
 							contains = 1;
 					}
-					for(auto contriit = contributers.begin();contriit != contributers.end();++contriit){
-						if(*contriit == *itt)
-							contains = 1;
-					}
-					if(!contains && i != *itt){
-						contributers.push_front(*itt);
+					if(!contains && i != *oIterator){
+						contributers.push_front(*oIterator);
 					}
 				}
 
 				//Identify if case handled
 				int all = 1;
-				for(int i = 1;i < size + 1;i++){
+				for(int i = 1;i < inputsSize + 1;i++){
 					if(inputsCheck[i] == 0)
 						all = 0;
 				}
@@ -97,14 +94,13 @@ void Trainer::trainPrecisionLearning( Network &n, std::vector<std::pair<std::for
 			}
 		}
 
-		
 		if(!covered){
-			for(auto itt = inputs.begin();itt != inputs.end();++itt){
-                	        n.neurons[*itt].addReciever(locs[0]);
+			for(auto inputsIterator = inputs.begin();inputsIterator != inputs.end();++inputsIterator){
+                	        n.neurons[*inputsIterator].addReciever(locs[0]);
                 	}
 			Neuron n1 = Neuron();
 			n1.addReciever(locs[1]);
-			n1.criticalCharge = size;
+			n1.criticalCharge = inputsSize;
 			n1.pulse = 2;
 			n.addNeuron(n1);
 			Neuron n2 = Neuron();
@@ -112,51 +108,54 @@ void Trainer::trainPrecisionLearning( Network &n, std::vector<std::pair<std::for
 			n.addNeuron(n2);
 			Neuron n3 = Neuron();
 			n3.criticalCharge = 2;
-			n3.addReciever((*it).second);
+			n3.addReciever((*targetIterator).second);
 			n.addNeuron(n3);
+			bitmap[locs[0] / 32] |= 1<<(locs[0] % 32);
 		}
-		std::cout << "\n";
-		if(!contributers.empty()){
-			int negator = 0;
-			for(int i = 0;i < n.size;i++){
-				if(n.index[i / 32] & 1<<(i % 32)){
-					for(auto itt = n.neurons[i].recievers.begin();itt != n.neurons[i].recievers.end();++itt){
-						if(*itt == locs[2] && n.neurons[i].pulse < 0)
-							negator = i;
+
+		for(int i = 0;i < bitmapSize;i++){
+			if(bitmap[i / 32] & 1<<(i % 32)){
+				std::vector<int> oTree;
+                                n.outputTree(oTree,i);
+				int negator = 0;
+				for(int j = 0;j < n.size;j++){
+					if(n.index[j / 32] & 1<<(j % 32) && n.neurons[j].pulse < 0){
+						for(auto recieversIterator = n.neurons[j].recievers.begin();recieversIterator != n.neurons[j].recievers.end();++recieversIterator){
+							if(*recieversIterator == n.neurons[n.neurons[i].recievers.front()].recievers.front())
+								negator = j;//potential for bug if negator is 0
+						}
 					}
 				}
-			}
-			if(negator){
-				for(auto itt = contributers.begin();itt != contributers.end();++itt){
-					n.neurons[*itt].removeReciever(negator);
-					n.neurons[*itt].addReciever(negator);
+				int reciever;
+				
+				if(negator){
+					reciever = negator;
 				}
-			}
-			else{
-				Neuron n4 = Neuron();
-				n4.addReciever(locs[2]);
-				n4.pulse = -2;
-				int loc4 = n.nextLocation();
-				if(loc4 == -1)
-					return;
-				n.addNeuron(n4);
-				for(auto itt = contributers.begin();itt != contributers.end();++itt){
-					n.neurons[*itt].addReciever(loc4);
+				else{
+					Neuron n4 = Neuron();
+                                	n4.addReciever(n.neurons[n.neurons[i].recievers.front()].recievers.front());
+                                	n4.pulse = -2;
+                                	int loc4 = n.nextLocation();
+                                	if(loc4 == -1)
+                                	        return;
+					reciever = loc4;
+                                	n.addNeuron(n4);	
 				}
+				for(auto contributersIterator = contributers.begin();contributersIterator != contributers.end();++contributersIterator){
+                                        int present = 0;
+                                        for(auto oIterator = oTree.begin();oIterator != oTree.end();++oIterator){
+                                                if(*oIterator == *contributersIterator)
+                                                        present = 1;
+                                        }
+                                        if(!present){
+                                                n.neurons[*contributersIterator].removeReciever(reciever);
+                                                n.neurons[*contributersIterator].addReciever(reciever);
+                                        }
+                                }
+				
 			}
 		}
 	}
-	double accuracy = 0;
-        double total = 0;
-	for(auto it = targetData.begin(); it != targetData.end();++it){
-
-                if(n.process(&((*it).first)) == (*it).second){
-                        accuracy++;
-                }
-                total++;
-        }
-        accuracy /= total;
-	std::cout << "\n\n" << (accuracy * 100) << "% accuracy\n";
 }
 
 void Trainer::trainTargetLearning( Network &n, std::vector<std::pair<std::forward_list<int>,int> > &targetData, int enumerations) {

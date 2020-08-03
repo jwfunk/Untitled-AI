@@ -10,13 +10,13 @@ std::ostream& operator<<(std::ostream &os, const Neuron &i){
 }
 
 const std::string Neuron::info() const {
-	std::string r = "Charge: " + std::to_string(charge) + "\nCritical Charge: " + std::to_string(criticalCharge) + "\nPulse: " + std::to_string(pulse) + "\nRecievers: ";
+	std::string returnValue = "Charge: " + std::to_string(charge) + "\nCritical Charge: " + std::to_string(criticalCharge) + "\nPulse: " + std::to_string(pulse) + "\nRecievers: ";
         
-	for(auto it = recievers.begin(); it != recievers.end(); ++it){
-		r += std::to_string(*it) + " ";
+	for(auto recieversIterator = recievers.begin(); recieversIterator != recievers.end(); ++recieversIterator){
+		returnValue += std::to_string(*recieversIterator) + " ";
 	}
-	r += "-1";
-	return r;
+	returnValue += "-1";
+	return returnValue;
 }
 
 int Neuron::addReciever(int i) {
