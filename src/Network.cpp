@@ -402,7 +402,7 @@ void Network::mutateTarget(std::pair<std::forward_list<int>, int >& target){
 	std::vector<int> oTree;
 	iTree.clear();
 	oTree.clear();
-	inputTree(iTree,target);
+	inputTree(iTree,target.first);
 	int present = 0;
 	int inputSize = 0;
 	int outputSize = 0;
@@ -994,15 +994,15 @@ void Network::outputTree(std::vector<int>& tree,int target){
         }
 }
 
-void Network::inputTree(std::vector<int>& tree, std::pair<std::forward_list<int>,int >& data){
+void Network::inputTree(std::vector<int>& tree, std::forward_list<int>& data){
 	int bitmap[size/32];
 	for(int i = 0;i < size/32;i++)
 		bitmap[i] = 0;
 	int i = 0;
-	for(auto firstIterator = data.first.begin();firstIterator != data.first.end();++firstIterator){
-		if(*firstIterator)
+	for(auto dataIterator = data.begin();dataIterator != data.end();++dataIterator){
+		if(*dataIterator)
 			if(index[i / 32] & (1<<(i % 32)) && !(bitmap[i / 32] & (1<<(i % 32))))
-				recursiveInputTree(bitmap, data, i);
+				recursiveInputTree(bitmap, i);
 		++i;
 	}
 	for(int i = 0;i < size;i++){
@@ -1011,12 +1011,12 @@ void Network::inputTree(std::vector<int>& tree, std::pair<std::forward_list<int>
 	}
 }
 
-void Network::recursiveInputTree(int* bitmap,std::pair<std::forward_list<int>, int >& data, int current){
+void Network::recursiveInputTree(int* bitmap, int current){
 	bitmap[current / 32] |= 1<<(current % 32);
 
 	for(auto recieversIterator = neurons[current].recievers.begin();recieversIterator != neurons[current].recievers.end();++recieversIterator){
 		if(!(bitmap[*recieversIterator / 32] & (1<<(*recieversIterator % 32))))
-			recursiveInputTree(bitmap, data, *recieversIterator);
+			recursiveInputTree(bitmap, *recieversIterator);
 	}
 }
 

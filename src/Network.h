@@ -8,6 +8,7 @@
 //neurons: array of all neurons in the Network
 //size: size of neurons array
 //index: bitmap for empty positions in neurons
+//available: a stack keeping track of the empty spaces in the network
 #ifndef NETWORK
 #define NETWORK
 
@@ -33,6 +34,8 @@ class Network {
 	public:
 
 	//constructors
+
+	//creates empty network
 	Network();
 
 	//Adds the given neuron to the network. Returns 0 on success and 1 on failure
@@ -72,6 +75,9 @@ class Network {
 	//mutates a random aspect of the Network
 	void mutate(int);
 
+	//mutates a random aspect of the Network. but if the given inputs don't connect with the 
+	//target output it specifically mutates so that the input's tree connects with the outputs
+	//tree
 	void mutateTarget(std::pair<std::forward_list<int>, int >&);
 
 	//displays information of the network
@@ -83,8 +89,10 @@ class Network {
 	//destructor
 	~Network();
 
+	//saves the Network to the given filename
 	void save(std::string);
 
+	//retrieves the network from the given filename
 	int load(std::string);
 
 	private:
@@ -106,12 +114,12 @@ class Network {
 	//Clears the charges of all Neurons in the network
         void clear();
 
-	void inputTree(std::vector<int>&, std::pair<std::forward_list<int>,int >&);
+	//used to create a tree of what the given inputs branch out to
+	void inputTree(std::vector<int>&, std::forward_list<int>&);
+	void recursiveInputTree(int*, int);
 
-	void recursiveInputTree(int*, std::pair<std::forward_list<int>, int>&, int);
-
+	//used to create a tree of what the given output branches from
 	void outputTree(std::vector<int>&, int);
-
 	void recursiveOutputTree(int*, std::forward_list<int>*,int);
 
 	std::stack<int> available;

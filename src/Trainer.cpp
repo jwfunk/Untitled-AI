@@ -11,10 +11,14 @@
 
 void Trainer::trainPrecisionLearning( Network &n, std::vector<std::pair<std::forward_list<int>,int> > &targetData) {
 	std::srand(std::time(0));
-	std::forward_list<int> inputs;
+	
 	for(auto targetIterator = targetData.begin();targetIterator != targetData.end();++targetIterator){
+
+		//Put the inputs values into inputs
+
 		int inputsSize = 0;
 		int inputLoc = 0;
+		std::forward_list<int> inputs;
 		for(auto firstIterator = (*targetIterator).first.begin();firstIterator != (*targetIterator).first.end();++firstIterator){
 			if(*firstIterator == 1){
 				inputs.push_front(inputLoc);
@@ -22,9 +26,15 @@ void Trainer::trainPrecisionLearning( Network &n, std::vector<std::pair<std::for
 			}
 			inputLoc++;
 		}
+
+		
+
 		std::vector<int> locs = n.nextLocations(3);
                 if(locs.empty())
                 	return;
+		
+		//create a bitmap to keep track of what neurons the active inputs are affecting
+		
 		int bitmap[n.size / 16];//possibly change to increase speed
 		int bitmapSize = n.size * 2;
 		for(int i = 0;i < bitmapSize / 32;i++)
@@ -36,8 +46,11 @@ void Trainer::trainPrecisionLearning( Network &n, std::vector<std::pair<std::for
 			}
 		}
 
-		bitmap[locs[0] / 32] &= ~(1 << (locs[0] % 32));
+		//create list of all the Neurons that contribute to the bitmap neurons
+
 		std::forward_list<int> contributers;
+
+		//used to determine if the given case has already been covered previously
 
 		int covered = 0;
 
@@ -93,8 +106,13 @@ void Trainer::trainPrecisionLearning( Network &n, std::vector<std::pair<std::for
 				//Identify if case handled
 			}
 		}
-
 		if(!covered){
+
+			//create neuron tree to cover the new case
+			std::vector<int> locs = n.nextLocations(3);
+                	if(locs.empty())
+                		return;
+
 			for(auto inputsIterator = inputs.begin();inputsIterator != inputs.end();++inputsIterator){
                 	        n.neurons[*inputsIterator].addReciever(locs[0]);
                 	}
@@ -112,6 +130,8 @@ void Trainer::trainPrecisionLearning( Network &n, std::vector<std::pair<std::for
 			n.addNeuron(n3);
 			bitmap[locs[0] / 32] |= 1<<(locs[0] % 32);
 		}
+
+		//make sure that all the bitmap neurons are properly negated
 
 		for(int i = 0;i < bitmapSize;i++){
 			if(bitmap[i / 32] & 1<<(i % 32)){
