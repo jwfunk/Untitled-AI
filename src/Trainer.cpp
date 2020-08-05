@@ -26,12 +26,6 @@ void Trainer::trainPrecisionLearning( Network &n, std::vector<std::pair<std::for
 			}
 			inputLoc++;
 		}
-
-		
-
-		std::vector<int> locs = n.nextLocations(3);
-                if(locs.empty())
-                	return;
 		
 		//create a bitmap to keep track of what neurons the active inputs are affecting
 		
@@ -95,8 +89,8 @@ void Trainer::trainPrecisionLearning( Network &n, std::vector<std::pair<std::for
 
 				//Identify if case handled
 				int all = 1;
-				for(int i = 1;i < inputsSize + 1;i++){
-					if(inputsCheck[i] == 0)
+				for(int j = 1;j < inputsSize + 1;j++){
+					if(inputsCheck[j] == 0)
 						all = 0;
 				}
 				if(inputsCheck[0] == 1)
@@ -256,10 +250,6 @@ void Trainer::trainTargetLearning( Network &n, std::vector<std::pair<std::forwar
 		} 
 		std::cout << "\n\n";
 	}
-
-
-
-
 	
 	std::ofstream file;
 	file.open("../test.txt");
