@@ -8,28 +8,34 @@
 //neurons: array of all neurons in the Network
 //size: size of neurons array
 //index: bitmap for empty positions in neurons
+//available: a stack keeping track of the empty spaces in the network
 #ifndef NETWORK
 #define NETWORK
 
 #define TRAINERITERATIONS 10000
-#define MAXITERATIONS 1000
+#define MAXITERATIONS 1000000
 #define INITSIZE 64
 #define MAXSIZE 2048
-#define NMUTATIONS 10
+#define NMUTATIONS 3
 
 #include "Neuron.h"
 #include <forward_list>
 #include <string>
 #include <vector>
+#include <utility>
+#include <stack>
 
 enum structure {AND,OR,XOR,NOT,PAND,POR};
 class Network {
 
+	friend class Trainer;
 	friend std::ostream& operator<<(std::ostream&, const Network&);
 	
 	public:
 
 	//constructors
+
+	//creates empty network
 	Network();
 
 	//Adds the given neuron to the network. Returns 0 on success and 1 on failure
@@ -67,7 +73,12 @@ class Network {
 	int process(std::forward_list<int>*);
 
 	//mutates a random aspect of the Network
-	void mutate();
+	void mutate(int);
+
+	//mutates a random aspect of the Network. but if the given inputs don't connect with the 
+	//target output it specifically mutates so that the input's tree connects with the outputs
+	//tree
+	void mutateTarget(std::pair<std::forward_list<int>, int >&);
 
 	//displays information of the network
 	const std::string info() const;
@@ -77,6 +88,12 @@ class Network {
 
 	//destructor
 	~Network();
+
+	//saves the Network to the given filename
+	void save(std::string);
+
+	//retrieves the network from the given filename
+	int load(std::string);
 
 	private:
 
@@ -97,6 +114,15 @@ class Network {
 	//Clears the charges of all Neurons in the network
         void clear();
 
+	//used to create a tree of what the given inputs branch out to
+	void inputTree(std::vector<int>&, std::forward_list<int>&);
+	void recursiveInputTree(int*, int);
+
+	//used to create a tree of what the given output branches from
+	void outputTree(std::vector<int>&, int);
+	void recursiveOutputTree(int*, std::forward_list<int>*,int);
+
+	std::stack<int> available;
 	std::forward_list<int> inputs;
 	std::forward_list<int> outputs;
 	Neuron *neurons{nullptr};

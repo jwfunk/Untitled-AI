@@ -30,7 +30,7 @@ int main(){
 	//v.push_back(p);
 	p.second = 1;
 	v.push_back(p);
-	trainTargetLearning(n,v,1);
+	Trainer::trainTargetLearning(n,v,1);
 
 	Network tttFirstMove = Network();
 	for(int i = 0;i < 19;i++){
@@ -288,5 +288,5 @@ int main(){
         p.first = state59;
         p.second = 21;
         v.push_back(p);
-	trainTargetLearning(tttFirstMove,v,10);
+	Trainer::trainPrecisionLearning(tttFirstMove,v,10);
 }
