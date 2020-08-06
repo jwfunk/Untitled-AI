@@ -11,6 +11,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <ctime>
+#include <stack>
 
 void clear(){//System specific line, must change for windows
 	system("clear");
@@ -114,68 +115,73 @@ std::string train(Network &n,std::vector<std::pair<std::forward_list<int>,int> >
 	clear();
 	std::vector<std::pair<std::forward_list<int>,int> > nextData;
         TicTacToe t = TicTacToe();
-        while(1){
+	t.swap();
+	std::stack<TicTacToe> aiMoves;
+	for(int i = 0;i < 9;i++){
+		TicTacToe c = t;
+		c.move(i);
+		aiMoves.push(c);
+	}
+	t.swap();
+	aiMoves.push(t);
+	while(!aiMoves.empty()){
 		double accuracy = 0;
-	        double total = 0;
-		
-		//debugging purposes
-	        for(auto targetIterator = targetData.begin(); targetIterator != targetData.end();++targetIterator){
-	
-        	        if(n.process(&((*targetIterator).first)) == (*targetIterator).second){
-        	                accuracy++;
-        	        }
-			else{
-				for(auto firstIterator = (*targetIterator).first.begin();firstIterator != (*targetIterator).first.end();++firstIterator)
-					std::cout << (*firstIterator) << " ";
-			}
-        	        total++;
-        	}
-        	accuracy /= total;
-        	std::cout << "\n\n" << (accuracy * 100) << "% accuracy\n";
-		//debugging purposes
+                double total = 0;
 
-                std::cout << t.display();
-                int turn = t.getTurn();
-                int returnCode;
-		std::forward_list<int> data;
+                //debugging purposes
+                for(auto targetIterator = targetData.begin(); targetIterator != targetData.end();++targetIterator){
+
+                        if(n.process(&((*targetIterator).first)) == (*targetIterator).second){
+                                accuracy++;
+                        }
+                        else{
+                                for(auto firstIterator = (*targetIterator).first.begin();firstIterator != (*targetIterator).first.end();++firstIterator)
+                                        std::cout << (*firstIterator) << " ";
+                        }
+                        total++;
+                }
+                accuracy /= total;
+                std::cout << "\n\n" << (accuracy * 100) << "% accuracy\n";
+                //debugging purposes
+		t = aiMoves.top();
+		aiMoves.pop();
+		std::cout << t.display();
+                std::forward_list<int> data;
                 convert(data,t.getBoard(),t.getTurn());
-		int move = -20;
-		if(turn == 1){
-			if(contains(targetData,data)){
-				move = locate(targetData,data) - 19;
-				returnCode = t.move(move);
-			}
-			else{
-				std::cout << "make your move\n";
-                        	std::cin >> move;
-				if(move == -1)
-					return "";
-                        	while((returnCode = t.move(move)) == -1)
-                        	        std::cin >> move;
-
-				//add new case to targetData
-				std::pair<std::forward_list<int>,int> p;
+                int move = -20;
+                        if(contains(targetData,data)){
+                                move = locate(targetData,data) - 19;
+                                t.move(move);
+                        }       
+                        else{   
+                                std::cout << "make your move\n";
+                                std::cin >> move;
+                                if(move == -1)
+                                        return "";
+                                int won = 0;
+				while((won = t.move(move)) == -1)
+                                        std::cin >> move;
+                                
+                                //add new case to targetData
+                                std::pair<std::forward_list<int>,int> p;
                                 p.first = data;
                                 p.second = move + 19;
                                 targetData.push_back(p);
-				n.save("test.txt");
 
                                 nextData.push_back(p);
-				if(n.process(&data) - 19 != move)
-                                	Trainer::trainPrecisionLearning(n,nextData);
+                                if(n.process(&data) - 19 != move)
+                                        Trainer::trainPrecisionLearning(n,nextData);
                                 nextData.clear();
+				if(won != 1){
+					for(int i = 0;i < 9;i++){
+                				TicTacToe c = t;
+                				if((won = c.move(i)) != -1 && won != 1)
+                					aiMoves.push(c);
+        				}
+				}
                         }
-                }
-                else{
-			if(!random)
-				move = n.process(&data) - 19;
-                        while((returnCode = t.move(move)) == -1)
-                                move = std::rand() % 9;
-		}
-		if(returnCode == 1)
-			t.reset();
-		clear();
-        }
+                clear();
+	}
 	//return value
 	return "trained";
 }
@@ -199,12 +205,16 @@ int main(){
 	std::srand(std::time(0));
         Network n = Network();
 	std::vector<std::pair<std::forward_list<int>,int> > targetData;
-	
-	std::string buffer = "1";
+	std::string filename;
+	std::string buffer = "";
 	std::string message = "";
 	do{
-		if(buffer == "1")
-			message = std::to_string(n.load("test.txt"));
+		if(buffer == "1"){
+			std::cout << "Enter your filename: ";
+			std::cin >> filename;
+			message = "Loaded " + filename;
+			n.load(filename);
+		}
 		if(buffer == "2"){
 			message = newTicTacToe(n);
 			targetData.clear();
@@ -217,8 +227,14 @@ int main(){
 			message = play(n);
 		if(buffer == "6")
 			message = n.info();
+		if(buffer == "7"){
+			std::cout << "Enter your filename: ";
+                        std::cin >> filename;
+			message = "Saved " + filename;
+			n.save(filename);
+		}
 		clear();
-		std::string menu = "Menu: " + message + "\n\t1. Load Test.txt\n\t2. New\n\t3. Train\n\t4. Train with random moves\n\t5. Play\n\t6. Display Network\n\t-1. Exit\n";
+		std::string menu = "Menu: " + message + "\n\t1. Load \n\t2. New\n\t3. Train\n\t4. Train with random moves\n\t5. Play\n\t6. Display Network\n\t7. Save\n\t-1. Exit\n";
 		std::cout << menu << "\n";
 		std::cin >> buffer;
 
