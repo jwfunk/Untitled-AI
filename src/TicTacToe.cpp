@@ -54,3 +54,17 @@ void TicTacToe::reset(){
 	for(int i = 0;i < 9;i++)
                 board[i] = 0;
 }
+
+void TicTacToe::swap(){
+	if(turn == 1)
+                turn = -1;
+        else
+                turn = 1;
+}
+
+TicTacToe& TicTacToe::operator=(const TicTacToe &t){
+	for(int i = 0;i < 9;i++)
+		board[i] = t.board[i];
+	turn = t.turn;
+	return *this;
+}

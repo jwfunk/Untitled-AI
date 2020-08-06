@@ -25,7 +25,11 @@ class TicTacToe{
 
 	std::string display();
 
+	void swap();
+
 	void reset();
+
+	TicTacToe& operator=(const TicTacToe &);
 
 	private:
 	
