@@ -8,6 +8,251 @@
 #include <ctime>
 #include <fstream>
 #include <forward_list>
+#include "TicTacToe.h"
+#include <stack>
+
+void Trainer::dynamicTraining(Network &n, int enumerations){
+	n.setDynamic(1);
+	int nMutations = 0;
+	for(int i = 0;i < enumerations;i++){
+		int nWins = 0;
+		int cWins = 0;	
+		Network c;//need copy constructor
+		c = n;
+		c.mutate(-1);
+		for(int j = 0;j < 50;j++){
+			int winner = 0;
+			TicTacToe t1;
+			TicTacToe t2;
+			int moves = 0;
+			int pmove1 = -1;
+			int pmove2 = -1;
+			int move1;
+			while(winner == 0){
+				std::forward_list<int> data;
+                		dynamicConvert(data,pmove1);
+				move1 = t1.move(n.process(&data) - 10);
+				dynamicConvert(data,pmove2);	
+				//std::cout << c;
+				int move2 = t2.move(c.process(&data) - 10);
+				if(move1 == -1)
+					winner = -1;
+				if(move2 == -1)
+					winner = 1;
+				if(move2 == -1 && move1 == -1)
+					winner = 2;
+				if(t1.winner() == 1 && t2.winner() != 1)
+					winner = 1;
+				if(t2.winner() == 1 && t1.winner() != 1)
+                	                winner = -1;
+				if(t2.winner() == 1 && t1.winner() == 1){
+					if(moves < 5)
+						moves = 4;
+					else
+						winner = 2;
+				}
+				moves++;
+				if(moves == 5){
+                	                t1.reset();
+                	                t2.reset();
+                	                n.clear();
+                	                c.clear();
+                	        }
+				while(t1.move(pmove1 = std::rand() % 9) == -1){
+					if(t1.winner() == -1)
+						winner = -1;
+				}
+				if(t2.move(pmove2 = pmove1) == -1)
+					while(t2.move(pmove2 = std::rand() % 9) == -1){
+                	        	
+					}
+				if(t1.winner() == -1)
+                                	winner = -1;
+				if(t2.winner() == -1)
+					winner = 1;
+				if(t1.winner() == -1 && t2.winner() == -1)
+					winner = 2;
+				if(moves == 9)
+					winner = 2;		
+			}
+			n.clear();
+                	c.clear();
+			if(winner != 2){
+				if(winner == -1)
+					cWins++;
+				else
+					nWins++;
+			}
+		}
+		if(cWins > nWins){
+			n = c;
+			nMutations++;
+		}
+		std::cout << "|";
+                int bars = 20;
+                int numbars = enumerations / bars;//right value is number of bars
+                for(int k = 0;k <= i / numbars;k++)
+                        std::cout << "=";
+                for(int k = 0;k < bars - (i / numbars) - 1;k++)
+                        std::cout << " ";
+                std::cout << "|  ";
+		std::cout << nMutations << "\r" << std::flush;
+	}
+}
+
+void Trainer::staticTraining(Network &n,std::vector<std::pair<std::forward_list<int>,int> > &targetData){
+	system("clear");
+	std::vector<std::pair<std::forward_list<int>,int> > nextData;
+        TicTacToe t = TicTacToe();
+	t.swap();
+	std::stack<TicTacToe> aiMoves;
+	for(int i = 0;i < 9;i++){
+		TicTacToe c = t;
+		c.move(i);
+		aiMoves.push(c);
+	}
+	t.swap();
+	aiMoves.push(t);
+	while(!aiMoves.empty()){
+		double accuracy = 0;
+                double total = 0;
+
+                //debugging purposes
+                for(auto targetIterator = targetData.begin(); targetIterator != targetData.end();++targetIterator){
+
+                        if(n.process(&((*targetIterator).first)) == (*targetIterator).second){
+                                accuracy++;
+                        }
+                        else{
+                                for(auto firstIterator = (*targetIterator).first.begin();firstIterator != (*targetIterator).first.end();++firstIterator)
+                                        std::cout << (*firstIterator) << " ";
+                        }
+                        total++;
+                }
+                accuracy /= total;
+                std::cout << "\n\n" << (accuracy * 100) << "% accuracy\n";
+                //debugging purposes
+		t = aiMoves.top();
+		aiMoves.pop();
+		std::cout << t.display();
+                std::forward_list<int> data;
+                staticConvert(data,t.getBoard(),t.getTurn());
+                int move = -20;
+                        if(contains(targetData,data)){
+                                move = locate(targetData,data) - 19;
+                                t.move(move);
+                        }       
+                        else{   
+                                std::cout << "make your move\n";
+                                std::cin >> move;
+                                if(move == -1)
+                                        return;
+                                int won = 0;
+				while((won = t.move(move)) == -1)
+                                        std::cin >> move;
+                                
+                                //add new case to targetData
+                                std::pair<std::forward_list<int>,int> p;
+                                p.first = data;
+                                p.second = move + 19;
+                                targetData.push_back(p);
+
+                                nextData.push_back(p);
+                                if(n.process(&data) - 19 != move)
+                                        Trainer::trainPrecisionLearning(n,nextData);
+                                nextData.clear();
+				if(won != 1){
+					for(int i = 0;i < 9;i++){
+                				TicTacToe c = t;
+                				if((won = c.move(i)) != -1 && won != 1)
+                					aiMoves.push(c);
+        				}
+				}
+                        }
+                system("clear");
+	}
+	//return value
+}
+
+int Trainer::locate(std::vector<std::pair<std::forward_list<int>,int> > &targetData,std::forward_list<int> data){
+        for(auto targetIterator = targetData.begin();targetIterator != targetData.end();++targetIterator){
+                auto dataIterator = data.begin();
+                int match = 1;
+                for(auto firstIterator = (*targetIterator).first.begin();firstIterator != (*targetIterator).first.end();++firstIterator){
+                        if(*firstIterator != *dataIterator)
+                                match = 0;
+                        ++dataIterator;
+                }
+                if(match)
+                        return (*targetIterator).second;
+        }
+        return -1;
+}
+
+int Trainer::contains(std::vector<std::pair<std::forward_list<int>,int> > &targetData,std::forward_list<int> data){
+        for(auto targetIterator = targetData.begin();targetIterator != targetData.end();++targetIterator){
+                auto dataIterator = data.begin();
+                int match = 1;
+                for(auto firstIterator = (*targetIterator).first.begin();firstIterator != (*targetIterator).first.end();++firstIterator){
+                        if(*firstIterator != *dataIterator)
+                                match = 0;
+                        ++dataIterator;
+                }
+                if(match)
+                        return 1;
+        }
+        return 0;
+}
+
+void Trainer::dynamicConvert(std::forward_list<int>&data, int loc){
+	data.clear();
+	int noInputs = 1;
+	for(int i = 8;i >= 0;i--){
+		if(i == loc){
+                        data.push_front(1);
+                        noInputs = 0;
+                }
+                else{
+                        data.push_front(0);
+                }
+	}
+        if(noInputs)
+                data.push_front(1);
+        else
+                data.push_front(0);
+}
+
+void Trainer::staticConvert(std::forward_list<int>&data,int *board,int turn){
+	data.clear();
+        int noInputs = 1;
+        int oTurn;
+        if(turn == 1)
+                oTurn = -1;
+        else
+                oTurn = 1;
+        for(int i = 8;i >= 0;i--){
+                if(board[i] == oTurn){
+                        data.push_front(1);
+                        noInputs = 0;
+                }
+                else{
+                        data.push_front(0);
+                }
+        }
+        for(int i = 8;i >= 0;i--){
+                if(board[i] == turn){
+                        data.push_front(1);
+                        noInputs = 0;
+                }
+                else{
+                        data.push_front(0);
+                }
+        }
+        if(noInputs)
+                data.push_front(1);
+        else
+                data.push_front(0);
+}
 
 void Trainer::trainPrecisionLearning( Network &n, std::vector<std::pair<std::forward_list<int>,int> > &targetData) {
 	std::srand(std::time(0));

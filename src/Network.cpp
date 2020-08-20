@@ -22,7 +22,28 @@ std::ostream& operator<<(std::ostream &os, const Network &i){
 const std::string Network::info() const {
 	if(size == 0)
 		return "Empty Network";
-	std::string returnValue = "Inputs: ";
+	std::string returnValue = "Dynamic: ";
+
+	returnValue += std::to_string(dynamic);
+
+	returnValue += "\n";
+
+	if(dynamic){
+		returnValue += "Senders: ";
+		for(auto sendersIterator = senders.begin();sendersIterator != senders.end();++sendersIterator)
+			returnValue += std::to_string(*sendersIterator) + " ";
+		returnValue += "-1\n";
+		returnValue += "Recievers: ";
+		for(auto recieversIterator = recievers.begin();recieversIterator != recievers.end();++recieversIterator)
+			returnValue += std::to_string(*recieversIterator) + " ";
+		returnValue += "-1\n";
+		returnValue += "Not Targets : ";
+		for(auto notTargetsIterator = notTargets.begin();notTargetsIterator != notTargets.end();++notTargetsIterator)
+			returnValue += std::to_string(*notTargetsIterator) + " ";
+		returnValue += "-1\n";
+	}
+
+	returnValue += "Inputs: ";
 	
 	for(auto inputsIterator = inputs.begin(); inputsIterator != inputs.end(); ++inputsIterator)
 		returnValue += std::to_string(*inputsIterator) + " ";
@@ -52,9 +73,36 @@ int Network::load(std::string file){
 	(*this) = Network();
 	std::fstream fs;
 	fs.open(file,std::ios::in);
+	if(!fs.good())
+		return -1;
 	std::string buffer;
 	fs >> buffer;
+	fs >> dynamic;
 	int i;
+	std::forward_list<int> sen;
+	std::forward_list<int> rec;
+	std::forward_list<int> notT;
+	if(dynamic){
+		fs >> buffer;
+		fs >> i;
+		while(i != -1){
+			sen.push_front(i);
+			fs >> i;
+		}
+		fs >> buffer;
+		fs >> i;
+		while(i != -1){
+			rec.push_front(i);
+			fs >> i;
+		}
+		fs >> buffer;
+		fs >> i;
+		while(i != -1){
+			notT.push_front(i);
+			fs >> i;
+		}
+	}
+	fs >> buffer;
 	fs >> i;
 	std::forward_list<int> in;
 	while(i != -1){
@@ -129,6 +177,13 @@ int Network::load(std::string file){
 		inputs.push_front(*inIterator);
 	for(auto ouIterator = ou.begin();ouIterator != ou.end();++ouIterator)
                 outputs.push_front(*ouIterator);
+	for(auto senIterator = sen.begin();senIterator != sen.end();++senIterator)
+		senders.push_front(*senIterator);
+	for(auto recIterator = rec.begin();recIterator != rec.end();++recIterator)
+		recievers.push_front(*recIterator);
+	for(auto notTIterator = notT.begin();notTIterator != notT.end();++notTIterator)
+		notTargets.push_front(*notTIterator);
+	
 	return 0;			
 }
 
@@ -144,6 +199,8 @@ int Network::addStructure(structure s, int i1, int i2, int i3){
 			neurons[i2].addReciever(loc);
 			input.addReciever(i3);
 			(*this).addNeuron(input);
+			recievers.push_front(loc);
+			notTargets.push_front(loc);
 			return 0;
 		}
 		case OR://pulses if i1 or i2 pulses
@@ -161,6 +218,8 @@ int Network::addStructure(structure s, int i1, int i2, int i3){
                         neurons[i2].addReciever(loc);
                         input.addReciever(i3);
                         (*this).addNeuron(input);
+			recievers.push_front(loc);
+                        notTargets.push_front(loc);
 		        return 0;
 		}
 		case NOT://if i1 pulses negates i3 from pulsing
@@ -172,6 +231,7 @@ int Network::addStructure(structure s, int i1, int i2, int i3){
 			neurons[i1].addReciever(loc);
 			input.addReciever(i3);
 			(*this).addNeuron(input);
+			recievers.push_front(loc);
 			return 0;
 		}
 		case XOR://if i1 or i2 pulses alone i3 is pulsed
@@ -219,6 +279,10 @@ int Network::addStructure(structure s, int i1, int i2, int i3){
 			(*this).addNeuron(n7);
 			neurons[loc3].addReciever(loc7);
 			neurons[loc4].addReciever(loc7);
+			
+			recievers.push_front(loc1);
+			recievers.push_front(loc2);
+			notTargets.push_front(loc7);
 			return 0;
 		}
 		case PAND:
@@ -294,6 +358,9 @@ int Network::removeNeuron(int i){
 		index[i / 32] &= ~(1<<(i % 32));
 		inputs.remove(i);
 		outputs.remove(i);
+		senders.remove(i);
+		recievers.remove(i);
+		notTargets.remove(i);
 		for(int j = 0;j < size;j++){
 			if(index[j / 32] & 1<<(j % 32))
 				neurons[j].removeReciever(i);
@@ -309,6 +376,7 @@ int Network::addInput(int i){
                 return 1;
 	if(index[i / 32] & 1<<(i % 32)){
 		inputs.push_front(i);
+		senders.push_front(i);
 		return 0;
 	}
 	return 1;
@@ -316,6 +384,7 @@ int Network::addInput(int i){
 
 int Network::removeInput(int i){
 	inputs.remove(i);
+	senders.remove(i);
 	return 0;
 }
 
@@ -324,8 +393,8 @@ int Network::addOutput(int i){
                 return 1;
         if(index[i / 32] & 1<<(i % 32)){
                 outputs.push_front(i);
-		neurons[i].pulse = neurons[i].criticalCharge;
-		neurons[i].addReciever(i);
+		recievers.push_front(i);
+		notTargets.push_front(i);
                 return 0;
         }
         return 1;
@@ -333,6 +402,7 @@ int Network::addOutput(int i){
 
 int Network::removeOutput(int i){
 	outputs.remove(i);
+	recievers.remove(i);
 	return 0;
 }
 
@@ -341,6 +411,7 @@ int Network::process(std::forward_list<int> *given){
 	//Activate input Neurons
 	
 	std::queue <int> active;
+	active = retroactive;
 	auto givenIterator = given->begin();
 	for(auto inputsIterator = inputs.begin(); inputsIterator != inputs.end(); ++inputsIterator){
 		if(givenIterator == given->end()){
@@ -368,7 +439,10 @@ int Network::process(std::forward_list<int> *given){
 		if(i == -1){
 			for(auto outputsIterator = outputs.begin();outputsIterator != outputs.end();++outputsIterator)//possible improvement here
                          	if(neurons[*outputsIterator].charge >= neurons[*outputsIterator].criticalCharge){
-                                 	(*this).clear();//clear network charges
+                                 	if(!dynamic)
+						(*this).clear();//clear network charges
+					else
+						retroactive = active;
                                  	return *outputsIterator;
                          	}
 		}
@@ -386,14 +460,15 @@ int Network::process(std::forward_list<int> *given){
 		}
 		
 		if(iterations > MAXITERATIONS){
-			(*this).clear();
+			if(!dynamic)
+				(*this).clear();
         		return -1;
 		}
 		iterations++;
 		
 	}
-
-	(*this).clear();	
+	if(!dynamic)
+		(*this).clear();	
 	return -1;
 }
 
@@ -657,211 +732,184 @@ void Network::mutateTarget(std::pair<std::forward_list<int>, int >& target){
             
 }
 
-void Network::mutate(int choice = -1){
-	if(choice == -1){
-		int mutation = std::rand() % (5 * size + 7);
-                if(mutation < size)
-                        choice = 2;
-                if(mutation >= size && mutation < (2 * size))
-                        choice = 3; 
-                if(mutation >= (2 * size) && mutation < (3 * size))
-                        choice = 10;
-                if(mutation >= (3 * size) && mutation < (4 * size))
-                        choice = 1;
-		if(mutation >= (4 * size) && mutation < (5 * size))
-                        choice = 11; 
-                if(mutation == (5 * size))
-                        choice = 0; 
-                if(mutation == (5 * size + 1))
-                        choice = 4; 
-                if(mutation == (5 * size + 2))
-                        choice = 5; 
-                if(mutation == (5 * size + 3))
-                        choice = 6; 
-                if(mutation == (5 * size + 4))
-                        choice = 7; 
-                if(mutation == (5 * size + 5))
-                        choice = 8; 
-                if(mutation == (5 * size + 6))
-                        choice = 9;
-		if(mutation == (5 * size + 7))
-			choice = 12;
+int Network::choose(){
+	int numChoices = 9;
+	int choices[] = {10,10,10,10,10,10,10,10,10};
+	if(size == MAXSIZE && available.empty()){
+		choices[0] = 0;
+		choices[2] = 0;
+		choices[3] = 0;
+		choices[4] = 0;
+		choices[5] = 0;
 	}
-	
-		
+	int randSize = 0;
+	for(int i = 0;i < numChoices;i++)
+		randSize += choices[i];
+	int choice = std::rand() % randSize;
+	for(int i = 0;i < numChoices;i++){
+		choice -= choices[i];
+		if(choice < 0)
+			return i;
+	}	
+	return -1;
+}
+
+void Network::mutate(int choice = -1){
+	std::forward_list<int> usedLocs;		
+	for(int i = 0;i < NMUTATIONS;i++){
+		choice = choose();
 		switch(choice){
-			case 0://add Neuron
+			case 0://Timed Structure
 			{
-				Neuron n = Neuron();
-				int reciever = std::rand() % size;
-				while(!(index[reciever / 32] & 1<<(reciever % 32)))
-					reciever = std::rand() % size;
-				n.addReciever(reciever);
-				int sender = std::rand() % size;
-                                while(!(index[sender / 32] & 1<<(sender % 32)))
-                                        sender = std::rand() % size;
-				neurons[sender].addReciever((*this).nextLocation());
-				(*this).addNeuron(n);
-				return;
+				//eventually move to structure method
+				std::vector<int> locs = (*this).nextLocations(3);
+                                if(locs.empty())
+                                        return;
+
+				int target, sender;
+				sender = randomSender();
+				if(!neurons[sender].recievers.empty() && std::rand() % 2)//insert
+					target = insert(sender);
+				else//add
+					target = randomReciever();
+
+				(*this).neurons[sender].addReciever(locs[0]);
+				Neuron n1 = Neuron();
+                        	n1.addReciever(locs[1]);
+                        	n1.criticalCharge = 1;
+                        	n1.pulse = 4;
+                        	(*this).addNeuron(n1);
+                        	Neuron n2 = Neuron();
+                        	n2.addReciever(locs[2]);
+                        	(*this).addNeuron(n2);
+                        	Neuron n3 = Neuron();
+                        	n3.criticalCharge = 4;
+                        	n3.addReciever(target);
+                        	(*this).addNeuron(n3);
+				usedLocs.push_front(sender);//possibly remove
+				usedLocs.push_front(target);//possibly remove				
+				recievers.push_front(locs[0]);
+				notTargets.push_front(locs[2]);
+
+				if(std::rand() % 2){
+					Neuron n4 = Neuron();
+					int loc = (*this).nextLocation();
+					if(loc == -1)
+						return;
+					neurons[locs[0]].addReciever(loc);
+					(*this).addNeuron(n4);
+					senders.push_front(loc);
+					notTargets.push_front(loc);
+				}
+				break;
 			}
 			case 1://remove Neuron
 			{
 				if(!anyExpendable())
-					return;		
+					break;	
 				int remove = std::rand() % size;
 				while(!(index[remove / 32] & 1<<(remove % 32)) || !expendable(remove)){
                                         remove = std::rand() % size;
 				}
 				(*this).removeNeuron(remove);
-				return;
+				break;
 			}
-			case 2://modify cc
+			case 2://add AND structure
 			{
-				int modify = std::rand() % size;
-				while(!(index[modify / 32] & 1<<(modify % 32)))
-					modify = std::rand() % size;
-				if((std::rand() % 2))
-					neurons[modify].criticalCharge += 1;
-				else{
-					if(neurons[modify].criticalCharge != 1)
-						neurons[modify].criticalCharge -= 1;
-				}
-				return;
-			}
-			case 3://modify pulse
-			{
-				int modify = std::rand() % size;
-                                while(!(index[modify / 32] & 1<<(modify % 32)))
-                                        modify = std::rand() % size;
-                                if((std::rand() % 2))
-                                        neurons[modify].pulse += 1;
-                                else
-                                        neurons[modify].pulse -= 1;
-				return;
-			}
-			case 4://add AND structure
-			{
-				int sender1 = std::rand() % size;
-				while(!(index[sender1 / 32] & 1<<(sender1 % 32)))
-                                        sender1 = std::rand() % size;
-				int sender2 = std::rand() % size;
-				while(!(index[sender2 / 32] & 1<<(sender2 % 32)))
-                                        sender2 = std::rand() % size;
-				int reciever = std::rand() % size;
-				while(!(index[reciever / 32] & 1<<(reciever % 32)))
-                                        reciever = std::rand() % size;
+				int sender1 = randomSender();
+				int sender2 = randomSender();
+				int reciever = randomReciever();
 				(*this).addStructure(AND,sender1,sender2,reciever);
-				return;
+				usedLocs.push_front(sender1);//
+				usedLocs.push_front(sender2);//
+				usedLocs.push_front(reciever);//
+				break;
 			}
-			case 5://add OR structure
+			case 3://add OR structure
 			{
-				int sender1 = std::rand() % size;
-                                while(!(index[sender1 / 32] & 1<<(sender1 % 32)))
-                                        sender1 = std::rand() % size;
-                                int sender2 = std::rand() % size;
-                                while(!(index[sender2 / 32] & 1<<(sender2 % 32)))
-                                        sender2 = std::rand() % size;
-                                int reciever = std::rand() % size;
-                                while(!(index[reciever / 32] & 1<<(reciever % 32)))
-                                        reciever = std::rand() % size;
+				int sender1 = randomSender();
+                                int sender2 = randomSender();
+                                int reciever = randomReciever();
                                 (*this).addStructure(OR,sender1,sender2,reciever);
-				return;
+				usedLocs.push_front(sender1);
+				usedLocs.push_front(sender2);
+				usedLocs.push_front(reciever);
+				break;
 			}
-			case 6://add XOR structure
+			case 4://add XOR structure
 			{
-				int sender1 = std::rand() % size;
-                                while(!(index[sender1 / 32] & 1<<(sender1 % 32)))
-                                        sender1 = std::rand() % size;
-                                int sender2 = std::rand() % size;
-                                while(!(index[sender2 / 32] & 1<<(sender2 % 32)))
-                                        sender2 = std::rand() % size;
-                                int reciever = std::rand() % size;
-                                while(!(index[reciever / 32] & 1<<(reciever % 32)))
-                                        reciever = std::rand() % size;
+				int sender1 = randomLoc(usedLocs);
+                                int sender2 = randomLoc(usedLocs);
+                                int reciever = randomLoc(usedLocs);
                                 (*this).addStructure(XOR,sender1,sender2,reciever);
-				return;
+				usedLocs.push_front(sender1);
+				usedLocs.push_front(sender2);
+				usedLocs.push_front(reciever);
+				break;
 			}
-			case 7://add NOT structure
+			case 5://add NOT structure
 			{
-				int sender1 = std::rand() % size;
-                                while(!(index[sender1 / 32] & 1<<(sender1 % 32)))
-                                        sender1 = std::rand() % size;
-                                int reciever = std::rand() % size;
-                                while(!(index[reciever / 32] & 1<<(reciever % 32)))
-                                        reciever = std::rand() % size;
+				int sender1 = randomSender();
+                                int reciever = randomNotTarget();
                                 (*this).addStructure(NOT,sender1,0,reciever);
-				return;
+				usedLocs.push_front(sender1);
+				usedLocs.push_front(reciever);
+				break;
 			}
-			case 8://add POR structure
+			case 6://add POR structure
 			{
-                                int sender1 = std::rand() % size;
-                                while(!(index[sender1 / 32] & 1<<(sender1 % 32)))
-                                        sender1 = std::rand() % size;
-                                int reciever = std::rand() % size;
-                                while(!(index[reciever / 32] & 1<<(reciever % 32)))
-                                        reciever = std::rand() % size;
-                                (*this).addStructure(POR,sender1,0,reciever);
-				return;
+                                int sender = randomSender();
+                                int reciever;
+				if(!neurons[sender].recievers.empty() && std::rand() % 2)//insert
+					reciever = insert(sender);
+				else
+					reciever = randomReciever();
+                                (*this).addStructure(POR,sender,0,reciever);
+				usedLocs.push_front(sender);
+				usedLocs.push_front(reciever);
+				break;
                         }
-			case 9://add PAND structure
+			case 7://add PAND structure
 			{
-                                int sender1 = std::rand() % size;
-                                while(!(index[sender1 / 32] & 1<<(sender1 % 32)))
-                                        sender1 = std::rand() % size;
-                                int reciever = std::rand() % size;
-                                while(!(index[reciever / 32] & 1<<(reciever % 32)))
-                                        reciever = std::rand() % size;
-                                (*this).addStructure(PAND,sender1,0,reciever);
-				return;
+				int sender = randomSender();
+                                int reciever;
+                                if(!neurons[sender].recievers.empty() && std::rand() % 2)//insert
+                                        reciever = insert(sender);
+                                else
+                                        reciever = randomReciever();
+                                (*this).addStructure(PAND,sender,0,reciever);
+				usedLocs.push_front(sender);
+				usedLocs.push_front(reciever);
+                                break;
                         }
-			case 10://add reciever
+			case 8://reciever
 			{
-				int sender = std::rand() % size;
-                                while(!(index[sender / 32] & 1<<(sender % 32)))
-                                        sender = std::rand() % size;
-                                int reciever = std::rand() % size;
-                                while(!(index[reciever / 32] & 1<<(reciever % 32)))
-                                        reciever = std::rand() % size;
-                                neurons[sender].addReciever(reciever);
-                                return;
-			}
-			case 11://remove reciever
-			{
-				int target = std::rand() % size;
-				while(!(index[target / 32] & 1<<(target % 32)))
-                                        target = std::rand() % size;
-				int rsize = 0;
-				if(neurons[target].recievers.empty())
-					return;
-				for(auto it = neurons[target].recievers.begin(); it != neurons[target].recievers.end(); ++it){
-					rsize++;
-				}
-				int remove = std::rand() % rsize;
-				auto it = neurons[target].recievers.begin();
-				for(int i = 0;i < remove;i++)
-					++it;
-				neurons[target].removeReciever(*it);		
-				return;	
-			}
-			case 12://extend inputs processing time by 2
-			{
-				for(auto it = inputs.begin();it != inputs.end();++it){
-					std::vector<int> input = nextLocations(2);
-					if(input.empty())
-						return;
-					Neuron n1 = neurons[*it];
-					n1.criticalCharge = 2;
-					(*this).addNeuron(n1);
-					Neuron n2 = Neuron();
-					n2.addReciever(input[0]);
-					(*this).addNeuron(n2);
-					neurons[*it].pulse = 2;
-					neurons[*it].recievers = std::forward_list<int>();
-					neurons[*it].addReciever(input[1]);
+				int loc = randomSender();
+				int choice = std::rand() % 3;
+				switch(choice)
+				{
+					case 0://add
+					neurons[loc].addReciever(randomReciever());	
+					break;
+
+					case 1://remove
+					if(!neurons[loc].recievers.empty()){
+						insert(loc);//possibly rename to convey why it's used here
+					}
+					break;
+		
+					case 2://replace
+					if(!neurons[loc].recievers.empty()){
+                                                insert(loc);//possibly rename to convey why it's used here
+						neurons[loc].addReciever(randomReciever());
+                                        }
+					break;		
 				}
 			}
-		}		
-	
+		}
+	usedLocs.sort();
+	usedLocs.unique();					
+	}
 }
 
 Network& Network::operator=(const Network &i){
@@ -887,6 +935,10 @@ Network& Network::operator=(const Network &i){
 		inputs = i.inputs;
 		outputs = i.outputs;
 		available = i.available;
+		dynamic = i.dynamic;
+		senders = i.senders;
+		recievers = i.recievers;
+		notTargets = i.notTargets;
         }
         return *this;
 }
@@ -897,7 +949,7 @@ Network::~Network(){
 	}
 	if(index != nullptr){
 		delete[] index;
-	}	
+	}
 }
 
 int Network::expendable(int e){
@@ -972,6 +1024,7 @@ void Network::clear(){
                 if(index[j / 32] & 1<<(j % 32))
 			neurons[j].charge = 0;
 	}
+	retroactive = std::queue<int>();
 }
 
 void Network::outputTree(std::vector<int>& tree,int target){
@@ -1027,4 +1080,75 @@ void Network::recursiveOutputTree(int* bitmap,std::forward_list<int>* data, int 
                 if(!(bitmap[*dataIterator / 32] & (1<<(*dataIterator % 32))))
                         recursiveOutputTree(bitmap, data, *dataIterator);
         }
+}
+int Network::randomSender(){
+	int senderSize = 0;
+	for(auto senderIterator = senders.begin();senderIterator != senders.end();++senderIterator)
+		senderSize++;
+	int choice = std::rand() % senderSize;
+	auto senderIterator = senders.begin();
+	for(int i = 0;i < choice;i++)
+		++senderIterator;
+	return *senderIterator;
+}
+
+int Network::randomReciever(){
+        int recieverSize = 0;
+        for(auto recieverIterator = recievers.begin();recieverIterator != recievers.end();++recieverIterator)
+                recieverSize++;
+        int choice = std::rand() % recieverSize;
+        auto recieverIterator = recievers.begin();
+        for(int i = 0;i < choice;i++)
+                ++recieverIterator;
+        return *recieverIterator;
+}
+
+int Network::randomNotTarget(){
+        int notTargetSize = 0;
+        for(auto notTargetIterator = notTargets.begin();notTargetIterator != notTargets.end();++notTargetIterator)
+                notTargetSize++;
+        int choice = std::rand() % notTargetSize;
+        auto notTargetIterator = notTargets.begin();
+        for(int i = 0;i < choice;i++)
+                ++notTargetIterator;
+        return *notTargetIterator;
+}
+
+int Network::randomLoc(std::forward_list<int>& usedLocs){
+	if(usedLocs.empty()){
+		int target = std::rand() % size; 
+	        while(!(index[target / 32] & 1<<(target % 32)))
+	        	target = std::rand() % size;
+		return target;
+	}
+	else{
+		int usedSize = 0;
+		for(auto locsIterator = usedLocs.begin();locsIterator != usedLocs.end();++locsIterator)
+			usedSize++;
+		int choice = std::rand() % usedSize;
+		if(choice - 3 < 0){//change integer value to affect percentage chance of reusing used location
+			std::forward_list<int> empty;
+			return randomLoc(empty);
+		}
+		else{
+			choice = std::rand() % usedSize;
+			auto usedIterator = usedLocs.begin();
+			for(int i = 0;i < choice;i++)
+				++usedIterator;
+			return *usedIterator;
+		}
+	}
+}
+
+int Network::insert(int sender){
+	int targetsSize = 0;
+        for(auto recieversIterator = neurons[sender].recievers.begin();recieversIterator != neurons[sender].recievers.end();++recieversIterator)
+        	targetsSize++;
+        int target = std::rand() % targetsSize;
+        auto recieversIterator = neurons[sender].recievers.begin();
+        for(int i = 0;i < target;i++)
+        	++recieversIterator;
+        target = *recieversIterator;
+	neurons[sender].removeReciever(target);
+	return target;
 }

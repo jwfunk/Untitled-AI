@@ -9,6 +9,7 @@
 //size: size of neurons array
 //index: bitmap for empty positions in neurons
 //available: a stack keeping track of the empty spaces in the network
+//dynamic: used to determine if a network uses static processing or dynamic processing
 #ifndef NETWORK
 #define NETWORK
 
@@ -24,6 +25,7 @@
 #include <vector>
 #include <utility>
 #include <stack>
+#include <queue>
 
 enum structure {AND,OR,XOR,NOT,PAND,POR};
 class Network {
@@ -37,6 +39,9 @@ class Network {
 
 	//creates empty network
 	Network();
+
+	//Clears the charges of all Neurons in the network
+	void clear();
 
 	//Adds the given neuron to the network. Returns 0 on success and 1 on failure
 	int addNeuron(const Neuron);
@@ -95,6 +100,11 @@ class Network {
 	//retrieves the network from the given filename
 	int load(std::string);
 
+	//sets the network's dynamic variable
+	void setDynamic(int d) {dynamic = d;}
+
+	int getDynamic() {return dynamic;}
+
 	private:
 
 	//returns the next free location in neurons or -1 if full
@@ -111,8 +121,6 @@ class Network {
 	//0 otherwise
 	int anyExpendable();
 	
-	//Clears the charges of all Neurons in the network
-        void clear();
 
 	//used to create a tree of what the given inputs branch out to
 	void inputTree(std::vector<int>&, std::forward_list<int>&);
@@ -122,12 +130,27 @@ class Network {
 	void outputTree(std::vector<int>&, int);
 	void recursiveOutputTree(int*, std::forward_list<int>*,int);
 
+	int randomLoc(std::forward_list<int>&);
+
+	int randomSender();
+	int randomReciever();
+	int randomNotTarget();
+
+	int insert(int);
+
+	int choose();
+
+	std::queue<int> retroactive;
 	std::stack<int> available;
 	std::forward_list<int> inputs;
 	std::forward_list<int> outputs;
+	std::forward_list<int> senders;
+	std::forward_list<int> recievers;
+	std::forward_list<int> notTargets;
 	Neuron *neurons{nullptr};
 	int size{0};
 	int *index{nullptr};
+	int dynamic{0};
 };
 
 #endif

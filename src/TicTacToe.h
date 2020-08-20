@@ -31,6 +31,8 @@ class TicTacToe{
 
 	TicTacToe& operator=(const TicTacToe &);
 
+	int winner();
+
 	private:
 	
 	int board[9];

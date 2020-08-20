@@ -51,6 +51,10 @@ class Trainer{
 
 	public:
 
+	static void dynamicTraining(Network&,int);
+
+	static void staticTraining(Network&, std::vector<std::pair<std::forward_list<int>,int> > &);
+
 	//Trains the network to play from moves given by the player
 	//Always attains 100% accuracy but requires data to train from
 	static void trainPrecisionLearning( Network &, std::vector<std::pair<std::forward_list<int>,int> > &);
@@ -60,6 +64,15 @@ class Trainer{
 	//ineffective moving on
 	static void trainTargetLearning(Network&,std::vector<std::pair<std::forward_list<int>,int> >&,int);
 
+	static void staticConvert(std::forward_list<int>&,int *,int);
+
+	static void dynamicConvert(std::forward_list<int>&,int);
+
+	private:
 	
+	static int locate(std::vector<std::pair<std::forward_list<int>,int> > &,std::forward_list<int>);
+	
+	static int contains(std::vector<std::pair<std::forward_list<int>,int> > &,std::forward_list<int>);
+
 };
 #endif

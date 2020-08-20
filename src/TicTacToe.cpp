@@ -8,7 +8,29 @@ TicTacToe::TicTacToe(){
 		board[i] = 0;
 }
 
+int TicTacToe::winner(){
+	if(board[0] != 0 && board[0] == board[1] && board[0] == board[2])
+                return board[0];
+        if(board[3] != 0 && board[3] == board[4] && board[3] == board[5])
+		return board[3];
+        if(board[6] != 0 && board[6] == board[7] && board[6] == board[8])
+                return board[6];
+        if(board[0] != 0 && board[0] == board[3] && board[0] == board[6])
+                return board[0];
+        if(board[1] != 0 && board[1] == board[4] && board[1] == board[7])
+                return board[1];
+        if(board[2] != 0 && board[2] == board[5] && board[2] == board[8])
+                return board[2];
+        if(board[0] != 0 && board[0] == board[4] && board[0] == board[8])
+                return board[0];
+        if(board[6] != 0 && board[6] == board[4] && board[6] == board[2])
+                return board[6];
+	return 0;
+}
+
 int TicTacToe::move(int m){
+	if(m < 0 || m > 8)
+		return -1;
 	if(board[m] != 0)
 		return -1;
 	else{
