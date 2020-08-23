@@ -13,6 +13,35 @@ Network::Network(){
 	size = 0;
 }
 
+Network::Network(const Network &i){
+	if(neurons != nullptr){
+		delete[] neurons;
+	}
+	if(index != nullptr){
+		delete[] index;
+	}
+	size = i.size;
+	neurons = new Neuron[size];
+	index = new int[size / 32];
+
+	for(int j = 0;j < size / 32;j++){
+		index[j] = i.index[j];
+	}
+	for(int j = 0;j < size;j++){
+		neurons[j] = i.neurons[j];
+	}
+
+	inputs = i.inputs;
+	outputs = i.outputs;
+	available = i.available;
+	dynamic = i.dynamic;
+	senders = i.senders;
+	recievers = i.recievers;
+	notTargets = i.notTargets;
+	retroactive = i.retroactive;
+
+}
+
 std::ostream& operator<<(std::ostream &os, const Network &i){
 
 	os << i.info();
@@ -201,6 +230,7 @@ int Network::addStructure(structure s, int i1, int i2, int i3){
 			(*this).addNeuron(input);
 			recievers.push_front(loc);
 			notTargets.push_front(loc);
+			senders.push_front(loc);
 			return 0;
 		}
 		case OR://pulses if i1 or i2 pulses
@@ -220,6 +250,7 @@ int Network::addStructure(structure s, int i1, int i2, int i3){
                         (*this).addNeuron(input);
 			recievers.push_front(loc);
                         notTargets.push_front(loc);
+			senders.push_front(loc);
 		        return 0;
 		}
 		case NOT://if i1 pulses negates i3 from pulsing
@@ -232,6 +263,7 @@ int Network::addStructure(structure s, int i1, int i2, int i3){
 			input.addReciever(i3);
 			(*this).addNeuron(input);
 			recievers.push_front(loc);
+			senders.push_front(loc);
 			return 0;
 		}
 		case XOR://if i1 or i2 pulses alone i3 is pulsed
@@ -283,6 +315,7 @@ int Network::addStructure(structure s, int i1, int i2, int i3){
 			recievers.push_front(loc1);
 			recievers.push_front(loc2);
 			notTargets.push_front(loc7);
+			senders.push_front(loc7);
 			return 0;
 		}
 		case PAND:
@@ -441,8 +474,10 @@ int Network::process(std::forward_list<int> *given){
                          	if(neurons[*outputsIterator].charge >= neurons[*outputsIterator].criticalCharge){
                                  	if(!dynamic)
 						(*this).clear();//clear network charges
-					else
+					else{
 						retroactive = active;
+						neurons[*outputsIterator].charge -= neurons[*outputsIterator].criticalCharge;
+					}
                                  	return *outputsIterator;
                          	}
 		}
@@ -790,7 +825,7 @@ void Network::mutate(int choice = -1){
 				usedLocs.push_front(target);//possibly remove				
 				recievers.push_front(locs[0]);
 				notTargets.push_front(locs[2]);
-
+				senders.push_front(locs[2]);
 				if(std::rand() % 2){
 					Neuron n4 = Neuron();
 					int loc = (*this).nextLocation();
@@ -939,6 +974,7 @@ Network& Network::operator=(const Network &i){
 		senders = i.senders;
 		recievers = i.recievers;
 		notTargets = i.notTargets;
+		retroactive = i.retroactive;
         }
         return *this;
 }

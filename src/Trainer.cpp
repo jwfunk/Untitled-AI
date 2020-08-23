@@ -10,93 +10,102 @@
 #include <forward_list>
 #include "TicTacToe.h"
 #include <stack>
+#include <tuple>
 
 void Trainer::dynamicTraining(Network &n, int enumerations){
 	n.setDynamic(1);
 	int nMutations = 0;
+	Network prev[50];
+	int prevLoc = 0;
 	for(int i = 0;i < enumerations;i++){
 		int nWins = 0;
 		int cWins = 0;	
 		Network c;//need copy constructor
 		c = n;
 		c.mutate(-1);
-		for(int j = 0;j < 50;j++){
-			int winner = 0;
-			TicTacToe t1;
-			TicTacToe t2;
-			int moves = 0;
-			int pmove1 = -1;
-			int pmove2 = -1;
-			int move1;
-			while(winner == 0){
-				std::forward_list<int> data;
-                		dynamicConvert(data,pmove1);
-				move1 = t1.move(n.process(&data) - 10);
-				dynamicConvert(data,pmove2);	
-				//std::cout << c;
-				int move2 = t2.move(c.process(&data) - 10);
-				if(move1 == -1)
-					winner = -1;
-				if(move2 == -1)
-					winner = 1;
-				if(move2 == -1 && move1 == -1)
-					winner = 2;
-				if(t1.winner() == 1 && t2.winner() != 1)
-					winner = 1;
-				if(t2.winner() == 1 && t1.winner() != 1)
-                	                winner = -1;
-				if(t2.winner() == 1 && t1.winner() == 1){
-					if(moves < 5)
-						moves = 4;
-					else
-						winner = 2;
-				}
-				moves++;
-				if(moves == 5){
-                	                t1.reset();
-                	                t2.reset();
-                	                n.clear();
-                	                c.clear();
-                	        }
-				while(t1.move(pmove1 = std::rand() % 9) == -1){
-					if(t1.winner() == -1)
-						winner = -1;
-				}
-				if(t2.move(pmove2 = pmove1) == -1)
-					while(t2.move(pmove2 = std::rand() % 9) == -1){
-                	        	
-					}
-				if(t1.winner() == -1)
-                                	winner = -1;
-				if(t2.winner() == -1)
-					winner = 1;
-				if(t1.winner() == -1 && t2.winner() == -1)
-					winner = 2;
-				if(moves == 9)
-					winner = 2;		
-			}
+		int winner = compete(n,c);
+		n.clear();
+		c.clear();
+		if(winner == 1)
+			nWins++;
+		if(winner == -1)
+			cWins++;
+		winner = compete(c,n);
+		n.clear();
+		c.clear();
+                if(winner == -1)
+                        nWins++;
+                if(winner == 1)
+                        cWins++;
+		for(int i = 0;i < 50 && i < prevLoc;i++){
+			winner = compete(n,prev[i]);
 			n.clear();
-                	c.clear();
-			if(winner != 2){
-				if(winner == -1)
-					cWins++;
-				else
-					nWins++;
-			}
+			prev[i].clear();
+			if(winner == 1)
+                        	nWins++;
+			winner = compete(prev[i],n);
+			n.clear();
+			prev[i].clear();
+			if(winner == -1)
+				nWins++;
+			winner = compete(c,prev[i]);
+			c.clear();
+			prev[i].clear();
+                        if(winner == 1)
+                                cWins++;
+                        winner = compete(prev[i],c);
+			c.clear();
+			prev[i].clear();
+                        if(winner == -1)
+                                cWins++;
 		}
 		if(cWins > nWins){
+			prev[prevLoc % 50] = n;
+			prevLoc++;
 			n = c;
 			nMutations++;
+			std::cout << evaluate(n) << "            \n";
 		}
 		std::cout << "|";
-                int bars = 20;
+                int bars = 100;
                 int numbars = enumerations / bars;//right value is number of bars
                 for(int k = 0;k <= i / numbars;k++)
                         std::cout << "=";
                 for(int k = 0;k < bars - (i / numbars) - 1;k++)
                         std::cout << " ";
                 std::cout << "|  ";
-		std::cout << nMutations << "\r" << std::flush;
+		//if(i % numbars == 0)
+			//std::cout << evaluate(n) << "            \n";
+		std::cout << i << " " << nMutations << "\r" << std::flush;
+	}
+}
+
+int Trainer::compete(Network& n,Network& c){
+	int winner = 0;
+	std::forward_list<int> data;
+	int pmove = -1;
+	TicTacToe t;
+	while(winner == 0){
+		dynamicConvert(data,pmove);
+		int move = t.move(pmove = (n.process(&data) - 10));
+		if(move == -1)
+			return -1;
+		if(move == 1){
+			if(t.winner() == 1)
+				return 1;
+			else
+				return 0;
+		}
+		dynamicConvert(data,pmove);
+		move = t.move(pmove = (c.process(&data) - 10));
+		if(move == -1)
+                        return 1;
+                if(move == 1){
+                        if(t.winner() == -1)
+                                return -1;
+                        else
+                                return 0;
+                }
 	}
 }
 
@@ -500,4 +509,62 @@ void Trainer::trainTargetLearning( Network &n, std::vector<std::pair<std::forwar
 	file.open("../test.txt");
 	file << n;
 	file.close();
+}
+
+int Trainer::evaluate(Network &n){
+	TicTacToe t = TicTacToe();
+        t.swap();
+        std::stack<TicTacToe> boardStack;
+	std::stack<int> moveStack;
+	std::stack<Network> networkStack;
+        for(int i = 0;i < 9;i++){
+                TicTacToe c = t;
+                c.move(i);
+		boardStack.push(c);
+		moveStack.push(i);
+		Network cn;
+		cn = n;
+		networkStack.push(cn);	
+        }
+        t.swap();
+	boardStack.push(t);
+	moveStack.push(-1);
+	Network cn;
+	cn = n;
+	networkStack.push(cn);	
+	int score = 0;
+
+	while(!boardStack.empty()){
+		std::forward_list<int> data;
+		dynamicConvert(data,moveStack.top());
+		moveStack.pop();
+		Network tn;
+		tn = networkStack.top();
+		networkStack.pop();
+		TicTacToe c = boardStack.top();
+		boardStack.pop();
+		int move = tn.process(&data) - 10;
+		if(c.move(move) != -1){
+			score++;
+			if(c.winner() == 1){
+				int* board = c.getBoard();
+				for(int i = 0;i < 9;i++)
+					if(board[i] == 0)
+						score++;
+			}
+			else{
+				for(int i = 0;i < 9;i++){
+					TicTacToe nextc = c;
+					int won;
+					if((won = nextc.move(i)) != -1 && won != 1){
+						boardStack.push(nextc);
+						moveStack.push(i);
+						networkStack.push(tn);
+					}
+                                }
+			}
+		}
+	}
+
+	return score;
 }

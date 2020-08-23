@@ -14,10 +14,10 @@
 #define NETWORK
 
 #define TRAINERITERATIONS 10000
-#define MAXITERATIONS 1000000
+#define MAXITERATIONS 1000
 #define INITSIZE 64
 #define MAXSIZE 2048
-#define NMUTATIONS 3
+#define NMUTATIONS 10
 
 #include "Neuron.h"
 #include <forward_list>
@@ -39,6 +39,8 @@ class Network {
 
 	//creates empty network
 	Network();
+
+	Network(const Network &);
 
 	//Clears the charges of all Neurons in the network
 	void clear();

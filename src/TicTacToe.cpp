@@ -90,3 +90,125 @@ TicTacToe& TicTacToe::operator=(const TicTacToe &t){
 	turn = t.turn;
 	return *this;
 }
+
+int TicTacToe::oneAway(int turn){
+	
+	if(board[0] == 0 && turn == board[1] && turn == board[2])
+		return 1;
+	if(board[0] == turn && 0 == board[1] && turn == board[2])
+		return 1;
+	if(board[0] == turn && turn == board[1] && 0 == board[2])
+		return 1;
+
+	if(board[3] == 0 && turn == board[4] && turn == board[5])
+                return 1;
+	if(board[3] == turn && 0 == board[4] && turn == board[5])
+                return 1;
+	if(board[3] == turn && turn == board[4] && 0 == board[5])
+                return 1;
+
+	if(board[6] == 0 && turn == board[7] && turn == board[8])
+                return 1;
+	if(board[6] == turn && 0 == board[7] && turn == board[8])
+                return 1;
+	if(board[6] == turn && turn == board[7] && 0 == board[8])
+                return 1;
+
+	if(board[0] == 0 && turn == board[3] && turn == board[6])
+                return 1;
+	if(board[0] == turn && 0 == board[3] && turn == board[6])
+                return 1;
+	if(board[0] == turn && turn == board[3] && 0 == board[6])
+                return 1;
+
+	if(board[1] == 0 && turn == board[4] && turn == board[7])
+                return 1;
+	if(board[1] == turn && 0 == board[4] && turn == board[7])
+                return 1;
+	if(board[1] == turn && turn == board[4] && 0 == board[7])
+                return 1;
+
+	if(board[2] == 0 && turn == board[5] && turn == board[8])
+                return 1;
+	if(board[2] == turn && 0 == board[5] && turn == board[8])
+                return 1;
+	if(board[2] == turn && turn == board[5] && 0 == board[8])
+                return 1;
+
+	if(board[0] == 0 && turn == board[4] && turn == board[8])
+                return 1;
+	if(board[0] == turn && 0 == board[4] && turn == board[8])
+                return 1;
+	if(board[0] == turn && turn == board[4] && 0 == board[8])
+                return 1;
+
+	if(board[6] == 0 && turn == board[4] && turn == board[2])
+                return 1;
+	if(board[6] == turn && 0 == board[4] && turn == board[2])
+                return 1;
+	if(board[6] == turn && turn == board[4] && 0 == board[2])
+                return 1;
+
+        return 0;
+}
+
+int TicTacToe::getOneAway(int turn){
+
+	if(board[0] == 0 && turn == board[1] && turn == board[2])
+		return 0;
+	if(board[0] == turn && 0 == board[1] && turn == board[2])
+		return 1;
+	if(board[0] == turn && turn == board[1] && 0 == board[2])
+		return 2;
+
+	if(board[3] == 0 && turn == board[4] && turn == board[5])
+                return 3;
+	if(board[3] == turn && 0 == board[4] && turn == board[5])
+                return 4;
+	if(board[3] == turn && turn == board[4] && 0 == board[5])
+                return 5;
+
+	if(board[6] == 0 && turn == board[7] && turn == board[8])
+                return 6;
+	if(board[6] == turn && 0 == board[7] && turn == board[8])
+                return 7;
+	if(board[6] == turn && turn == board[7] && 0 == board[8])
+                return 8;
+
+	if(board[0] == 0 && turn == board[3] && turn == board[6])
+                return 0;
+	if(board[0] == turn && 0 == board[3] && turn == board[6])
+                return 3;
+	if(board[0] == turn && turn == board[3] && 0 == board[6])
+                return 6;
+
+	if(board[1] == 0 && turn == board[4] && turn == board[7])
+                return 1;
+	if(board[1] == turn && 0 == board[4] && turn == board[7])
+                return 4;
+	if(board[1] == turn && turn == board[4] && 0 == board[7])
+                return 7;
+
+	if(board[2] == 0 && turn == board[5] && turn == board[8])
+                return 2;
+	if(board[2] == turn && 0 == board[5] && turn == board[8])
+                return 5;
+	if(board[2] == turn && turn == board[5] && 0 == board[8])
+                return 8;
+
+	if(board[0] == 0 && turn == board[4] && turn == board[8])
+                return 0;
+	if(board[0] == turn && 0 == board[4] && turn == board[8])
+                return 4;
+	if(board[0] == turn && turn == board[4] && 0 == board[8])
+                return 8;
+
+	if(board[6] == 0 && turn == board[4] && turn == board[2])
+                return 6;
+	if(board[6] == turn && 0 == board[4] && turn == board[2])
+                return 4;
+	if(board[6] == turn && turn == board[4] && 0 == board[2])
+                return 2;
+
+        return -1;
+}

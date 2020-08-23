@@ -33,6 +33,10 @@ class TicTacToe{
 
 	int winner();
 
+	int oneAway(int);
+
+	int getOneAway(int);
+
 	private:
 	
 	int board[9];

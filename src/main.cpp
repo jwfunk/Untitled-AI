@@ -110,7 +110,7 @@ int main(){
 		if(buffer == "3")
 			Trainer::staticTraining(n,targetData);
 		if(buffer == "4")
-			Trainer::dynamicTraining(n,100000);
+			Trainer::dynamicTraining(n,1000000);
 		if(buffer == "5")
 			message = play(n);
 		if(buffer == "6")

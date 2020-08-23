@@ -20,7 +20,7 @@ const std::string Neuron::info() const {
 }
 
 int Neuron::addReciever(int i) {
-	recievers.push_front(i);
+	recievers.push_back(i);
 	return 0;
 }
 
@@ -31,7 +31,7 @@ int Neuron::removeReciever(int i) {
 
 Neuron& Neuron::operator=(const Neuron &i){
 	if(this != &i){
-		this->charge = 0;
+		this->charge = i.charge;
 		this->criticalCharge = i.criticalCharge;
 		this->pulse = i.pulse;
 		this->recievers = i.recievers;

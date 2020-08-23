@@ -13,7 +13,7 @@
 
 #include <iostream>
 #include <string>
-#include <forward_list>
+#include <list>
 class Neuron{
 
 	friend class Trainer;
@@ -43,7 +43,7 @@ class Neuron{
 	int charge{0};
 	int criticalCharge{1};
 	int pulse{1};
-	std::forward_list<int> recievers;
+	std::list<int> recievers;
 
 };
 

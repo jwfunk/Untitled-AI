@@ -74,5 +74,9 @@ class Trainer{
 	
 	static int contains(std::vector<std::pair<std::forward_list<int>,int> > &,std::forward_list<int>);
 
+	static int evaluate(Network&);
+
+	static int compete(Network&,Network&);
+
 };
 #endif
