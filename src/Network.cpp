@@ -66,7 +66,7 @@ const std::string Network::info() const {
 		for(auto recieversIterator = recievers.begin();recieversIterator != recievers.end();++recieversIterator)
 			returnValue += std::to_string(*recieversIterator) + " ";
 		returnValue += "-1\n";
-		returnValue += "Not Targets : ";
+		returnValue += "Not Targets: ";
 		for(auto notTargetsIterator = notTargets.begin();notTargetsIterator != notTargets.end();++notTargetsIterator)
 			returnValue += std::to_string(*notTargetsIterator) + " ";
 		returnValue += "-1\n";
@@ -125,6 +125,7 @@ int Network::load(std::string file){
 			fs >> i;
 		}
 		fs >> buffer;
+		fs >> buffer;
 		fs >> i;
 		while(i != -1){
 			notT.push_front(i);
@@ -152,7 +153,8 @@ int Network::load(std::string file){
         size = INITSIZE;
         available = std::stack<int>();
 	while(!fs.eof()){
-		fs >> buffer;
+		if(buffer != "Neuron:")
+			fs >> buffer;
 		int loc;
 		fs >> loc;
 		fs >> buffer;
@@ -165,12 +167,11 @@ int Network::load(std::string file){
 		fs >> buffer;
 		int pulse;
 		fs >> pulse;
-		std::forward_list<int> rec;
-		rec.clear();
+		std::list<int> rec;
 		fs >> buffer;
 		fs >> i;
 		while(i != -1){
-			rec.push_front(i);
+			rec.push_back(i);
 			fs >> i;
 		}
 		if(loc >= size){
@@ -195,9 +196,9 @@ int Network::load(std::string file){
 		neurons[loc].charge = charge;
 		neurons[loc].criticalCharge = ccharge;
 		neurons[loc].pulse = pulse;
-		for(auto it = rec.begin();it != rec.end();++it)
-			neurons[loc].addReciever(*it);
+		neurons[loc].recievers = rec;
 		index[loc / 32] |= 1<<(loc % 32);
+		fs >> buffer;
 	}
 	for(int i = size - 1;i >= 0;i--)
 		if(!(index[i / 32] & 1<<(i % 32)))
@@ -461,7 +462,7 @@ int Network::process(std::forward_list<int> *given){
 		(*this).clear();//clear the network
 		return -1;
 	}
-	active.push(-1);
+	active.push(-1);//too many at some point
 	int iterations = 0;
 	
 	//process the data
@@ -480,6 +481,7 @@ int Network::process(std::forward_list<int> *given){
 					}
                                  	return *outputsIterator;
                          	}
+			active.push(-1);
 		}
 		else{
 			if(neurons[i].charge >= neurons[i].criticalCharge){
@@ -490,7 +492,6 @@ int Network::process(std::forward_list<int> *given){
                	        	neurons[i].charge -= neurons[i].criticalCharge;
 				if(neurons[i].charge >= neurons[i].criticalCharge)
 					active.push(i);
-				active.push(-1);
 			}
 		}
 		

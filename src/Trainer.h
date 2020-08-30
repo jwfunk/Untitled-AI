@@ -68,6 +68,7 @@ class Trainer{
 
 	static void dynamicConvert(std::forward_list<int>&,int);
 
+	static int tevaluate(Network&);
 	private:
 	
 	static int locate(std::vector<std::pair<std::forward_list<int>,int> > &,std::forward_list<int>);

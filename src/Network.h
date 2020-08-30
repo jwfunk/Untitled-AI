@@ -14,10 +14,10 @@
 #define NETWORK
 
 #define TRAINERITERATIONS 10000
-#define MAXITERATIONS 1000
+#define MAXITERATIONS 100000
 #define INITSIZE 64
 #define MAXSIZE 2048
-#define NMUTATIONS 10
+#define NMUTATIONS 3 
 
 #include "Neuron.h"
 #include <forward_list>

@@ -84,6 +84,12 @@ void TicTacToe::swap(){
                 turn = 1;
 }
 
+TicTacToe::TicTacToe(const TicTacToe & t){
+	for(int i = 0;i < 9;i++)
+                board[i] = t.board[i];
+        turn = t.turn;
+}
+
 TicTacToe& TicTacToe::operator=(const TicTacToe &t){
 	for(int i = 0;i < 9;i++)
 		board[i] = t.board[i];

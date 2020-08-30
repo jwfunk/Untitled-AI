@@ -17,6 +17,8 @@ class TicTacToe{
 	//constructors
 	TicTacToe();
 
+	TicTacToe(const TicTacToe &);
+
 	int move(int);
 
 	int getTurn() {return turn;}
