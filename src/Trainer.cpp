@@ -11,12 +11,64 @@
 #include "TicTacToe.h"
 #include <stack>
 #include <tuple>
+#include <chrono>
+
+int done = TRAINERITERATIONS;
 
 void Trainer::dynamicTraining(Network &n, int enumerations){
+	bool ready = false;
 	n.setDynamic(1);
 	int nMutations = 0;
+	std::thread threads[NUMTHREADS];
+	int* progress[NUMTHREADS];
+	int** progressPointers[NUMTHREADS];
+	std::mutex lock;
+	std::condition_variable cv;
+	for(int i = 0;i < NUMTHREADS;i++){
+		progressPointers[i] = &progress[i];
+		threads[i] = std::thread(dynamicTrainingThread,&n,&cv,&ready,&lock,&nMutations,progressPointers[i]);
+	}
+	std::this_thread::sleep_for (std::chrono::seconds(1));
+	int i = 0;
+	while(i < TRAINERITERATIONS * NUMTHREADS){
+		std::cout << "|";
+		int bars = 100;
+		int numbars = TRAINERITERATIONS * NUMTHREADS / bars;//right value is number of bars
+		for(int k = 0;k <= i / numbars;k++)
+			std::cout << "=";
+		for(int k = 0;k < bars - (i / numbars) - 1;k++)
+			std::cout << " ";
+		std::cout << "|  ";
+		std::cout << i << " " << nMutations << "\r" << std::flush;
+		std::unique_lock<std::mutex> lk(lock);
+        	while(!ready) cv.wait(lk);
+		ready = false;
+		i = 0;
+		for(int j = 0;j < NUMTHREADS;++j)
+			i += *progress[j];
+	}
+	for(int i = 0;i < NUMTHREADS;i++){
+		threads[i].join();
+	}
+}
+
+void Trainer::dynamicTrainingThread(Network* sourceNetwork,std::condition_variable* cv,bool* ready,std::mutex* lock,int* nMutations,int** progress){
+	Network n;
+	int num;
+	(*lock).lock();
+	n = *sourceNetwork;
+	num = *nMutations;
+	(*lock).unlock();
 	int nVal = evaluate(n);
-	for(int i = 0;i < enumerations;i++){
+	for(int i = 0;i < TRAINERITERATIONS;i++){
+		(*progress) = &i;
+		if(num < *nMutations){
+			(*lock).lock();
+			n = *sourceNetwork;
+			num = *nMutations;
+			(*lock).unlock();
+			nVal = evaluate(n);
+		}
 		Network c;//need copy constructor
 		c = n;
 		c.mutate(-1);
@@ -34,22 +86,30 @@ void Trainer::dynamicTraining(Network &n, int enumerations){
 		if(cWins >= nWins){
 			int cVal = evaluate(c);
 			if(cVal > nVal){
-				n = c;
-				nVal = cVal;
-				nMutations++;
-				std::cout << cVal << " \n";
+				(*lock).lock();
+				if(num == *nMutations){//possible adjustment to avoid better mutations being ignored
+					*sourceNetwork = c;
+					n = c;
+					nVal = cVal;
+					(*nMutations)++;
+					num++;
+					std::cout << cVal << " \n";
+				}
+				(*lock).unlock();
+				//(*progress) = i;
+				*ready = true;
+				(*cv).notify_all();
 			}
 		}
-		std::cout << "|";
-                int bars = 100;
-                int numbars = enumerations / bars;//right value is number of bars
-                for(int k = 0;k <= i / numbars;k++)
-                        std::cout << "=";
-                for(int k = 0;k < bars - (i / numbars) - 1;k++)
-                        std::cout << " ";
-                std::cout << "|  ";
-		std::cout << i << " " << nMutations << "\r" << std::flush;
+		if(i % 1 == 0){
+			//(*progress) = i;
+			*ready = true;
+			(*cv).notify_all();
+		}
 	}
+	*progress = &done;
+	*ready = true;
+	(*cv).notify_all();
 }
 
 int Trainer::compete(Network& n,Network& c){
@@ -112,6 +172,7 @@ int Trainer::compete(Network& n,Network& c){
 		if(rValc == 1)
 			return 1;
 	}
+	return 0;
 }
 
 void Trainer::staticTraining(Network &n,std::vector<std::pair<std::forward_list<int>,int> > &targetData){

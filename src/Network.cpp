@@ -471,6 +471,11 @@ int Network::process(std::forward_list<int> *given){
 		int i = active.front();
 		active.pop();
 		if(i == -1){
+			if(active.front() == -1){
+				if(!dynamic)
+					(*this).clear();
+				return -1;
+			}
 			for(auto outputsIterator = outputs.begin();outputsIterator != outputs.end();++outputsIterator)//possible improvement here
                          	if(neurons[*outputsIterator].charge >= neurons[*outputsIterator].criticalCharge){
                                  	if(!dynamic)
@@ -498,6 +503,7 @@ int Network::process(std::forward_list<int> *given){
 		if(iterations > MAXITERATIONS){
 			if(!dynamic)
 				(*this).clear();
+//			std::cout << "MAX ITERATIONS\n";
         		return -1;
 		}
 		iterations++;
@@ -791,7 +797,7 @@ int Network::choose(){
 }
 
 void Network::mutate(int choice = -1){
-	std::forward_list<int> usedLocs;		
+	std::forward_list<int> usedSenders;		
 	for(int i = 0;i < NMUTATIONS;i++){
 		choice = choose();
 		switch(choice){
@@ -822,8 +828,8 @@ void Network::mutate(int choice = -1){
                         	n3.criticalCharge = 4;
                         	n3.addReciever(target);
                         	(*this).addNeuron(n3);
-				usedLocs.push_front(sender);//possibly remove
-				usedLocs.push_front(target);//possibly remove				
+				usedSenders.push_front(sender);//possibly remove
+				usedSenders.push_front(target);//possibly remove				
 				recievers.push_front(locs[0]);
 				notTargets.push_front(locs[2]);
 				senders.push_front(locs[2]);
@@ -856,9 +862,9 @@ void Network::mutate(int choice = -1){
 				int sender2 = randomSender();
 				int reciever = randomReciever();
 				(*this).addStructure(AND,sender1,sender2,reciever);
-				usedLocs.push_front(sender1);//
-				usedLocs.push_front(sender2);//
-				usedLocs.push_front(reciever);//
+				usedSenders.push_front(sender1);//
+				usedSenders.push_front(sender2);//
+				usedSenders.push_front(reciever);//
 				break;
 			}
 			case 3://add OR structure
@@ -867,20 +873,20 @@ void Network::mutate(int choice = -1){
                                 int sender2 = randomSender();
                                 int reciever = randomReciever();
                                 (*this).addStructure(OR,sender1,sender2,reciever);
-				usedLocs.push_front(sender1);
-				usedLocs.push_front(sender2);
-				usedLocs.push_front(reciever);
+				usedSenders.push_front(sender1);
+				usedSenders.push_front(sender2);
+				usedSenders.push_front(reciever);
 				break;
 			}
 			case 4://add XOR structure
 			{
-				int sender1 = randomLoc(usedLocs);
-                                int sender2 = randomLoc(usedLocs);
-                                int reciever = randomLoc(usedLocs);
+				int sender1 = randomSender();
+				int sender2 = randomSender();
+				int reciever = randomReciever();
                                 (*this).addStructure(XOR,sender1,sender2,reciever);
-				usedLocs.push_front(sender1);
-				usedLocs.push_front(sender2);
-				usedLocs.push_front(reciever);
+				usedSenders.push_front(sender1);
+				usedSenders.push_front(sender2);
+				usedSenders.push_front(reciever);
 				break;
 			}
 			case 5://add NOT structure
@@ -888,8 +894,8 @@ void Network::mutate(int choice = -1){
 				int sender1 = randomSender();
                                 int reciever = randomNotTarget();
                                 (*this).addStructure(NOT,sender1,0,reciever);
-				usedLocs.push_front(sender1);
-				usedLocs.push_front(reciever);
+				usedSenders.push_front(sender1);
+				usedSenders.push_front(reciever);
 				break;
 			}
 			case 6://add POR structure
@@ -901,8 +907,8 @@ void Network::mutate(int choice = -1){
 				else
 					reciever = randomReciever();
                                 (*this).addStructure(POR,sender,0,reciever);
-				usedLocs.push_front(sender);
-				usedLocs.push_front(reciever);
+				usedSenders.push_front(sender);
+				usedSenders.push_front(reciever);
 				break;
                         }
 			case 7://add PAND structure
@@ -914,8 +920,8 @@ void Network::mutate(int choice = -1){
                                 else
                                         reciever = randomReciever();
                                 (*this).addStructure(PAND,sender,0,reciever);
-				usedLocs.push_front(sender);
-				usedLocs.push_front(reciever);
+				usedSenders.push_front(sender);
+				usedSenders.push_front(reciever);
                                 break;
                         }
 			case 8://reciever
@@ -943,8 +949,8 @@ void Network::mutate(int choice = -1){
 				}
 			}
 		}
-	usedLocs.sort();
-	usedLocs.unique();					
+	usedSenders.sort();
+	usedSenders.unique();					
 	}
 }
 

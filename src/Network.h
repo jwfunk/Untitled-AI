@@ -18,6 +18,7 @@
 #define INITSIZE 64
 #define MAXSIZE 2048
 #define NMUTATIONS 3 
+#define NUMTHREADS 3
 
 #include "Neuron.h"
 #include <forward_list>

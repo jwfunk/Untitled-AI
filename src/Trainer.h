@@ -17,6 +17,9 @@
 #include <iostream>
 #include <vector>
 #include <forward_list>
+#include <mutex>
+#include <thread>
+#include <condition_variable>
 
 /*
 //Precision Learning
@@ -70,6 +73,8 @@ class Trainer{
 
 	static int tevaluate(Network&);
 	private:
+
+	static void dynamicTrainingThread(Network*,std::condition_variable*,bool*,std::mutex*,int*,int**);
 	
 	static int locate(std::vector<std::pair<std::forward_list<int>,int> > &,std::forward_list<int>);
 	

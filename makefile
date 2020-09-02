@@ -9,7 +9,7 @@ src/Neuron.o: src/Neuron.cpp src/Neuron.h
 
 src/Network.o: src/Network.cpp src/Network.h
 
-src/Trainer.o: src/Trainer.cpp src/Trainer.h
+src/Trainer.o: src/Trainer.cpp src/Trainer.h src/Network.h
 
 src/TicTacToe.o: src/TicTacToe.cpp src/TicTacToe.h
 
