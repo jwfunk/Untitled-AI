@@ -13,12 +13,12 @@
 #ifndef NETWORK
 #define NETWORK
 
-#define TRAINERITERATIONS 10000
-#define MAXITERATIONS 100000
+#define TRAINERITERATIONS 1000000
+#define MAXITERATIONS 1000000000
 #define INITSIZE 64
-#define MAXSIZE 2048
-#define NMUTATIONS 3 
-#define NUMTHREADS 3
+#define MAXSIZE 4096
+#define NMUTATIONS 1 
+#define NUMTHREADS 2
 
 #include "Neuron.h"
 #include <forward_list>
@@ -28,7 +28,7 @@
 #include <stack>
 #include <queue>
 
-enum structure {AND,OR,XOR,NOT,PAND,POR};
+enum structure {AND,OR,XOR,NOT,PAND,POR,TIMED};
 class Network {
 
 	friend class Trainer;
@@ -142,6 +142,14 @@ class Network {
 	int insert(int);
 
 	int choose();
+
+	void getInputs(std::vector<int>&,int);
+
+	void recursiveMutate(int);
+
+	int noRecievers(int,int);
+
+	void recursiveAddReciever(int);
 
 	std::queue<int> retroactive;
 	std::stack<int> available;

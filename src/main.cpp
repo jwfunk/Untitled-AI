@@ -13,10 +13,7 @@
 #include <ctime>
 #include <stack>
 #include <signal.h>
-
-void clear(){//System specific line, must change for windows
-	system("clear");
-}
+#include <thread>
 
 void ctrlCHandler(int i){
 	std::cout << "Caught signal " << i << "\n";
@@ -24,7 +21,7 @@ void ctrlCHandler(int i){
 }
 
 std::string play(Network &n){
-	clear();
+	system("clear");
 	TicTacToe t = TicTacToe();
 	int move = -1;
         while(1){
@@ -62,23 +59,9 @@ std::string play(Network &n){
 			n.clear();
 			move = -1;
 		}
-		clear();
+		system("clear");
         }
 	
-}
-
-
-std::string newDynamicTicTacToe(Network& n){
-	n = Network();
-	n.setDynamic(1);
-	for(int i = 0;i < 19;i++){
-                n.addNeuron(Neuron());
-        }
-        for(int i = 0;i < 10;i++)
-                n.addInput(9 - i);
-        for(int i = 0;i < 9;i++)
-                n.addOutput(18 - i);
-	return "Default Dynamic TicTacToe Network loaded";
 }
 
 std::string newStaticTicTacToe(Network& n){
@@ -99,6 +82,7 @@ std::string newStaticTicTacToe(Network& n){
 int main(){
 	std::srand(std::time(0));
         Network n = Network();
+	int end = 0;
 	std::vector<std::pair<std::forward_list<int>,int> > targetData;
 	std::string filename;
 	std::string buffer = "";
@@ -110,6 +94,8 @@ int main(){
 	sigIntHandler.sa_flags = 0;
 
 	sigaction(SIGINT, &sigIntHandler, NULL);
+
+
 	do{
 		if(buffer == "1"){
 			std::cout << "Enter your filename: ";
@@ -120,7 +106,7 @@ int main(){
 				message = "Could not load " + filename;
 		}
 		if(buffer == "2"){
-			message = newDynamicTicTacToe(n);
+			message = Trainer::newDynamicTicTacToe(n);
 			targetData.clear();
 		}
 		if(buffer == "8")
@@ -128,7 +114,7 @@ int main(){
 		if(buffer == "3")
 			Trainer::staticTraining(n,targetData);
 		if(buffer == "4"){
-			Trainer::dynamicTraining(n,500000);
+			std::thread(Trainer::dynamicTraining,&end,std::ref(n),500000).detach();
 			message = "";
 		}
 		if(buffer == "5")
@@ -143,7 +129,14 @@ int main(){
 		}
 		if(buffer == "9")
 			message = std::to_string(Trainer::tevaluate(n));
-		clear();
+		if(buffer == "e"){
+			end = 1;
+			while(end != -1){
+
+			}
+			end = 0;
+		}
+		system("clear");
 		std::string menu = "Menu: " + message + "\n\t1. Load \n\t2. New\n\t3. Train\n\t5. Play\n\t6. Display Network\n\t7. Save\n\t-1. Exit\n";
 		std::cout << menu << "\n";
 		std::cin >> buffer;

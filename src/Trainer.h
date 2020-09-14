@@ -54,7 +54,9 @@ class Trainer{
 
 	public:
 
-	static void dynamicTraining(Network&,int);
+	static std::string newDynamicTicTacToe(Network&);
+
+	static void dynamicTraining(int*,Network&,int);
 
 	static void staticTraining(Network&, std::vector<std::pair<std::forward_list<int>,int> > &);
 
@@ -74,7 +76,7 @@ class Trainer{
 	static int tevaluate(Network&);
 	private:
 
-	static void dynamicTrainingThread(Network*,std::condition_variable*,bool*,std::mutex*,int*,int**);
+	static void dynamicTrainingThread(Network*,int*,std::condition_variable*,bool*,std::mutex*,int*,int**);
 	
 	static int locate(std::vector<std::pair<std::forward_list<int>,int> > &,std::forward_list<int>);
 	

@@ -14,11 +14,38 @@
 #include <chrono>
 
 int done = TRAINERITERATIONS;
+std::string Trainer::newDynamicTicTacToe(Network& n){
+	n = Network();
+	n.setDynamic(1);
+	for(int i = 0;i < 29;i++){
+                n.addNeuron(Neuron());
+        }
+        for(int i = 0;i < 10;i++)
+                n.addInput(9 - i);
+        for(int i = 0;i < 9;i++)
+                n.addOutput(18 - i);
+        for(int i = 0;i < 10;i++){
+		n.neurons[i].addReciever(i + 19);
+		n.senders.push_front(i + 19);
+		n.recievers.push_front(i + 19);
+	}
+        for(int i = 1;i < 10;i++){
+		n.addStructure(NOT,0,0,i + 19);
+	}
+        for(int i = 1;i < 10;i++){
+		for(int j = 1;j < 10;j++){
+			if(i != j)
+				n.addStructure(NOT,i,0,j + 19);
+		}
+	}
+	return "Default Dynamic TicTacToe Network loaded";
+}
 
-void Trainer::dynamicTraining(Network &n, int enumerations){
+void Trainer::dynamicTraining(int* end,Network &n, int enumerations){
 	bool ready = false;
 	n.setDynamic(1);
 	int nMutations = 0;
+	int nVal = evaluate(n);
 	std::thread threads[NUMTHREADS];
 	int* progress[NUMTHREADS];
 	int** progressPointers[NUMTHREADS];
@@ -26,7 +53,7 @@ void Trainer::dynamicTraining(Network &n, int enumerations){
 	std::condition_variable cv;
 	for(int i = 0;i < NUMTHREADS;i++){
 		progressPointers[i] = &progress[i];
-		threads[i] = std::thread(dynamicTrainingThread,&n,&cv,&ready,&lock,&nMutations,progressPointers[i]);
+		threads[i] = std::thread(dynamicTrainingThread,&n,&nVal,&cv,&ready,&lock,&nMutations,progressPointers[i]);
 	}
 	std::this_thread::sleep_for (std::chrono::seconds(1));
 	int i = 0;
@@ -39,20 +66,25 @@ void Trainer::dynamicTraining(Network &n, int enumerations){
 		for(int k = 0;k < bars - (i / numbars) - 1;k++)
 			std::cout << " ";
 		std::cout << "|  ";
-		std::cout << i << " " << nMutations << "\r" << std::flush;
+		std::cout << i << " " << nMutations << " " << nVal << "\r" << std::flush;
 		std::unique_lock<std::mutex> lk(lock);
         	while(!ready) cv.wait(lk);
 		ready = false;
 		i = 0;
 		for(int j = 0;j < NUMTHREADS;++j)
 			i += *progress[j];
+		if(*end){
+			for(int j = 0;j < NUMTHREADS;++j)
+				*progress[j] = TRAINERITERATIONS;
+			*end = -1;
+		}
 	}
 	for(int i = 0;i < NUMTHREADS;i++){
 		threads[i].join();
 	}
 }
 
-void Trainer::dynamicTrainingThread(Network* sourceNetwork,std::condition_variable* cv,bool* ready,std::mutex* lock,int* nMutations,int** progress){
+void Trainer::dynamicTrainingThread(Network* sourceNetwork,int* sourceVal,std::condition_variable* cv,bool* ready,std::mutex* lock,int* nMutations,int** progress){
 	Network n;
 	int num;
 	(*lock).lock();
@@ -60,8 +92,9 @@ void Trainer::dynamicTrainingThread(Network* sourceNetwork,std::condition_variab
 	num = *nMutations;
 	(*lock).unlock();
 	int nVal = evaluate(n);
-	for(int i = 0;i < TRAINERITERATIONS;i++){
-		(*progress) = &i;
+	int i = 0;
+	(*progress) = &i;
+	for(i = 0;i < TRAINERITERATIONS;i++){
 		if(num < *nMutations){
 			(*lock).lock();
 			n = *sourceNetwork;
@@ -72,6 +105,7 @@ void Trainer::dynamicTrainingThread(Network* sourceNetwork,std::condition_variab
 		Network c;//need copy constructor
 		c = n;
 		c.mutate(-1);
+		/*
 		int nWins = 0;
 		int cWins = 0;
 		for(int i = 0;i < 20;++i){
@@ -83,7 +117,8 @@ void Trainer::dynamicTrainingThread(Network* sourceNetwork,std::condition_variab
 			if(winner == -1)
 				cWins++;
 		}
-		if(cWins >= nWins){
+		*/
+		if(1){
 			int cVal = evaluate(c);
 			if(cVal > nVal){
 				(*lock).lock();
@@ -91,9 +126,9 @@ void Trainer::dynamicTrainingThread(Network* sourceNetwork,std::condition_variab
 					*sourceNetwork = c;
 					n = c;
 					nVal = cVal;
+					(*sourceVal) = cVal;
 					(*nMutations)++;
 					num++;
-					std::cout << cVal << " \n";
 				}
 				(*lock).unlock();
 				//(*progress) = i;
@@ -639,8 +674,19 @@ int Trainer::evaluate(Network &n){
 						moveStack.push(i);
 						networkStack.push(tn);
 					}
-					if(nextc.winner() == -1)
-						score--;
+					if(nextc.winner() == -1){
+						int* board = c.getBoard();
+						int win = 0;
+						int sum = 1;
+						for(int i = 0;i < 9;i++){
+							if(board[i] == 0){
+								win++;
+								sum *= win;
+							}
+						}
+						sum++;
+						score -= sum;
+					}
                                 }
 			}
 		}
