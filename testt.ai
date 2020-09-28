@@ -1,0 +1,1216 @@
+Dynamic: 1
+Senders: 235 224 215 210 203 194 187 182 177 172 165 158 155 150 147 146 143 142 139 134 133 132 129 128 123 122 119 116 115 112 111 110 28 27 26 25 24 23 22 21 20 19 -1
+Recievers: 28 27 26 25 24 23 22 21 20 19 -1
+Not Targets: -1
+Inputs: 0 1 2 3 4 5 6 7 8 9 -1
+Outputs: 10 11 12 13 14 15 16 17 18 -1
+Neuron: 0
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: 19 29 30 31 32 33 34 35 36 37 -1
+Neuron: 1
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: 20 38 39 40 41 42 43 44 45 122 112 182 194 -1
+Neuron: 2
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: 21 46 47 48 49 50 51 52 53 116 146 210 224 172 -1
+Neuron: 3
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: 22 54 55 56 57 58 59 60 61 111 119 155 177 -1
+Neuron: 4
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: 23 62 63 64 65 66 67 68 69 134 143 203 147 -1
+Neuron: 5
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: 24 70 71 72 73 74 75 76 77 142 110 129 -1
+Neuron: 6
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: 25 78 79 80 81 82 83 84 85 123 150 235 -1
+Neuron: 7
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: 26 86 87 88 89 90 91 92 93 132 128 -1
+Neuron: 8
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: 27 94 95 96 97 98 99 100 101 115 139 165 187 133 -1
+Neuron: 9
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: 28 102 103 104 105 106 107 108 109 158 215 -1
+Neuron: 10
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: -1
+Neuron: 11
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: -1
+Neuron: 12
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: -1
+Neuron: 13
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: -1
+Neuron: 14
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: -1
+Neuron: 15
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: -1
+Neuron: 16
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: -1
+Neuron: 17
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: -1
+Neuron: 18
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: -1
+Neuron: 19
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: 10 -1
+Neuron: 20
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: 14 115 116 123 -1
+Neuron: 21
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: 14 132 143 150 158 194 -1
+Neuron: 22
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: 133 147 172 14 -1
+Neuron: 23
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: 14 128 129 177 187 215 224 -1
+Neuron: 24
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: 111 119 11 134 165 -1
+Neuron: 25
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: 14 110 112 -1
+Neuron: 26
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: 122 14 139 210 235 -1
+Neuron: 27
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: 14 146 155 182 203 -1
+Neuron: 28
+Charge: 0
+Critical Charge: 1
+Pulse: 1
+Recievers: 14 142 -1
+Neuron: 29
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 20 -1
+Neuron: 30
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 21 -1
+Neuron: 31
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 22 -1
+Neuron: 32
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 23 -1
+Neuron: 33
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 24 -1
+Neuron: 34
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 25 -1
+Neuron: 35
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 26 -1
+Neuron: 36
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 27 -1
+Neuron: 37
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 28 -1
+Neuron: 38
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 21 -1
+Neuron: 39
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 22 -1
+Neuron: 40
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 23 -1
+Neuron: 41
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 24 -1
+Neuron: 42
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 25 -1
+Neuron: 43
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 26 -1
+Neuron: 44
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 27 -1
+Neuron: 45
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 28 -1
+Neuron: 46
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 20 -1
+Neuron: 47
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 22 -1
+Neuron: 48
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 23 -1
+Neuron: 49
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 24 -1
+Neuron: 50
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 25 -1
+Neuron: 51
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 26 -1
+Neuron: 52
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 27 -1
+Neuron: 53
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 28 -1
+Neuron: 54
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 20 -1
+Neuron: 55
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 21 -1
+Neuron: 56
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 23 -1
+Neuron: 57
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 24 -1
+Neuron: 58
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 25 -1
+Neuron: 59
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 26 -1
+Neuron: 60
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 27 -1
+Neuron: 61
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 28 -1
+Neuron: 62
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 20 -1
+Neuron: 63
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 21 -1
+Neuron: 64
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 22 -1
+Neuron: 65
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 24 -1
+Neuron: 66
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 25 -1
+Neuron: 67
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 26 -1
+Neuron: 68
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 27 -1
+Neuron: 69
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 28 -1
+Neuron: 70
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 20 -1
+Neuron: 71
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 21 -1
+Neuron: 72
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 22 -1
+Neuron: 73
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 23 -1
+Neuron: 74
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 25 -1
+Neuron: 75
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 26 -1
+Neuron: 76
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 27 -1
+Neuron: 77
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 28 -1
+Neuron: 78
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 20 -1
+Neuron: 79
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 21 -1
+Neuron: 80
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 22 -1
+Neuron: 81
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 23 -1
+Neuron: 82
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 24 -1
+Neuron: 83
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 26 -1
+Neuron: 84
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 27 -1
+Neuron: 85
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 28 -1
+Neuron: 86
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 20 -1
+Neuron: 87
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 21 -1
+Neuron: 88
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 22 -1
+Neuron: 89
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 23 -1
+Neuron: 90
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 24 -1
+Neuron: 91
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 25 -1
+Neuron: 92
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 27 -1
+Neuron: 93
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 28 -1
+Neuron: 94
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 20 -1
+Neuron: 95
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 21 -1
+Neuron: 96
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 22 -1
+Neuron: 97
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 23 -1
+Neuron: 98
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 24 -1
+Neuron: 99
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 25 -1
+Neuron: 100
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 26 -1
+Neuron: 101
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 28 -1
+Neuron: 102
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 20 -1
+Neuron: 103
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 21 -1
+Neuron: 104
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 22 -1
+Neuron: 105
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 23 -1
+Neuron: 106
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 24 -1
+Neuron: 107
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 25 -1
+Neuron: 108
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 26 -1
+Neuron: 109
+Charge: 0
+Critical Charge: 1
+Pulse: -1
+Recievers: 27 -1
+Neuron: 110
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 114 13 -1
+Neuron: 111
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 121 16 138 171 -1
+Neuron: 112
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 113 14 -1
+Neuron: 113
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 110 -1
+Neuron: 114
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 112 -1
+Neuron: 115
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 16 118 127 -1
+Neuron: 116
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 13 117 125 -1
+Neuron: 117
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 115 -1
+Neuron: 118
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 116 -1
+Neuron: 119
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 120 18 136 169 -1
+Neuron: 120
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 111 -1
+Neuron: 121
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 119 -1
+Neuron: 122
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 13 141 214 241 -1
+Neuron: 123
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 17 124 126 -1
+Neuron: 124
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 116 -1
+Neuron: 125
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 123 -1
+Neuron: 126
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 115 -1
+Neuron: 127
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 123 -1
+Neuron: 128
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 131 181 14 193 223 234 -1
+Neuron: 129
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 130 179 191 15 221 232 -1
+Neuron: 130
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 128 -1
+Neuron: 131
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 129 -1
+Neuron: 132
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 12 145 154 164 202 -1
+Neuron: 133
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 149 176 16 -1
+Neuron: 134
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 15 135 137 167 -1
+Neuron: 135
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 119 -1
+Neuron: 136
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 134 -1
+Neuron: 137
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 111 -1
+Neuron: 138
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 134 -1
+Neuron: 139
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 12 140 212 239 -1
+Neuron: 140
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 122 -1
+Neuron: 141
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 139 -1
+Neuron: 142
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 14 -1
+Neuron: 143
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 14 144 152 162 200 -1
+Neuron: 144
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 132 -1
+Neuron: 145
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 143 -1
+Neuron: 146
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 16 157 186 209 -1
+Neuron: 147
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 148 174 11 -1
+Neuron: 148
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 133 -1
+Neuron: 149
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 147 -1
+Neuron: 150
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 10 151 153 160 198 -1
+Neuron: 151
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 143 -1
+Neuron: 152
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 150 -1
+Neuron: 153
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 132 -1
+Neuron: 154
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 150 -1
+Neuron: 155
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 15 156 184 207 -1
+Neuron: 156
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 146 -1
+Neuron: 157
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 155 -1
+Neuron: 158
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 10 159 161 163 196 -1
+Neuron: 159
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 150 -1
+Neuron: 160
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 158 -1
+Neuron: 161
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 143 -1
+Neuron: 162
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 158 -1
+Neuron: 163
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 132 -1
+Neuron: 164
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 158 -1
+Neuron: 165
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 10 166 168 170 -1
+Neuron: 166
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 134 -1
+Neuron: 167
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 165 -1
+Neuron: 168
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 119 -1
+Neuron: 169
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 165 -1
+Neuron: 170
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 111 -1
+Neuron: 171
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 165 -1
+Neuron: 172
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 173 175 18 -1
+Neuron: 173
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 147 -1
+Neuron: 174
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 172 -1
+Neuron: 175
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 133 -1
+Neuron: 176
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 172 -1
+Neuron: 177
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 14 178 180 189 219 230 -1
+Neuron: 178
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 129 -1
+Neuron: 179
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 177 -1
+Neuron: 180
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 128 -1
+Neuron: 181
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 177 -1
+Neuron: 182
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 15 183 185 205 -1
+Neuron: 183
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 155 -1
+Neuron: 184
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 182 -1
+Neuron: 185
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 146 -1
+Neuron: 186
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 182 -1
+Neuron: 187
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 11 188 190 192 217 228 -1
+Neuron: 188
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 177 -1
+Neuron: 189
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 187 -1
+Neuron: 190
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 129 -1
+Neuron: 191
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 187 -1
+Neuron: 192
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 128 -1
+Neuron: 193
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 187 -1
+Neuron: 194
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 12 195 197 199 201 -1
+Neuron: 195
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 158 -1
+Neuron: 196
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 194 -1
+Neuron: 197
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 150 -1
+Neuron: 198
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 194 -1
+Neuron: 199
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 143 -1
+Neuron: 200
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 194 -1
+Neuron: 201
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 132 -1
+Neuron: 202
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 194 -1
+Neuron: 203
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 15 204 206 208 -1
+Neuron: 204
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 182 -1
+Neuron: 205
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 203 -1
+Neuron: 206
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 155 -1
+Neuron: 207
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 203 -1
+Neuron: 208
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 146 -1
+Neuron: 209
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 203 -1
+Neuron: 210
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 14 211 213 237 -1
+Neuron: 211
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 139 -1
+Neuron: 212
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 210 -1
+Neuron: 213
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 122 -1
+Neuron: 214
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 210 -1
+Neuron: 215
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 14 216 218 220 222 226 -1
+Neuron: 216
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 187 -1
+Neuron: 217
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 215 -1
+Neuron: 218
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 177 -1
+Neuron: 219
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 215 -1
+Neuron: 220
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 129 -1
+Neuron: 221
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 215 -1
+Neuron: 222
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 128 -1
+Neuron: 223
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 215 -1
+Neuron: 224
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 18 225 227 229 231 233 -1
+Neuron: 225
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 215 -1
+Neuron: 226
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 224 -1
+Neuron: 227
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 187 -1
+Neuron: 228
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 224 -1
+Neuron: 229
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 177 -1
+Neuron: 230
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 224 -1
+Neuron: 231
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 129 -1
+Neuron: 232
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 224 -1
+Neuron: 233
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 128 -1
+Neuron: 234
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 224 -1
+Neuron: 235
+Charge: 0
+Critical Charge: 2
+Pulse: 1
+Recievers: 14 236 238 240 -1
+Neuron: 236
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 210 -1
+Neuron: 237
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 235 -1
+Neuron: 238
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 139 -1
+Neuron: 239
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 235 -1
+Neuron: 240
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 122 -1
+Neuron: 241
+Charge: 0
+Critical Charge: 1
+Pulse: -2
+Recievers: 235 -1

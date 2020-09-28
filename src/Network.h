@@ -16,7 +16,7 @@
 #define TRAINERITERATIONS 1000000
 #define MAXITERATIONS 1000000000
 #define INITSIZE 64
-#define MAXSIZE 4096
+#define MAXSIZE 16384
 #define NMUTATIONS 1 
 #define NUMTHREADS 2
 
@@ -81,12 +81,10 @@ class Network {
 	int process(std::forward_list<int>*);
 
 	//mutates a random aspect of the Network
-	void mutate(int);
 
 	//mutates a random aspect of the Network. but if the given inputs don't connect with the 
 	//target output it specifically mutates so that the input's tree connects with the outputs
 	//tree
-	void mutateTarget(std::pair<std::forward_list<int>, int >&);
 
 	//displays information of the network
 	const std::string info() const;
@@ -108,13 +106,35 @@ class Network {
 
 	int getDynamic() {return dynamic;}
 
-	private:
+	int getSize() {return size;}
 
+	int getIndex(int i) {return index[i];}
+
+	Neuron* getNeuron(int i) {return &neurons[i];}
+
+	
+	int randomSender();
+	int randomReciever();
+	int randomNotTarget();
+	void getInputs(std::vector<int>&,int);
+
+	std::forward_list<int> senders;
+	std::forward_list<int> recievers;
+	std::forward_list<int> notTargets;
 	//returns the next free location in neurons or -1 if full
         int nextLocation();
+	//used to create a tree of what the given inputs branch out to
+	void inputTree(std::vector<int>&, std::forward_list<int>&);
+	void recursiveInputTree(int*, int);
 
+	//used to create a tree of what the given output branches from
+	void outputTree(std::vector<int>&, int);
+	void recursiveOutputTree(int*, std::forward_list<int>*,int);
 	//returns a vector of the number of next locations specified by the int parameter or NULL if not enough space
 	std::vector<int> nextLocations(int);
+	private:
+
+
 
 	//returns 1 if neuron at int is not an input or output
 	//otherwise returns 0
@@ -125,39 +145,18 @@ class Network {
 	int anyExpendable();
 	
 
-	//used to create a tree of what the given inputs branch out to
-	void inputTree(std::vector<int>&, std::forward_list<int>&);
-	void recursiveInputTree(int*, int);
 
-	//used to create a tree of what the given output branches from
-	void outputTree(std::vector<int>&, int);
-	void recursiveOutputTree(int*, std::forward_list<int>*,int);
 
-	int randomLoc(std::forward_list<int>&);
-
-	int randomSender();
-	int randomReciever();
-	int randomNotTarget();
 
 	int insert(int);
 
-	int choose();
 
-	void getInputs(std::vector<int>&,int);
 
-	void recursiveMutate(int);
-
-	int noRecievers(int,int);
-
-	void recursiveAddReciever(int);
 
 	std::queue<int> retroactive;
 	std::stack<int> available;
 	std::forward_list<int> inputs;
 	std::forward_list<int> outputs;
-	std::forward_list<int> senders;
-	std::forward_list<int> recievers;
-	std::forward_list<int> notTargets;
 	Neuron *neurons{nullptr};
 	int size{0};
 	int *index{nullptr};

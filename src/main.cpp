@@ -4,6 +4,7 @@
 
 #include "TicTacToe.h"
 #include "Trainer.h"
+#include "TicTacToeTrainingMethods.h"
 #include "Network.h"
 #include <vector>
 #include <utility>
@@ -41,9 +42,9 @@ std::string play(Network &n){
                 else{
                         std::forward_list<int> data;
 			if(n.getDynamic())
-                        	Trainer::dynamicConvert(data,move);
+                        	TicTacToeTrainingMethods::dynamicConvert(data,move);
 			else
-				Trainer::staticConvert(data,t.getBoard(),t.getTurn());
+				TicTacToeTrainingMethods::staticConvert(data,t.getBoard(),t.getTurn());
 			int aiMove = n.process(&data) - 10;
 			if(!n.getDynamic())
 				aiMove -= 10;
@@ -95,6 +96,7 @@ int main(){
 
 	sigaction(SIGINT, &sigIntHandler, NULL);
 
+	Trainer TicTacToeTrainer = Trainer(&TicTacToeTrainingMethods::evaluate,&TicTacToeTrainingMethods::mutate);
 
 	do{
 		if(buffer == "1"){
@@ -106,15 +108,15 @@ int main(){
 				message = "Could not load " + filename;
 		}
 		if(buffer == "2"){
-			message = Trainer::newDynamicTicTacToe(n);
+			message = TicTacToeTrainingMethods::newDynamicTicTacToe(n);
 			targetData.clear();
 		}
 		if(buffer == "8")
 			message = newStaticTicTacToe(n);
 		if(buffer == "3")
-			Trainer::staticTraining(n,targetData);
+			TicTacToeTrainingMethods::staticTraining(n,targetData);
 		if(buffer == "4"){
-			std::thread(Trainer::dynamicTraining,&end,std::ref(n),500000).detach();
+			std::thread(&Trainer::dynamicTraining,&TicTacToeTrainer,&end,std::ref(n),500000).detach();
 			message = "";
 		}
 		if(buffer == "5")
@@ -128,7 +130,7 @@ int main(){
 			n.save(filename);
 		}
 		if(buffer == "9")
-			message = std::to_string(Trainer::tevaluate(n));
+			message = std::to_string(TicTacToeTrainingMethods::tevaluate(n));
 		if(buffer == "e"){
 			end = 1;
 			while(end != -1){

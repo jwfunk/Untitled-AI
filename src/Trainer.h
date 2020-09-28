@@ -44,47 +44,25 @@
 //              contributers
 */
 
-//Target Learning
-//Given a vector of pairs
-//pair.first is a forward list representing a vector of inputs for the network
-//pair.second is the expected result for the input
-//enumerations is the number of enumerations the training method will go through
-
 class Trainer{
 
 	public:
 
-	static std::string newDynamicTicTacToe(Network&);
+	Trainer(int(*eval)(Network&),int(*mut)(Network&,int)):evaluate(eval),mutate(mut) {}
 
-	static void dynamicTraining(int*,Network&,int);
+	void dynamicTraining(int*,Network&,int);
 
-	static void staticTraining(Network&, std::vector<std::pair<std::forward_list<int>,int> > &);
 
 	//Trains the network to play from moves given by the player
 	//Always attains 100% accuracy but requires data to train from
-	static void trainPrecisionLearning( Network &, std::vector<std::pair<std::forward_list<int>,int> > &);
 
-	//Trains the network via random mutation
-	//this has seen marginal success but seems largely
-	//ineffective moving on
-	static void trainTargetLearning(Network&,std::vector<std::pair<std::forward_list<int>,int> >&,int);
-
-	static void staticConvert(std::forward_list<int>&,int *,int);
-
-	static void dynamicConvert(std::forward_list<int>&,int);
-
-	static int tevaluate(Network&);
 	private:
 
-	static void dynamicTrainingThread(Network*,int*,std::condition_variable*,bool*,std::mutex*,int*,int**);
+	void dynamicTrainingThread(Network*,int*,std::condition_variable*,bool*,std::mutex*,int*,int**);
 	
-	static int locate(std::vector<std::pair<std::forward_list<int>,int> > &,std::forward_list<int>);
-	
-	static int contains(std::vector<std::pair<std::forward_list<int>,int> > &,std::forward_list<int>);
 
-	static int evaluate(Network&);
+	int (*evaluate)(Network&);
 
-	static int compete(Network&,Network&);
-
+	int (*mutate)(Network&,int);
 };
 #endif

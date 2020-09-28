@@ -39,6 +39,10 @@ class Neuron{
 	//copy assignment operator
 	Neuron& operator=(const Neuron &);
 
+	std::list<int>* getRecievers(){return &recievers;}
+
+	int getPulse() {return pulse;}
+
 	private:
 	int charge{0};
 	int criticalCharge{1};

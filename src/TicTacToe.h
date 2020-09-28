@@ -39,6 +39,10 @@ class TicTacToe{
 
 	int getOneAway(int);
 
+	int twoAway(int);
+
+	int threeAway(int);
+
 	private:
 	
 	int board[9];
