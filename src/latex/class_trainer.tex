@@ -1,0 +1,51 @@
+\hypertarget{class_trainer}{}\doxysection{Trainer Class Reference}
+\label{class_trainer}\index{Trainer@{Trainer}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_trainer_a2b93508c92322fe7ba464b15f3d750c7}{Trainer}} (int($\ast$eval)(\mbox{\hyperlink{class_network}{Network}} \&), int($\ast$mut)(\mbox{\hyperlink{class_network}{Network}} \&, int))
+\item 
+void \mbox{\hyperlink{class_trainer_ac2f9b3320eeb314733330e6116575446}{dynamic\+Training}} (int $\ast$end, \mbox{\hyperlink{class_network}{Network}} \&n)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_trainer_a2b93508c92322fe7ba464b15f3d750c7}\label{class_trainer_a2b93508c92322fe7ba464b15f3d750c7}} 
+\index{Trainer@{Trainer}!Trainer@{Trainer}}
+\index{Trainer@{Trainer}!Trainer@{Trainer}}
+\doxysubsubsection{\texorpdfstring{Trainer()}{Trainer()}}
+{\footnotesize\ttfamily Trainer\+::\+Trainer (\begin{DoxyParamCaption}\item[{int($\ast$)(\mbox{\hyperlink{class_network}{Network}} \&)}]{eval,  }\item[{int($\ast$)(\mbox{\hyperlink{class_network}{Network}} \&, int)}]{mut }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Constructs a \mbox{\hyperlink{class_trainer}{Trainer}} with the given evaluate and mutate functions
+
+
+\begin{DoxyParams}{Parameters}
+{\em eval} & Address of the evaluate function \\
+\hline
+{\em mut} & Address of the mutate function \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_trainer_ac2f9b3320eeb314733330e6116575446}\label{class_trainer_ac2f9b3320eeb314733330e6116575446}} 
+\index{Trainer@{Trainer}!dynamicTraining@{dynamicTraining}}
+\index{dynamicTraining@{dynamicTraining}!Trainer@{Trainer}}
+\doxysubsubsection{\texorpdfstring{dynamicTraining()}{dynamicTraining()}}
+{\footnotesize\ttfamily void Trainer\+::dynamic\+Training (\begin{DoxyParamCaption}\item[{int $\ast$}]{end,  }\item[{\mbox{\hyperlink{class_network}{Network}} \&}]{n }\end{DoxyParamCaption})}
+
+Trains the \mbox{\hyperlink{class_network}{Network}} using the given evaluate and mutate functions
+
+
+\begin{DoxyParams}{Parameters}
+{\em end} & address of an int variable used to stop training \\
+\hline
+{\em n} & \mbox{\hyperlink{class_network}{Network}} that will be trained \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Trainer.\+h\item 
+Trainer.\+cpp\end{DoxyCompactItemize}

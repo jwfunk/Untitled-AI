@@ -1,0 +1,10 @@
+//
+//defs.h
+//
+
+#define TRAINERITERATIONS 1000000
+#define MAXITERATIONS 1000000000
+#define INITSIZE 64
+#define MAXSIZE 16384
+#define NMUTATIONS 1
+#define NUMTHREADS 2

@@ -17,6 +17,8 @@ class TicTacToe{
 	//constructors
 	TicTacToe();
 
+	TicTacToe(const TicTacToe &);
+
 	int move(int);
 
 	int getTurn() {return turn;}
@@ -30,6 +32,16 @@ class TicTacToe{
 	void reset();
 
 	TicTacToe& operator=(const TicTacToe &);
+
+	int winner();
+
+	int oneAway(int);
+
+	int getOneAway(int);
+
+	int twoAway(int);
+
+	int threeAway(int);
 
 	private:
 	

@@ -1,0 +1,391 @@
+\hypertarget{class_network}{}\doxysection{Network Class Reference}
+\label{class_network}\index{Network@{Network}}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{class_network_a46436c4c473584e8b6fd303ceedb9806}{structure}} \{ \newline
+{\bfseries A\+ND}, 
+{\bfseries OR}, 
+{\bfseries X\+OR}, 
+{\bfseries N\+OT}, 
+\newline
+{\bfseries P\+A\+ND}, 
+{\bfseries P\+OR}, 
+{\bfseries T\+I\+M\+ED}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_network_a3cc2fb4f8fa4d507077e8da85ce5a1c8}{Network}} ()
+\item 
+\mbox{\hyperlink{class_network_a1dfc26f2b1d5ae74a7707cd0fd22fc1e}{Network}} (const \mbox{\hyperlink{class_network}{Network}} \&)
+\item 
+void \mbox{\hyperlink{class_network_ac318ee133974ab6e7d3fd47682b80cad}{clear}} ()
+\item 
+int \mbox{\hyperlink{class_network_adbcdab4b076fae6d8723a0bae2dbe341}{add\+Neuron}} (const \mbox{\hyperlink{class_neuron}{Neuron}})
+\item 
+void \mbox{\hyperlink{class_network_a73d17a8ca12de5865afd83b8b34a86f1}{remove\+Neuron}} (int i)
+\item 
+int \mbox{\hyperlink{class_network_afce6a721439e0eaffbad7398920301a5}{add\+Structure}} (\mbox{\hyperlink{class_network_a46436c4c473584e8b6fd303ceedb9806}{structure}} s, int i1, int i2, int i3)
+\item 
+int \mbox{\hyperlink{class_network_a20f181b9aa4b170ec3345ff3eb462dd1}{add\+Input}} (int i)
+\item 
+int \mbox{\hyperlink{class_network_a68dfdcb3032ff3a5d68679c5b5b8a2e7}{remove\+Input}} (int i)
+\item 
+int \mbox{\hyperlink{class_network_a862056ab1714ac945b8d93673d68acb9}{add\+Output}} (int i)
+\item 
+int \mbox{\hyperlink{class_network_ab67ce0130c344b74e37f8e35f9f546ec}{remove\+Output}} (int i)
+\item 
+int \mbox{\hyperlink{class_network_a68f7580902f58633f48cb10837c041a7}{process}} (std\+::forward\+\_\+list$<$ int $>$ $\ast$)
+\item 
+const std\+::string \mbox{\hyperlink{class_network_a9ad767df44d5c86f6426501f8b973b79}{info}} () const
+\item 
+\mbox{\hyperlink{class_network}{Network}} \& \mbox{\hyperlink{class_network_a4a2fd564c94e76153fa389adfdc3b64a}{operator=}} (const \mbox{\hyperlink{class_network}{Network}} \&)
+\item 
+\mbox{\hyperlink{class_network_a7a4e19cdb4bf0c7ecf82baa643831492}{$\sim$\+Network}} ()
+\item 
+void \mbox{\hyperlink{class_network_a142a23835fe3fc2cfae42254856bf105}{save}} (std\+::string file)
+\item 
+int \mbox{\hyperlink{class_network_aff2f47bbd6c862c337586c3fb8b589c7}{load}} (std\+::string file)
+\item 
+int \mbox{\hyperlink{class_network_aeeba2e85cfd7255cfef49b9bf96aad01}{get\+Size}} ()
+\item 
+int \mbox{\hyperlink{class_network_a813da4df9c564945fef1915b475fba83}{get\+Index}} (int i)
+\item 
+\mbox{\Hypertarget{class_network_a9ca62df7f37c11774ea1106052f924e8}\label{class_network_a9ca62df7f37c11774ea1106052f924e8}} 
+\mbox{\hyperlink{class_neuron}{Neuron}} $\ast$ {\bfseries get\+Neuron} (int i)
+\item 
+\mbox{\Hypertarget{class_network_ab6f8e3f734c975d30f7eb62ee05e583c}\label{class_network_ab6f8e3f734c975d30f7eb62ee05e583c}} 
+int {\bfseries random\+Sender} ()
+\item 
+\mbox{\Hypertarget{class_network_ae0fd687a94d413b99dce9dbbdedde56b}\label{class_network_ae0fd687a94d413b99dce9dbbdedde56b}} 
+int {\bfseries random\+Reciever} ()
+\item 
+\mbox{\Hypertarget{class_network_a0f54025b250e961b5c641063becaf589}\label{class_network_a0f54025b250e961b5c641063becaf589}} 
+int {\bfseries random\+Not\+Target} ()
+\item 
+std\+::vector$<$ int $>$ \mbox{\hyperlink{class_network_a01bbec1f1a4ede2df92649993dd269e2}{get\+Inputs}} (int i)
+\item 
+int \mbox{\hyperlink{class_network_afb0a55871b6337d805ff9d7c236a737c}{next\+Location}} ()
+\item 
+std\+::vector$<$ int $>$ \mbox{\hyperlink{class_network_a8921816cfedc5deed80de9330c2bb704}{next\+Locations}} (int i)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_network_ac7fe4a5bfeec1673f65dadd1547eea16}\label{class_network_ac7fe4a5bfeec1673f65dadd1547eea16}} 
+std\+::forward\+\_\+list$<$ int $>$ {\bfseries senders}
+\item 
+\mbox{\Hypertarget{class_network_a5906e75d346661bec1067b6511436c26}\label{class_network_a5906e75d346661bec1067b6511436c26}} 
+std\+::forward\+\_\+list$<$ int $>$ {\bfseries recievers}
+\item 
+\mbox{\Hypertarget{class_network_a0aad9eec117dc275ee699eabd47169ba}\label{class_network_a0aad9eec117dc275ee699eabd47169ba}} 
+std\+::forward\+\_\+list$<$ int $>$ {\bfseries not\+Targets}
+\item 
+int \mbox{\hyperlink{class_network_aa619c05f86dde1f1857f64d72bfc0edf}{dynamic}} \{0\}
+\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_network_ad38c9566742be31ca860cf8b5d6ae11f}\label{class_network_ad38c9566742be31ca860cf8b5d6ae11f}} 
+class {\bfseries Trainer}
+\item 
+\mbox{\Hypertarget{class_network_a2f92634323d87c273bafe578d318dbf2}\label{class_network_a2f92634323d87c273bafe578d318dbf2}} 
+std\+::ostream \& {\bfseries operator$<$$<$} (std\+::ostream \&, const \mbox{\hyperlink{class_network}{Network}} \&)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{class_network_a46436c4c473584e8b6fd303ceedb9806}\label{class_network_a46436c4c473584e8b6fd303ceedb9806}} 
+\index{Network@{Network}!structure@{structure}}
+\index{structure@{structure}!Network@{Network}}
+\doxysubsubsection{\texorpdfstring{structure}{structure}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{class_network_a46436c4c473584e8b6fd303ceedb9806}{Network\+::structure}}}
+
+Enums for the structures that can be added
+
+A\+ND\+: Pulses when its two input Neurons pulse
+
+OR\+: Pulses when either of its input Neurons pulse
+
+X\+OR\+: Pulses when only one of its input Neurons pulse (Inputs must pulse within a certain time of each other)
+
+N\+OT\+: Prevents it\textquotesingle{}s reciever from pulsing when its input \mbox{\hyperlink{class_neuron}{Neuron}} pulses
+
+P\+A\+ND\+: \char`\"{}\+Partial\char`\"{} A\+ND, Can be used along with an A\+ND structure to add more necessary inputs. For example instead of needing two input Neurons to pulse one could add a third
+
+P\+OR\+: \char`\"{}\+Partial\char`\"{} OR, Works the same as P\+A\+ND but with OR
+
+T\+I\+M\+ED\+: Pulses to its recievers with a timed delay allowing a N\+OT structure to interupt it 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_network_a3cc2fb4f8fa4d507077e8da85ce5a1c8}\label{class_network_a3cc2fb4f8fa4d507077e8da85ce5a1c8}} 
+\index{Network@{Network}!Network@{Network}}
+\index{Network@{Network}!Network@{Network}}
+\doxysubsubsection{\texorpdfstring{Network()}{Network()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Network\+::\+Network (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Constructs a \mbox{\hyperlink{class_network}{Network}} with no Neurons inputed \mbox{\Hypertarget{class_network_a1dfc26f2b1d5ae74a7707cd0fd22fc1e}\label{class_network_a1dfc26f2b1d5ae74a7707cd0fd22fc1e}} 
+\index{Network@{Network}!Network@{Network}}
+\index{Network@{Network}!Network@{Network}}
+\doxysubsubsection{\texorpdfstring{Network()}{Network()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Network\+::\+Network (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_network}{Network}} \&}]{i }\end{DoxyParamCaption})}
+
+Constructs a \mbox{\hyperlink{class_network}{Network}} with a deep copy of the given \mbox{\hyperlink{class_network}{Network}} \mbox{\Hypertarget{class_network_a7a4e19cdb4bf0c7ecf82baa643831492}\label{class_network_a7a4e19cdb4bf0c7ecf82baa643831492}} 
+\index{Network@{Network}!````~Network@{$\sim$Network}}
+\index{````~Network@{$\sim$Network}!Network@{Network}}
+\doxysubsubsection{\texorpdfstring{$\sim$Network()}{~Network()}}
+{\footnotesize\ttfamily Network\+::$\sim$\+Network (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Deallocates the memory reserved for the \mbox{\hyperlink{class_neuron}{Neuron}} 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_network_a20f181b9aa4b170ec3345ff3eb462dd1}\label{class_network_a20f181b9aa4b170ec3345ff3eb462dd1}} 
+\index{Network@{Network}!addInput@{addInput}}
+\index{addInput@{addInput}!Network@{Network}}
+\doxysubsubsection{\texorpdfstring{addInput()}{addInput()}}
+{\footnotesize\ttfamily int Network\+::add\+Input (\begin{DoxyParamCaption}\item[{int}]{i }\end{DoxyParamCaption})}
+
+Adds the index to the inputs list if the \mbox{\hyperlink{class_neuron}{Neuron}} at that index is valid
+
+
+\begin{DoxyParams}{Parameters}
+{\em i} & index added to inputs \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_network_adbcdab4b076fae6d8723a0bae2dbe341}\label{class_network_adbcdab4b076fae6d8723a0bae2dbe341}} 
+\index{Network@{Network}!addNeuron@{addNeuron}}
+\index{addNeuron@{addNeuron}!Network@{Network}}
+\doxysubsubsection{\texorpdfstring{addNeuron()}{addNeuron()}}
+{\footnotesize\ttfamily int Network\+::add\+Neuron (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_neuron}{Neuron}}}]{n }\end{DoxyParamCaption})}
+
+Adds the given \mbox{\hyperlink{class_neuron}{Neuron}} to the \mbox{\hyperlink{class_network}{Network}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em \mbox{\hyperlink{class_neuron}{Neuron}}} & The \mbox{\hyperlink{class_neuron}{Neuron}} being added to the \mbox{\hyperlink{class_network}{Network}} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success and 1 when \mbox{\hyperlink{class_network}{Network}} is at max size 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_network_a862056ab1714ac945b8d93673d68acb9}\label{class_network_a862056ab1714ac945b8d93673d68acb9}} 
+\index{Network@{Network}!addOutput@{addOutput}}
+\index{addOutput@{addOutput}!Network@{Network}}
+\doxysubsubsection{\texorpdfstring{addOutput()}{addOutput()}}
+{\footnotesize\ttfamily int Network\+::add\+Output (\begin{DoxyParamCaption}\item[{int}]{i }\end{DoxyParamCaption})}
+
+Adds the index to the outputs list if the \mbox{\hyperlink{class_neuron}{Neuron}} at that index is valid
+
+
+\begin{DoxyParams}{Parameters}
+{\em i} & index added to outputs \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_network_afce6a721439e0eaffbad7398920301a5}\label{class_network_afce6a721439e0eaffbad7398920301a5}} 
+\index{Network@{Network}!addStructure@{addStructure}}
+\index{addStructure@{addStructure}!Network@{Network}}
+\doxysubsubsection{\texorpdfstring{addStructure()}{addStructure()}}
+{\footnotesize\ttfamily int Network\+::add\+Structure (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_network_a46436c4c473584e8b6fd303ceedb9806}{structure}}}]{s,  }\item[{int}]{i1,  }\item[{int}]{i2,  }\item[{int}]{i3 }\end{DoxyParamCaption})}
+
+Adds a structure to the network resembeling classic logic gates
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & structure enum indicating which kind of gate is added \\
+\hline
+{\em i1} & index of first input \mbox{\hyperlink{class_neuron}{Neuron}} to the structure \\
+\hline
+{\em i2} & index of second input \mbox{\hyperlink{class_neuron}{Neuron}} to the structure (only used with A\+ND, OR, and X\+OR structures) \\
+\hline
+{\em i3} & index of the recieving \mbox{\hyperlink{class_neuron}{Neuron}} of the structure \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_network_a46436c4c473584e8b6fd303ceedb9806}{structure}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{class_network_ac318ee133974ab6e7d3fd47682b80cad}\label{class_network_ac318ee133974ab6e7d3fd47682b80cad}} 
+\index{Network@{Network}!clear@{clear}}
+\index{clear@{clear}!Network@{Network}}
+\doxysubsubsection{\texorpdfstring{clear()}{clear()}}
+{\footnotesize\ttfamily void Network\+::clear (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Sets the charges of all the Neurons in the \mbox{\hyperlink{class_network}{Network}} to 0 \mbox{\Hypertarget{class_network_a813da4df9c564945fef1915b475fba83}\label{class_network_a813da4df9c564945fef1915b475fba83}} 
+\index{Network@{Network}!getIndex@{getIndex}}
+\index{getIndex@{getIndex}!Network@{Network}}
+\doxysubsubsection{\texorpdfstring{getIndex()}{getIndex()}}
+{\footnotesize\ttfamily int Network\+::get\+Index (\begin{DoxyParamCaption}\item[{int}]{i }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em i} & index to check \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if \mbox{\hyperlink{class_neuron}{Neuron}} at index is valid 0 otherwise 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_network_a01bbec1f1a4ede2df92649993dd269e2}\label{class_network_a01bbec1f1a4ede2df92649993dd269e2}} 
+\index{Network@{Network}!getInputs@{getInputs}}
+\index{getInputs@{getInputs}!Network@{Network}}
+\doxysubsubsection{\texorpdfstring{getInputs()}{getInputs()}}
+{\footnotesize\ttfamily std\+::vector$<$ int $>$ Network\+::get\+Inputs (\begin{DoxyParamCaption}\item[{int}]{i }\end{DoxyParamCaption})}
+
+Returns a list of all the Neurons that pulse the \mbox{\hyperlink{class_neuron}{Neuron}} at the specified index
+
+
+\begin{DoxyParams}{Parameters}
+{\em i} & Index to get the inputs of \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_network_aeeba2e85cfd7255cfef49b9bf96aad01}\label{class_network_aeeba2e85cfd7255cfef49b9bf96aad01}} 
+\index{Network@{Network}!getSize@{getSize}}
+\index{getSize@{getSize}!Network@{Network}}
+\doxysubsubsection{\texorpdfstring{getSize()}{getSize()}}
+{\footnotesize\ttfamily int Network\+::get\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxyReturn}{Returns}
+The size of the array holding the neurons 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_network_a9ad767df44d5c86f6426501f8b973b79}\label{class_network_a9ad767df44d5c86f6426501f8b973b79}} 
+\index{Network@{Network}!info@{info}}
+\index{info@{info}!Network@{Network}}
+\doxysubsubsection{\texorpdfstring{info()}{info()}}
+{\footnotesize\ttfamily const std\+::string Network\+::info (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+Information of the \mbox{\hyperlink{class_network}{Network}} organized in a string 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_network_aff2f47bbd6c862c337586c3fb8b589c7}\label{class_network_aff2f47bbd6c862c337586c3fb8b589c7}} 
+\index{Network@{Network}!load@{load}}
+\index{load@{load}!Network@{Network}}
+\doxysubsubsection{\texorpdfstring{load()}{load()}}
+{\footnotesize\ttfamily int Network\+::load (\begin{DoxyParamCaption}\item[{std\+::string}]{file }\end{DoxyParamCaption})}
+
+Loads the \mbox{\hyperlink{class_network}{Network}} located in the given file
+
+
+\begin{DoxyParams}{Parameters}
+{\em file} & string containing the file name \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_network_afb0a55871b6337d805ff9d7c236a737c}\label{class_network_afb0a55871b6337d805ff9d7c236a737c}} 
+\index{Network@{Network}!nextLocation@{nextLocation}}
+\index{nextLocation@{nextLocation}!Network@{Network}}
+\doxysubsubsection{\texorpdfstring{nextLocation()}{nextLocation()}}
+{\footnotesize\ttfamily int Network\+::next\+Location (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+The next available index or -\/1 if full 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_network_a8921816cfedc5deed80de9330c2bb704}\label{class_network_a8921816cfedc5deed80de9330c2bb704}} 
+\index{Network@{Network}!nextLocations@{nextLocations}}
+\index{nextLocations@{nextLocations}!Network@{Network}}
+\doxysubsubsection{\texorpdfstring{nextLocations()}{nextLocations()}}
+{\footnotesize\ttfamily std\+::vector$<$ int $>$ Network\+::next\+Locations (\begin{DoxyParamCaption}\item[{int}]{i }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em i} & The amount of free indexes to look for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The next availabe i indexes or -\/1 if not enough space 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_network_a4a2fd564c94e76153fa389adfdc3b64a}\label{class_network_a4a2fd564c94e76153fa389adfdc3b64a}} 
+\index{Network@{Network}!operator=@{operator=}}
+\index{operator=@{operator=}!Network@{Network}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_network}{Network}} \& Network\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_network}{Network}} \&}]{i }\end{DoxyParamCaption})}
+
+Performs a deep copy of the given \mbox{\hyperlink{class_network}{Network}} \mbox{\Hypertarget{class_network_a68f7580902f58633f48cb10837c041a7}\label{class_network_a68f7580902f58633f48cb10837c041a7}} 
+\index{Network@{Network}!process@{process}}
+\index{process@{process}!Network@{Network}}
+\doxysubsubsection{\texorpdfstring{process()}{process()}}
+{\footnotesize\ttfamily int Network\+::process (\begin{DoxyParamCaption}\item[{std\+::forward\+\_\+list$<$ int $>$ $\ast$}]{given }\end{DoxyParamCaption})}
+
+Recieves a list of 1\textquotesingle{}s and 0\textquotesingle{}s indicating whether or not the input \mbox{\hyperlink{class_neuron}{Neuron}} at each index of the inputs list was activated
+
+Activated Neurons pulse to their recievers which in turn pulse to theirs if their critical Charge is reached
+
+This cycle is continued until an output \mbox{\hyperlink{class_neuron}{Neuron}} pulses, all Neurons stop pulsing, or the max amount of pulses is reached
+
+
+\begin{DoxyParams}{Parameters}
+{\em Given} & List of 1\textquotesingle{}s and 0\textquotesingle{}s. Must be the same length as inputs list \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The index of the output neuron that pulses or -\/1 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_network_a68dfdcb3032ff3a5d68679c5b5b8a2e7}\label{class_network_a68dfdcb3032ff3a5d68679c5b5b8a2e7}} 
+\index{Network@{Network}!removeInput@{removeInput}}
+\index{removeInput@{removeInput}!Network@{Network}}
+\doxysubsubsection{\texorpdfstring{removeInput()}{removeInput()}}
+{\footnotesize\ttfamily int Network\+::remove\+Input (\begin{DoxyParamCaption}\item[{int}]{i }\end{DoxyParamCaption})}
+
+Removes the index from the inputs list if it exists
+
+
+\begin{DoxyParams}{Parameters}
+{\em i} & index removed from inputs \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_network_a73d17a8ca12de5865afd83b8b34a86f1}\label{class_network_a73d17a8ca12de5865afd83b8b34a86f1}} 
+\index{Network@{Network}!removeNeuron@{removeNeuron}}
+\index{removeNeuron@{removeNeuron}!Network@{Network}}
+\doxysubsubsection{\texorpdfstring{removeNeuron()}{removeNeuron()}}
+{\footnotesize\ttfamily void Network\+::remove\+Neuron (\begin{DoxyParamCaption}\item[{int}]{i }\end{DoxyParamCaption})}
+
+Removes the \mbox{\hyperlink{class_neuron}{Neuron}} at the given index from the \mbox{\hyperlink{class_network}{Network}}
+
+Removes the index from all other Neurons recievers in the \mbox{\hyperlink{class_network}{Network}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em i} & the index that\textquotesingle{}s removed from the \mbox{\hyperlink{class_network}{Network}} \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_network_ab67ce0130c344b74e37f8e35f9f546ec}\label{class_network_ab67ce0130c344b74e37f8e35f9f546ec}} 
+\index{Network@{Network}!removeOutput@{removeOutput}}
+\index{removeOutput@{removeOutput}!Network@{Network}}
+\doxysubsubsection{\texorpdfstring{removeOutput()}{removeOutput()}}
+{\footnotesize\ttfamily int Network\+::remove\+Output (\begin{DoxyParamCaption}\item[{int}]{i }\end{DoxyParamCaption})}
+
+Removes the index from the outputs list if it exists
+
+
+\begin{DoxyParams}{Parameters}
+{\em i} & index removed from outputs \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_network_a142a23835fe3fc2cfae42254856bf105}\label{class_network_a142a23835fe3fc2cfae42254856bf105}} 
+\index{Network@{Network}!save@{save}}
+\index{save@{save}!Network@{Network}}
+\doxysubsubsection{\texorpdfstring{save()}{save()}}
+{\footnotesize\ttfamily void Network\+::save (\begin{DoxyParamCaption}\item[{std\+::string}]{file }\end{DoxyParamCaption})}
+
+Saves the \mbox{\hyperlink{class_network}{Network}} to the given file name
+
+
+\begin{DoxyParams}{Parameters}
+{\em file} & string containing the file name \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_network_aa619c05f86dde1f1857f64d72bfc0edf}\label{class_network_aa619c05f86dde1f1857f64d72bfc0edf}} 
+\index{Network@{Network}!dynamic@{dynamic}}
+\index{dynamic@{dynamic}!Network@{Network}}
+\doxysubsubsection{\texorpdfstring{dynamic}{dynamic}}
+{\footnotesize\ttfamily int Network\+::dynamic \{0\}}
+
+Variable used to keep track of whether or not this \mbox{\hyperlink{class_network}{Network}} should be processed dynamically
+
+When dynamic is 0 the charges are cleared after processing 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Network.\+h\item 
+Network.\+cpp\end{DoxyCompactItemize}
