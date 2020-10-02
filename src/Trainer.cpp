@@ -13,10 +13,10 @@
 
 int done = TRAINERITERATIONS;
 
-void Trainer::dynamicTraining(int* end,Network &n, int enumerations){
+void Trainer::dynamicTraining(int* end,Network &n){
 	int start = 0;
 	bool ready = false;
-	n.setDynamic(1);
+	n.dynamic = 1;
 	int nMutations = 0;
 	int nVal = evaluate(n);
 	std::thread threads[NUMTHREADS];
@@ -26,7 +26,7 @@ void Trainer::dynamicTraining(int* end,Network &n, int enumerations){
 		progress[i] = &start;
 	std::mutex lock;
 	std::condition_variable cv;
-	for(int i = 0;i < NUMTHREADS;i++){
+	for(int i = 0;i < NUMTHREADS;++i){
 		progressPointers[i] = &progress[i];
 		threads[i] = std::thread(&Trainer::dynamicTrainingThread,this,&n,&nVal,&cv,&ready,&lock,&nMutations,progressPointers[i]);
 	}
@@ -35,9 +35,9 @@ void Trainer::dynamicTraining(int* end,Network &n, int enumerations){
 		std::cout << "|";
 		int bars = 100;
 		int numbars = TRAINERITERATIONS * NUMTHREADS / bars;//right value is number of bars
-		for(int k = 0;k <= i / numbars;k++)
+		for(int k = 0;k <= i / numbars;++k)
 			std::cout << "=";
-		for(int k = 0;k < bars - (i / numbars) - 1;k++)
+		for(int k = 0;k < bars - (i / numbars) - 1;++k)
 			std::cout << " ";
 		std::cout << "|  ";
 		std::cout << i << " " << nMutations << " " << nVal << "\r" << std::flush;
@@ -53,7 +53,7 @@ void Trainer::dynamicTraining(int* end,Network &n, int enumerations){
 			*end = -1;
 		}
 	}
-	for(int i = 0;i < NUMTHREADS;i++){
+	for(int i = 0;i < NUMTHREADS;++i){
 		threads[i].join();
 	}
 }
@@ -68,7 +68,7 @@ void Trainer::dynamicTrainingThread(Network* sourceNetwork,int* sourceVal,std::c
 	int nVal = evaluate(n);
 	int i = 0;
 	(*progress) = &i;
-	for(i = 0;i < TRAINERITERATIONS;i++){
+	for(i = 0;i < TRAINERITERATIONS;++i){
 		if(num < *nMutations){
 			(*lock).lock();
 			n = *sourceNetwork;
@@ -92,8 +92,8 @@ void Trainer::dynamicTrainingThread(Network* sourceNetwork,int* sourceVal,std::c
 						n = c;
 						nVal = cVal;
 						(*sourceVal) = cVal;
-						(*nMutations)++;
-						num++;
+						++(*nMutations);
+						++num;
 						n.save("temp.ai");
 					}
 					(*lock).unlock();

@@ -19,16 +19,6 @@ const std::string Neuron::info() const {
 	return returnValue;
 }
 
-int Neuron::addReciever(int i) {
-	recievers.push_back(i);
-	return 0;
-}
-
-int Neuron::removeReciever(int i) {
-	recievers.remove(i);
-	return 0;
-}
-
 Neuron& Neuron::operator=(const Neuron &i){
 	if(this != &i){
 		this->charge = i.charge;

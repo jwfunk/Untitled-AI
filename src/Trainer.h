@@ -13,6 +13,7 @@
 
 #include "Network.h"
 #include "Neuron.h"
+#include "defs.h"
 #include <utility>
 #include <iostream>
 #include <vector>
@@ -21,45 +22,30 @@
 #include <thread>
 #include <condition_variable>
 
-/*
-//Precision Learning
-//Given a vector of pairs
-//pair.first is a forward list representing a vector of inputs for the network
-//pair.second is the expected result for the input
-//
-//
-//Below is a visual for the structures that are being used in the method
-//
-//
-//
-//   new case--O          O   Neurons that previously were affected by the inputs are set to 1 in bitmap
-//          /  | \      / | \
-//        /     |  \  /   |   \  
-//      O       O    O    O    O  
-//      |____________|         |
-//      |     |                |
-//      |   inputs             |
-//      |______________________|
-//                  |
-//              contributers
-*/
 
 class Trainer{
 
 	public:
 
+	/**
+	 *Constructs a Trainer with the given evaluate and mutate functions
+	 *
+	 *@param eval Address of the evaluate function
+	 *@param mut  Address of the mutate function
+	 */
 	Trainer(int(*eval)(Network&),int(*mut)(Network&,int)):evaluate(eval),mutate(mut) {}
 
-	void dynamicTraining(int*,Network&,int);
-
-
-	//Trains the network to play from moves given by the player
-	//Always attains 100% accuracy but requires data to train from
+	/**
+	 *Trains the Network using the given evaluate and mutate functions
+	 *
+	 *@param end address of an int variable used to stop training
+	 *@param n Network that will be trained
+	 */
+	void dynamicTraining(int* end,Network& n);
 
 	private:
 
 	void dynamicTrainingThread(Network*,int*,std::condition_variable*,bool*,std::mutex*,int*,int**);
-	
 
 	int (*evaluate)(Network&);
 

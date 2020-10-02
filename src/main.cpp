@@ -6,20 +6,10 @@
 #include "Trainer.h"
 #include "TicTacToeTrainingMethods.h"
 #include "Network.h"
-#include <vector>
 #include <utility>
 #include <forward_list>
-#include <fstream>
 #include <cstdlib>
-#include <ctime>
-#include <stack>
-#include <signal.h>
 #include <thread>
-
-void ctrlCHandler(int i){
-	std::cout << "Caught signal " << i << "\n";
-	exit(0);
-}
 
 std::string play(Network &n){
 	system("clear");
@@ -41,12 +31,10 @@ std::string play(Network &n){
                 }
                 else{
                         std::forward_list<int> data;
-			if(n.getDynamic())
+			if(n.dynamic)
                         	TicTacToeTrainingMethods::dynamicConvert(data,move);
-			else
-				TicTacToeTrainingMethods::staticConvert(data,t.getBoard(),t.getTurn());
 			int aiMove = n.process(&data) - 10;
-			if(!n.getDynamic())
+			if(!n.dynamic)
 				aiMove -= 10;
 			if((returnVal = t.move(aiMove)) == -1){
 				std::cout << aiMove << "\n";
@@ -65,36 +53,15 @@ std::string play(Network &n){
 	
 }
 
-std::string newStaticTicTacToe(Network& n){
-	n = Network();
-	for(int i = 0;i < 19;i++){
-                n.addNeuron(Neuron());
-        }
-        for(int i = 0;i < 19;i++)
-                n.addInput(18 - i);
-        for(int i = 0;i < 9;i++){
-                n.addNeuron(Neuron());
-        }
-        for(int i = 0;i < 9;i++)
-                n.addOutput(27 - i);
-	return "Default Static TicTacToe Network loaded";
-}
 
 int main(){
 	std::srand(std::time(0));
-        Network n = Network();
+        Network n;
+	TicTacToeTrainingMethods::newDynamicTicTacToe(n);
 	int end = 0;
-	std::vector<std::pair<std::forward_list<int>,int> > targetData;
 	std::string filename;
 	std::string buffer = "";
 	std::string message = "";
-	struct sigaction sigIntHandler;
-
-	sigIntHandler.sa_handler = ctrlCHandler;
-	sigemptyset(&sigIntHandler.sa_mask);
-	sigIntHandler.sa_flags = 0;
-
-	sigaction(SIGINT, &sigIntHandler, NULL);
 
 	Trainer TicTacToeTrainer = Trainer(&TicTacToeTrainingMethods::evaluate,&TicTacToeTrainingMethods::mutate);
 
@@ -109,28 +76,21 @@ int main(){
 		}
 		if(buffer == "2"){
 			message = TicTacToeTrainingMethods::newDynamicTicTacToe(n);
-			targetData.clear();
 		}
-		if(buffer == "8")
-			message = newStaticTicTacToe(n);
-		if(buffer == "3")
-			TicTacToeTrainingMethods::staticTraining(n,targetData);
-		if(buffer == "4"){
-			std::thread(&Trainer::dynamicTraining,&TicTacToeTrainer,&end,std::ref(n),500000).detach();
+		if(buffer == "3"){
+			std::thread(&Trainer::dynamicTraining ,&TicTacToeTrainer ,&end ,std::ref(n)).detach();
 			message = "";
 		}
-		if(buffer == "5")
+		if(buffer == "4")
 			message = play(n);
-		if(buffer == "6")
+		if(buffer == "5")
 			message = n.info();
-		if(buffer == "7"){
+		if(buffer == "6"){
 			std::cout << "Enter your filename: ";
                         std::cin >> filename;
 			message = "Saved " + filename;
 			n.save(filename);
 		}
-		if(buffer == "9")
-			message = std::to_string(TicTacToeTrainingMethods::tevaluate(n));
 		if(buffer == "e"){
 			end = 1;
 			while(end != -1){
@@ -139,10 +99,11 @@ int main(){
 			end = 0;
 		}
 		system("clear");
-		std::string menu = "Menu: " + message + "\n\t1. Load \n\t2. New\n\t3. Train\n\t5. Play\n\t6. Display Network\n\t7. Save\n\t-1. Exit\n";
+		std::string menu = "Menu: " + message + "\n\t1. Load \n\t2. New\n\t3. Train\n\t4. Play\n\t5. Display Network\n\t6. Save\n\t-1. Exit\n";
 		std::cout << menu << "\n";
 		std::cin >> buffer;
 
 	}
 	while(buffer != "-1");
+	exit(0);
 }

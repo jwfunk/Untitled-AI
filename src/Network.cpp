@@ -1,4 +1,3 @@
-
 //Network.cpp
 
 #include "Network.h"
@@ -7,11 +6,10 @@
 #include <ctime>
 #include <queue>
 #include <fstream>
-
+#include "Exceptions.h"
 
 Network::Network(){
 	size = 0;
-	retroactive = std::queue<int>();
 }
 
 Network::Network(const Network &i){
@@ -25,10 +23,10 @@ Network::Network(const Network &i){
 	neurons = new Neuron[size];
 	index = new int[size / 32];
 
-	for(int j = 0;j < size / 32;j++){
+	for(int j = 0;j < size / 32;++j){
 		index[j] = i.index[j];
 	}
-	for(int j = 0;j < size;j++){
+	for(int j = 0;j < size;++j){
 		neurons[j] = i.neurons[j];
 	}
 
@@ -82,7 +80,7 @@ const std::string Network::info() const {
 		returnValue += std::to_string(*outputsIterator) + " ";
 	returnValue += "-1\n";
 	int empty = 0;	
-	for(int i = 0;i < size;i++){
+	for(int i = 0;i < size;++i){
 		if((index[i / 32] & (1<<(i % 32)))){
 			returnValue += "Neuron: " + std::to_string(i) + "\n" + neurons[i].info() + "\n";
 			empty = 1;	
@@ -149,7 +147,7 @@ int Network::load(std::string file){
 	}
 	neurons = new Neuron[INITSIZE];
         index = new int[INITSIZE / 32];
-        for(int i = 0;i < INITSIZE / 32;i++)
+        for(int i = 0;i < INITSIZE / 32;++i)
         	index[i] = 0;
         size = INITSIZE;
         available = std::stack<int>();
@@ -181,12 +179,12 @@ int Network::load(std::string file){
 				size *= 2;
 			int *newindex = new int[size / 32];
                         Neuron *newneurons = new Neuron[size];
-                        for(int i = 0;i < oldSize;i++)
+                        for(int i = 0;i < oldSize;++i)
                                 newneurons[i] = neurons[i];
-                        for(int i = 0;i < oldSize / 32;i++){
+                        for(int i = 0;i < oldSize / 32;++i){
                                 newindex[i] = index[i]; 
                         }
-			for(int i = oldSize / 32;i < size / 32;i++){
+			for(int i = oldSize / 32;i < size / 32;++i){
 				newindex[i] = 0;
 			}
                         delete[] neurons;
@@ -201,7 +199,7 @@ int Network::load(std::string file){
 		index[loc / 32] |= 1<<(loc % 32);
 		fs >> buffer;
 	}
-	for(int i = size - 1;i >= 0;i--)
+	for(int i = size - 1;i >= 0;--i)
 		if(!(index[i / 32] & 1<<(i % 32)))
 			available.push(i);
 	for(auto inIterator = in.begin();inIterator != in.end();++inIterator)
@@ -230,8 +228,6 @@ int Network::addStructure(structure s, int i1, int i2, int i3){
 			neurons[i2].addReciever(loc);
 			input.addReciever(i3);
 			(*this).addNeuron(input);
-			//recievers.push_front(loc);
-			//notTargets.push_front(loc);
 			senders.push_front(loc);
 			return 0;
 		}
@@ -264,8 +260,6 @@ int Network::addStructure(structure s, int i1, int i2, int i3){
 			neurons[i1].addReciever(loc);
 			input.addReciever(i3);
 			(*this).addNeuron(input);
-			//recievers.push_front(loc);
-			//senders.push_front(loc);
 			return 0;
 		}
 		case XOR://if i1 or i2 pulses alone i3 is pulsed
@@ -364,35 +358,59 @@ int Network::addStructure(structure s, int i1, int i2, int i3){
 	return -1;
 }
 
-int Network::addNeuron(const Neuron n){
+Neuron Network::getNeuron(int i){
+	if(i < 0 || i > size)
+		throw invalidBoundsException();
+	if(!(index[i / 32] & 1<<(i % 32)))
+		throw invalidIndexException();
+	return neurons[i];	
+}
+
+void Network::setNeuron(Neuron n,int i){
+	if(i < 0 || i > size)
+		throw invalidBoundsException();
+	if(!(index[i / 32] & 1<<(i % 32)))
+		throw invalidIndexException();
+	for(auto recieversIterator = n.recievers.begin(); recieversIterator != n.recievers.end();++recieversIterator){
+		if(!(index[*recieversIterator / 32] & 1<<(*recieversIterator % 32)))
+			throw badRecieverException();
+	}
+	neurons[i] = n;
+}
+
+void Network::addNeuron(const Neuron n){
+	for(auto recieversIterator = n.recievers.begin();recieversIterator != n.recievers.end();++recieversIterator){
+		if(!(index[*recieversIterator / 32] & 1<<(*recieversIterator % 32)))
+			throw badRecieverException();
+			
+	}
 	if(size == 0){
 		neurons = new Neuron[INITSIZE];
 		neurons[0] = n;
 		index = new int[INITSIZE / 32];
-		for(int i = 0;i < INITSIZE / 32;i++)
+		for(int i = 0;i < INITSIZE / 32;++i)
 			index[i] = 0;
 		index[0] = 1;
 		size = INITSIZE;
 		available = std::stack<int>();
-		for(int i = INITSIZE - 1;i > 0;i--){
+		for(int i = INITSIZE - 1;i > 0;--i){
 			available.push(i);
 		}
-		return 0;
+		return;
 	}
 	if(!available.empty()){
 		neurons[available.top()] = n;
 		index[available.top() / 32] |= 1<<(available.top() % 32);
 		available.pop();
-		return 0;
 	}
 	else{
 		if(size < MAXSIZE){
 			size *= 2;
 			int *newindex = new int[size / 32];
 			Neuron *newneurons = new Neuron[size];
-			for(int i = 0;i < size / 2;i++)
+			for(int i = 0;i < size / 2;++i)
                         	newneurons[i] = neurons[i];
-			for(int i = 0;i < size / 64;i++){
+			for(int i = 0;i < size / 64;++i){
                 	        newindex[i] = index[i];
                 	        newindex[i + size / 64] = 0;
                 	}
@@ -400,63 +418,62 @@ int Network::addNeuron(const Neuron n){
 			delete[] index;
 			neurons = newneurons;
 			index = newindex;
-			for(int i = 0;i < size / 2;i++){
+			for(int i = 0;i < size / 2;++i){
 				available.push(size - i - 1);
 			}
-                	return this->addNeuron(n);
+                	this->addNeuron(n);
 		}
 	}
-	return 1;
 }
 
-int Network::removeNeuron(int i){
-	if(i >= size || i < 0)
-		return 1;
-	if(index[i / 32] & 1<<(i % 32)){
-		index[i / 32] &= ~(1<<(i % 32));
-		inputs.remove(i);
-		outputs.remove(i);
-		senders.remove(i);
-		recievers.remove(i);
-		notTargets.remove(i);
-		for(int j = 0;j < size;j++){
-			if(index[j / 32] & 1<<(j % 32))
-				neurons[j].removeReciever(i);
-		}
-		available.push(i);
-	}
-	return 0;
-	
-}
-
-int Network::addInput(int i){
-	if(i >= size || i < 0)
-                return 1;
-	if(index[i / 32] & 1<<(i % 32)){
-		inputs.push_front(i);
-		return 0;
-	}
-	return 1;
-}
-
-int Network::removeInput(int i){
+void Network::removeNeuron(int i){
+	if(i < 0 || i > size)
+		throw invalidBoundsException();
+	if(!(index[i / 32] & 1<<(i % 32)))
+		throw invalidIndexException();
+	index[i / 32] &= ~(1<<(i % 32));
 	inputs.remove(i);
-	return 0;
-}
-
-int Network::addOutput(int i){
-	if(i >= size || i < 0)
-                return 1;
-        if(index[i / 32] & 1<<(i % 32)){
-                outputs.push_front(i);
-                return 0;
-        }
-        return 1;
-}
-
-int Network::removeOutput(int i){
 	outputs.remove(i);
-	return 0;
+	senders.remove(i);
+	recievers.remove(i);
+	notTargets.remove(i);
+	for(int j = 0;j < size;++j){
+		if(index[j / 32] & 1<<(j % 32))
+			neurons[j].removeReciever(i);
+	}
+	available.push(i);
+}
+
+void Network::addInput(int i){
+	if(i < 0 || i > size)
+		throw invalidBoundsException();
+	if(!(index[i / 32] & 1<<(i % 32)))
+		throw invalidIndexException();
+	inputs.push_front(i);
+}
+
+void Network::removeInput(int i){
+	if(i < 0 || i > size)
+		throw invalidBoundsException();
+	if(!(index[i / 32] & 1<<(i % 32)))
+		throw invalidIndexException();
+	inputs.remove(i);
+}
+
+void Network::addOutput(int i){
+	if(i < 0 || i > size)
+		throw invalidBoundsException();
+	if(!(index[i / 32] & 1<<(i % 32)))
+		throw invalidIndexException();
+	outputs.push_front(i);
+}
+
+void Network::removeOutput(int i){
+	if(i < 0 || i > size)
+		throw invalidBoundsException();
+	if(!(index[i / 32] & 1<<(i % 32)))
+		throw invalidIndexException();
+	outputs.remove(i);
 }
 
 int Network::process(std::forward_list<int> *given){
@@ -479,37 +496,23 @@ int Network::process(std::forward_list<int> *given){
 		}
 		++givenIterator;
 	}
-	if(givenIterator != given->end()){
+	if(givenIterator != given->end()){//should have no effect on a dynamic network, check length before changing charges
 		(*this).clear();//clear the network
 		return -1;
 	}
-	active.push(-2);//too many at some point
+	active.push(-1);
 	int iterations = 0;
-	int activeSize = active.size();	
+
 	//process the data
 	
-	while(activeSize > 1){
+	while(!active.empty()){
 		int i = active.front();
-		debug.push(i);
+		if(!(index[i / 32] & 1<<(i % 32)) || i < -1 || i > size)
+			throw corruptedNetworkException();
 		active.pop();
-		activeSize--;
-		if(i > size || i < -2){
-			std::cout << "Unknown bug causing segfault\n" << (*this).info();
-			while(!debug.empty()){
-				std::cout << debug.front() << "\n";
-				debug.pop();
-			}
-			std::cout << activeSize << "f\n" << active.size() << "s\n";
-			return -1;
-		}
-		if(i == -2){
-			while(active.front() == -1){
+		if(i == -1){
+			while(!active.empty() && active.front() == -1){
 				active.pop();
-				if(active.empty()){
-					if(!dynamic)
-						(*this).clear();	
-					return -1;
-				}
 			}
 			for(auto outputsIterator = outputs.begin();outputsIterator != outputs.end();++outputsIterator)//possible improvement here
                          	if(neurons[*outputsIterator].charge >= neurons[*outputsIterator].criticalCharge){
@@ -526,26 +529,17 @@ int Network::process(std::forward_list<int> *given){
 					(*this).clear();	
 				return -1;
 			}
-			active.push(-2);
-			activeSize++;
+			active.push(-1);
 		}
 		else{
 			if(neurons[i].charge >= neurons[i].criticalCharge){
 				for(auto recieversIterator = neurons[i].recievers.begin();recieversIterator != neurons[i].recievers.end();++recieversIterator){
                         	        neurons[*recieversIterator].charge += neurons[i].pulse;
 					active.push(*recieversIterator);
-					activeSize++;
-					if(*recieversIterator > size || *recieversIterator < -1 || *recieversIterator == 0 || *recieversIterator == 1){
-						std::cout << "Bug here " << *recieversIterator << "\n";
-					}
                	        	}
                	        	neurons[i].charge -= neurons[i].criticalCharge;
 				if(neurons[i].charge >= neurons[i].criticalCharge){
 					active.push(i);
-					activeSize++;
-					if(i > size || i < -1 || i == 0 || i == 1){
-						std::cout << "Bug here " << i << "\n";
-					}
 				}
 			}
 		}
@@ -553,10 +547,9 @@ int Network::process(std::forward_list<int> *given){
 		if(iterations > MAXITERATIONS){
 			if(!dynamic)
 				(*this).clear();
-//			std::cout << "MAX ITERATIONS\n";
         		return -1;
 		}
-		iterations++;
+		++iterations;
 		
 	}
 	if(!dynamic)
@@ -567,22 +560,22 @@ int Network::process(std::forward_list<int> *given){
 
 
 Network& Network::operator=(const Network &i){
+	if(neurons != nullptr){
+		delete[] neurons;
+	}
+	if(index != nullptr){
+		delete[] index;
+	}
         
 	if(this != &i){
-		if(neurons != nullptr){
-	                delete[] neurons;
-	        }
-	        if(index != nullptr){
-	                delete[] index;
-	        }
 		size = i.size;
 		neurons = new Neuron[size];
 		index = new int[size / 32];
 			
-		for(int j = 0;j < size / 32;j++){
+		for(int j = 0;j < size / 32;++j){
 			index[j] = i.index[j];
 		}
-		for(int j = 0;j < size;j++){
+		for(int j = 0;j < size;++j){
 			neurons[j] = i.neurons[j];
 		}
 		
@@ -618,7 +611,7 @@ int Network::expendable(int e){
 }
 
 int Network::anyExpendable(){
-	for(int i = 0;i < size;i++){
+	for(int i = 0;i < size;++i){
 		if((index[i / 32] & 1<<(i % 32)) && expendable(i))
 			return 1;
 	}
@@ -641,7 +634,7 @@ std::vector<int> Network::nextLocations(int locations){
 	if(locations > MAXSIZE)
 		return result;
 	if(size == 0){
-		for(int i = 0;i < locations;i++){
+		for(int i = 0;i < locations;++i){
 			result.push_back(i);
 		}
 		return result;	
@@ -650,7 +643,7 @@ std::vector<int> Network::nextLocations(int locations){
 	while(!available.empty()){
 		temp.push(available.top());
 		result.push_back(available.top());
-		locations--;
+		--locations;
 		available.pop();
 		if(locations == 0){
 			while(!temp.empty()){
@@ -665,7 +658,7 @@ std::vector<int> Network::nextLocations(int locations){
                 temp.pop();
         }
 	if(size + locations <= MAXSIZE){
-                for(int i = 0;i < locations;i++){
+                for(int i = 0;i < locations;++i){
 			result.push_back(size + i);
 		}
 		return result;
@@ -675,15 +668,15 @@ std::vector<int> Network::nextLocations(int locations){
 }
 
 void Network::clear(){
-	for(int j = 0;j < size;j++){
-                if(index[j / 32] & 1<<(j % 32))
-			neurons[j].charge = 0;
+	for(int j = 0;j < size;++j){
+		neurons[j].charge = 0;
 	}
 	retroactive = std::queue<int>();
 }
 
-void Network::getInputs(std::vector<int>& inputs,int target){
-	for(int i = 0;i < size;i++){
+std::vector<int> Network::getInputs(int target){
+	std::vector<int> inputs;
+	for(int i = 0;i < size;++i){
                 if(index[i / 32] & (1<<(i % 32))){
 			for(auto recieversIterator = neurons[i].recievers.begin();recieversIterator != neurons[i].recievers.end();++recieversIterator){
                                 if(*recieversIterator == target)
@@ -691,69 +684,16 @@ void Network::getInputs(std::vector<int>& inputs,int target){
                         }
 		}
 	}
+	return inputs;
 }
 
-void Network::outputTree(std::vector<int>& tree,int target){
-	int bitmap[size/32];
-	std::forward_list<int> data[size];
-	for(int i = 0;i < size;i++){
-                if(index[i / 32] & (1<<(i % 32))){
-			for(auto recieversIterator = neurons[i].recievers.begin();recieversIterator != neurons[i].recievers.end();++recieversIterator){
-				data[*recieversIterator].push_front(i);
-			}
-		}
-	}
-        for(int i = 0;i < size/32;i++)
-                bitmap[i] = 0;
-        recursiveOutputTree(bitmap, data, target);
-        for(int i = 0;i < size;i++){
-                if(bitmap[i / 32] & (1<<(i % 32))){
-                        tree.push_back(i);
-		}
-        }
-}
-
-void Network::inputTree(std::vector<int>& tree, std::forward_list<int>& data){
-	int bitmap[size/32];
-	for(int i = 0;i < size/32;i++)
-		bitmap[i] = 0;
-	int i = 0;
-	for(auto dataIterator = data.begin();dataIterator != data.end();++dataIterator){
-		if(*dataIterator)
-			if(index[i / 32] & (1<<(i % 32)) && !(bitmap[i / 32] & (1<<(i % 32))))
-				recursiveInputTree(bitmap, i);
-		++i;
-	}
-	for(int i = 0;i < size;i++){
-		if(bitmap[i / 32] & (1<<(i % 32)))
-			tree.push_back(i);
-	}
-}
-
-void Network::recursiveInputTree(int* bitmap, int current){
-	bitmap[current / 32] |= 1<<(current % 32);
-
-	for(auto recieversIterator = neurons[current].recievers.begin();recieversIterator != neurons[current].recievers.end();++recieversIterator){
-		if(!(bitmap[*recieversIterator / 32] & (1<<(*recieversIterator % 32))))
-			recursiveInputTree(bitmap, *recieversIterator);
-	}
-}
-
-void Network::recursiveOutputTree(int* bitmap,std::forward_list<int>* data, int current){
-        bitmap[current / 32] |= 1<<(current % 32);
-
-        for(auto dataIterator = data[current].begin();dataIterator != data[current].end();++dataIterator){
-                if(!(bitmap[*dataIterator / 32] & (1<<(*dataIterator % 32))))
-                        recursiveOutputTree(bitmap, data, *dataIterator);
-        }
-}
 int Network::randomSender(){
 	int senderSize = 0;
 	for(auto senderIterator = senders.begin();senderIterator != senders.end();++senderIterator)
-		senderSize++;
+		++senderSize;
 	int choice = std::rand() % senderSize;
 	auto senderIterator = senders.begin();
-	for(int i = 0;i < choice;i++)
+	for(int i = 0;i < choice;++i)
 		++senderIterator;
 	return *senderIterator;
 }
@@ -765,10 +705,10 @@ int Network::randomReciever(){
 int Network::randomNotTarget(){
         int notTargetSize = 0;
         for(auto notTargetIterator = notTargets.begin();notTargetIterator != notTargets.end();++notTargetIterator)
-                notTargetSize++;
+                ++notTargetSize;
         int choice = std::rand() % notTargetSize;
         auto notTargetIterator = notTargets.begin();
-        for(int i = 0;i < choice;i++)
+        for(int i = 0;i < choice;++i)
                 ++notTargetIterator;
         return *notTargetIterator;
 }
@@ -777,10 +717,10 @@ int Network::randomNotTarget(){
 int Network::insert(int sender){
 	int targetsSize = 0;
         for(auto recieversIterator = neurons[sender].recievers.begin();recieversIterator != neurons[sender].recievers.end();++recieversIterator)
-        	targetsSize++;
+        	++targetsSize;
         int target = std::rand() % targetsSize;
         auto recieversIterator = neurons[sender].recievers.begin();
-        for(int i = 0;i < target;i++)
+        for(int i = 0;i < target;++i)
         	++recieversIterator;
         target = *recieversIterator;
 	neurons[sender].removeReciever(target);

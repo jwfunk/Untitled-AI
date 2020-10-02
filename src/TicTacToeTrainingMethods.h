@@ -12,13 +12,10 @@
 
 class TicTacToeTrainingMethods{
 	public:
-	static void staticTraining(Network&, std::vector<std::pair<std::forward_list<int>,int> > &);
 	static int evaluate(Network&);
-	static void staticConvert(std::forward_list<int>&,int *,int);
 
 	static void dynamicConvert(std::forward_list<int>&,int);
 
-	static int tevaluate(Network&);
 	static std::string newDynamicTicTacToe(Network&);
 	static int choose(Network&);
 	static int mutate(Network&,int);
@@ -33,9 +30,5 @@ class TicTacToeTrainingMethods{
 	static void getOutputsLeft(Network&,std::forward_list<int>&,int);
 
 	static void clean(Network&);
-	static int locate(std::vector<std::pair<std::forward_list<int>,int> > &,std::forward_list<int>);
-	
-	static int contains(std::vector<std::pair<std::forward_list<int>,int> > &,std::forward_list<int>);
-	static void trainPrecisionLearning( Network &, std::vector<std::pair<std::forward_list<int>,int> > &);
 };
 #endif

@@ -1,0 +1,165 @@
+\hypertarget{class_neuron}{}\doxysection{Neuron Class Reference}
+\label{class_neuron}\index{Neuron@{Neuron}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_neuron_a33307921c924f80b7033ff097d30cdc6}{Neuron}} ()=default
+\item 
+\mbox{\hyperlink{class_neuron_ab022091e5f9b93fc088b066dfccad2f0}{Neuron}} (int cc, int p)
+\item 
+void \mbox{\hyperlink{class_neuron_a5b1c6c1bac8a0afaa9429cb5f7497b37}{add\+Reciever}} (int i)
+\item 
+void \mbox{\hyperlink{class_neuron_a1ec992c4858074fbed334304467cbd80}{remove\+Reciever}} (int i)
+\item 
+int \mbox{\hyperlink{class_neuron_ae9c0293cce3dd246821ab78f6cb4d00f}{get\+Pulse}} ()
+\item 
+const std\+::string \mbox{\hyperlink{class_neuron_af1c08841805e5b16a47504f933e343f4}{info}} () const
+\item 
+\mbox{\hyperlink{class_neuron}{Neuron}} \& \mbox{\hyperlink{class_neuron_acf7515f5b5e09d3356d507c8db5b72e3}{operator=}} (const \mbox{\hyperlink{class_neuron}{Neuron}} \&)
+\item 
+std\+::list$<$ int $>$\+::iterator \mbox{\hyperlink{class_neuron_a4b8379f52a174faa64945bfc61aa52fe}{recievers\+Begin}} ()
+\item 
+std\+::list$<$ int $>$\+::iterator \mbox{\hyperlink{class_neuron_a52f2bba00eb6721267c71fdda3c948ce}{recievers\+End}} ()
+\item 
+int \mbox{\hyperlink{class_neuron_ad093bbd9eb505eb082dda715b1d1c8d8}{recievers\+Empty}} ()
+\item 
+int \mbox{\hyperlink{class_neuron_aef5975b23421f0d6254bb1d26c746e1f}{recievers\+Front}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_neuron_ad38c9566742be31ca860cf8b5d6ae11f}\label{class_neuron_ad38c9566742be31ca860cf8b5d6ae11f}} 
+class {\bfseries Trainer}
+\item 
+\mbox{\Hypertarget{class_neuron_a88b59289ffd793fecd040d32e397b1e9}\label{class_neuron_a88b59289ffd793fecd040d32e397b1e9}} 
+class {\bfseries Network}
+\item 
+\mbox{\Hypertarget{class_neuron_af15a586a3efcbd55b77e5a02a1f969b5}\label{class_neuron_af15a586a3efcbd55b77e5a02a1f969b5}} 
+std\+::ostream \& {\bfseries operator$<$$<$} (std\+::ostream \&, const \mbox{\hyperlink{class_neuron}{Neuron}} \&)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_neuron_a33307921c924f80b7033ff097d30cdc6}\label{class_neuron_a33307921c924f80b7033ff097d30cdc6}} 
+\index{Neuron@{Neuron}!Neuron@{Neuron}}
+\index{Neuron@{Neuron}!Neuron@{Neuron}}
+\doxysubsubsection{\texorpdfstring{Neuron()}{Neuron()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Neuron\+::\+Neuron (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+Constructs a \mbox{\hyperlink{class_neuron}{Neuron}} with default values for critical\+Charge and pulse \mbox{\Hypertarget{class_neuron_ab022091e5f9b93fc088b066dfccad2f0}\label{class_neuron_ab022091e5f9b93fc088b066dfccad2f0}} 
+\index{Neuron@{Neuron}!Neuron@{Neuron}}
+\index{Neuron@{Neuron}!Neuron@{Neuron}}
+\doxysubsubsection{\texorpdfstring{Neuron()}{Neuron()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Neuron\+::\+Neuron (\begin{DoxyParamCaption}\item[{int}]{cc,  }\item[{int}]{p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Constructs a \mbox{\hyperlink{class_neuron}{Neuron}} object with it\textquotesingle{}s critical Charge and pulse initialized
+
+
+\begin{DoxyParams}{Parameters}
+{\em cc} & Value critical\+Charge is initialized to \\
+\hline
+{\em p} & Value pulse is initialized to \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_neuron_a5b1c6c1bac8a0afaa9429cb5f7497b37}\label{class_neuron_a5b1c6c1bac8a0afaa9429cb5f7497b37}} 
+\index{Neuron@{Neuron}!addReciever@{addReciever}}
+\index{addReciever@{addReciever}!Neuron@{Neuron}}
+\doxysubsubsection{\texorpdfstring{addReciever()}{addReciever()}}
+{\footnotesize\ttfamily void Neuron\+::add\+Reciever (\begin{DoxyParamCaption}\item[{int}]{i }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Add an integer value to recievers indicating the index of a neuron that the current one connects to
+
+
+\begin{DoxyParams}{Parameters}
+{\em i} & Value of integer added \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_neuron_ae9c0293cce3dd246821ab78f6cb4d00f}\label{class_neuron_ae9c0293cce3dd246821ab78f6cb4d00f}} 
+\index{Neuron@{Neuron}!getPulse@{getPulse}}
+\index{getPulse@{getPulse}!Neuron@{Neuron}}
+\doxysubsubsection{\texorpdfstring{getPulse()}{getPulse()}}
+{\footnotesize\ttfamily int Neuron\+::get\+Pulse (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns the pulse of the neuron
+
+\begin{DoxyReturn}{Returns}
+pulse of neuron 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_neuron_af1c08841805e5b16a47504f933e343f4}\label{class_neuron_af1c08841805e5b16a47504f933e343f4}} 
+\index{Neuron@{Neuron}!info@{info}}
+\index{info@{info}!Neuron@{Neuron}}
+\doxysubsubsection{\texorpdfstring{info()}{info()}}
+{\footnotesize\ttfamily const std\+::string Neuron\+::info (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+Returns a string describing the state of the neuron \mbox{\Hypertarget{class_neuron_acf7515f5b5e09d3356d507c8db5b72e3}\label{class_neuron_acf7515f5b5e09d3356d507c8db5b72e3}} 
+\index{Neuron@{Neuron}!operator=@{operator=}}
+\index{operator=@{operator=}!Neuron@{Neuron}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_neuron}{Neuron}} \& Neuron\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_neuron}{Neuron}} \&}]{i }\end{DoxyParamCaption})}
+
+Performs a deep copy of the given neuron \mbox{\Hypertarget{class_neuron_a4b8379f52a174faa64945bfc61aa52fe}\label{class_neuron_a4b8379f52a174faa64945bfc61aa52fe}} 
+\index{Neuron@{Neuron}!recieversBegin@{recieversBegin}}
+\index{recieversBegin@{recieversBegin}!Neuron@{Neuron}}
+\doxysubsubsection{\texorpdfstring{recieversBegin()}{recieversBegin()}}
+{\footnotesize\ttfamily std\+::list$<$int$>$\+::iterator Neuron\+::recievers\+Begin (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns an iterator at the beginning of recievers
+
+\begin{DoxyReturn}{Returns}
+recievers.\+begin() 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_neuron_ad093bbd9eb505eb082dda715b1d1c8d8}\label{class_neuron_ad093bbd9eb505eb082dda715b1d1c8d8}} 
+\index{Neuron@{Neuron}!recieversEmpty@{recieversEmpty}}
+\index{recieversEmpty@{recieversEmpty}!Neuron@{Neuron}}
+\doxysubsubsection{\texorpdfstring{recieversEmpty()}{recieversEmpty()}}
+{\footnotesize\ttfamily int Neuron\+::recievers\+Empty (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns 1 if recievers is empty Returns 0 otherwise
+
+\begin{DoxyReturn}{Returns}
+recievers.\+empty() 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_neuron_a52f2bba00eb6721267c71fdda3c948ce}\label{class_neuron_a52f2bba00eb6721267c71fdda3c948ce}} 
+\index{Neuron@{Neuron}!recieversEnd@{recieversEnd}}
+\index{recieversEnd@{recieversEnd}!Neuron@{Neuron}}
+\doxysubsubsection{\texorpdfstring{recieversEnd()}{recieversEnd()}}
+{\footnotesize\ttfamily std\+::list$<$int$>$\+::iterator Neuron\+::recievers\+End (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns an iterator at the end of recievers
+
+\begin{DoxyReturn}{Returns}
+recievers.\+end() 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_neuron_aef5975b23421f0d6254bb1d26c746e1f}\label{class_neuron_aef5975b23421f0d6254bb1d26c746e1f}} 
+\index{Neuron@{Neuron}!recieversFront@{recieversFront}}
+\index{recieversFront@{recieversFront}!Neuron@{Neuron}}
+\doxysubsubsection{\texorpdfstring{recieversFront()}{recieversFront()}}
+{\footnotesize\ttfamily int Neuron\+::recievers\+Front (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Returns the first element of recievers
+
+\begin{DoxyReturn}{Returns}
+recievers.\+front() 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_neuron_a1ec992c4858074fbed334304467cbd80}\label{class_neuron_a1ec992c4858074fbed334304467cbd80}} 
+\index{Neuron@{Neuron}!removeReciever@{removeReciever}}
+\index{removeReciever@{removeReciever}!Neuron@{Neuron}}
+\doxysubsubsection{\texorpdfstring{removeReciever()}{removeReciever()}}
+{\footnotesize\ttfamily void Neuron\+::remove\+Reciever (\begin{DoxyParamCaption}\item[{int}]{i }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Removes all instances of i from recievers if they exits
+
+
+\begin{DoxyParams}{Parameters}
+{\em i} & Value of integer to remove \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Neuron.\+h\item 
+Neuron.\+cpp\end{DoxyCompactItemize}

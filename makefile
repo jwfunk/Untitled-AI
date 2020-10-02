@@ -7,13 +7,13 @@ CXXFLAGS+=-lstdc++
 all:main
 src/Neuron.o: src/Neuron.cpp src/Neuron.h
 
-src/Network.o: src/Network.cpp src/Network.h
+src/Network.o: src/Network.cpp src/Network.h src/defs.h
 
-src/Trainer.o: src/Trainer.cpp src/Trainer.h src/Network.h
+src/Trainer.o: src/Trainer.cpp src/Trainer.h src/Network.h src/defs.h
 
 src/TicTacToe.o: src/TicTacToe.cpp src/TicTacToe.h
 
-src/TicTacToeTrainingMethods.o: src/TicTacToeTrainingMethods.cpp src/TicTacToeTrainingMethods.h
+src/TicTacToeTrainingMethods.o: src/TicTacToeTrainingMethods.cpp src/TicTacToeTrainingMethods.h src/Network.h
 
 clean:
 	-rm src/Neuron.o
