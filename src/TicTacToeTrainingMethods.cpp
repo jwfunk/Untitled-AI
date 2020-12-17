@@ -545,7 +545,7 @@ int TicTacToeTrainingMethods::evaluate(Network &n){
 		Network tn;
 		tn = networkStack.top();
 		networkStack.pop();
-		int move = tn.process(&data) - 10;
+		int move = tn.process(data) - 10;
 		if(!n.dynamic)
 			move -= 9;
 		if(!(c.move(move) < 0)){

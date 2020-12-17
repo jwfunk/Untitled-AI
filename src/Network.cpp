@@ -228,7 +228,6 @@ int Network::addStructure(structure s, int i1, int i2, int i3){
 			neurons[i2].addReciever(loc);
 			input.addReciever(i3);
 			(*this).addNeuron(input);
-			senders.push_front(loc);
 			return 0;
 		}
 		case OR://pulses if i1 or i2 pulses
@@ -246,9 +245,6 @@ int Network::addStructure(structure s, int i1, int i2, int i3){
                         neurons[i2].addReciever(loc);
                         input.addReciever(i3);
                         (*this).addNeuron(input);
-			recievers.push_front(loc);
-                        notTargets.push_front(loc);
-			senders.push_front(loc);
 		        return 0;
 		}
 		case NOT://if i1 pulses negates i3 from pulsing
@@ -308,10 +304,6 @@ int Network::addStructure(structure s, int i1, int i2, int i3){
 			neurons[loc3].addReciever(loc7);
 			neurons[loc4].addReciever(loc7);
 			
-			recievers.push_front(loc1);
-			recievers.push_front(loc2);
-			notTargets.push_front(loc7);
-			senders.push_front(loc7);
 			return 0;
 		}
 		case PAND:
@@ -334,20 +326,17 @@ int Network::addStructure(structure s, int i1, int i2, int i3){
 				return -1;
 			(*this).neurons[i1].addReciever(locs[0]);
 			Neuron n1 = Neuron();
-			n1.addReciever(locs[1]);
 			n1.criticalCharge = 1;
 			n1.pulse = 4;
 			(*this).addNeuron(n1);
 			Neuron n2 = Neuron();
-			n2.addReciever(locs[2]);
 			(*this).addNeuron(n2);
 			Neuron n3 = Neuron();
 			n3.criticalCharge = 4;
-			n3.addReciever(i3);
 			(*this).addNeuron(n3);
-			recievers.push_front(locs[0]);
-			notTargets.push_front(locs[2]);
-			senders.push_front(locs[2]);
+			neurons[locs[0]].addReciever(locs[1]);
+			neurons[locs[1]].addReciever(locs[2]);
+			neurons[locs[2]].addReciever(i3);
 
 		}
 		default:
@@ -476,7 +465,7 @@ void Network::removeOutput(int i){
 	outputs.remove(i);
 }
 
-int Network::process(std::forward_list<int> *given){
+int Network::process(std::forward_list<int> given){
 
 	//Activate input Neurons
 	
@@ -484,9 +473,9 @@ int Network::process(std::forward_list<int> *given){
 	std::queue <int> debug;
 	active = retroactive;
 	retroactive = std::queue<int>();
-	auto givenIterator = given->begin();
+	auto givenIterator = given.begin();
 	for(auto inputsIterator = inputs.begin(); inputsIterator != inputs.end(); ++inputsIterator){
-		if(givenIterator == given->end()){
+		if(givenIterator == given.end()){
 			(*this).clear();//clear the network
 			return -1;
 		}
@@ -496,7 +485,7 @@ int Network::process(std::forward_list<int> *given){
 		}
 		++givenIterator;
 	}
-	if(givenIterator != given->end()){//should have no effect on a dynamic network, check length before changing charges
+	if(givenIterator != given.end()){//should have no effect on a dynamic network, check length before changing charges
 		(*this).clear();//clear the network
 		return -1;
 	}
@@ -504,10 +493,9 @@ int Network::process(std::forward_list<int> *given){
 	int iterations = 0;
 
 	//process the data
-	
 	while(!active.empty()){
 		int i = active.front();
-		if(!(index[i / 32] & 1<<(i % 32)) || i < -1 || i > size)
+		if(i != -1 && (!(index[i / 32] & 1<<(i % 32)) || i < -1 || i > size))
 			throw corruptedNetworkException();
 		active.pop();
 		if(i == -1){

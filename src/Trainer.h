@@ -27,13 +27,8 @@ class Trainer{
 
 	public:
 
-	/**
-	 *Constructs a Trainer with the given evaluate and mutate functions
-	 *
-	 *@param eval Address of the evaluate function
-	 *@param mut  Address of the mutate function
-	 */
-	Trainer(int(*eval)(Network&),int(*mut)(Network&,int)):evaluate(eval),mutate(mut) {}
+	Trainer() = default;
+	Trainer(int i): objective(i) {}
 
 	/**
 	 *Trains the Network using the given evaluate and mutate functions
@@ -41,14 +36,16 @@ class Trainer{
 	 *@param end address of an int variable used to stop training
 	 *@param n Network that will be trained
 	 */
-	void dynamicTraining(int* end,Network& n);
+	void dynamicTraining(int* end,Network& n,int);
+
+	virtual int mutate(Network&,int) = 0;
+	virtual int evaluate(Network&,Network&) = 0;
 
 	private:
 
 	void dynamicTrainingThread(Network*,int*,std::condition_variable*,bool*,std::mutex*,int*,int**);
+	
+	int objective{1};
 
-	int (*evaluate)(Network&);
-
-	int (*mutate)(Network&,int);
 };
 #endif

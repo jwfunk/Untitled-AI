@@ -9,16 +9,19 @@
 #include "Network.h"
 #include <string>
 #include <forward_list>
+#include "Trainer.h"
 
-class TicTacToeTrainingMethods{
+class TicTacToeTrainingMethods: public Trainer{
 	public:
-	static int evaluate(Network&);
+	TicTacToeTrainingMethods() {}
+
+	int evaluate(Network&);
 
 	static void dynamicConvert(std::forward_list<int>&,int);
 
 	static std::string newDynamicTicTacToe(Network&);
 	static int choose(Network&);
-	static int mutate(Network&,int);
+	int mutate(Network&,int);
 	static int recursiveMutate(Network&,int);
 
 	static int noRecievers(Network&,int,int);

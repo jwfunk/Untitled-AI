@@ -13,12 +13,15 @@
 
 int done = TRAINERITERATIONS;
 
-void Trainer::dynamicTraining(int* end,Network &n){
+void Trainer::dynamicTraining(int* end,Network &n, int iterations){
+	done = iterations;
 	int start = 0;
 	bool ready = false;
 	n.dynamic = 1;
 	int nMutations = 0;
-	int nVal = evaluate(n);
+	int nVal = 0;
+	if(objective)
+		nVal = evaluate(n,n);
 	std::thread threads[NUMTHREADS];
 	int* progress[NUMTHREADS];
 	int** progressPointers[NUMTHREADS];
@@ -31,16 +34,16 @@ void Trainer::dynamicTraining(int* end,Network &n){
 		threads[i] = std::thread(&Trainer::dynamicTrainingThread,this,&n,&nVal,&cv,&ready,&lock,&nMutations,progressPointers[i]);
 	}
 	int i = 0;
-	while(i < TRAINERITERATIONS * NUMTHREADS){
+	while(i < iterations * NUMTHREADS){
 		std::cout << "|";
-		int bars = 100;
-		int numbars = TRAINERITERATIONS * NUMTHREADS / bars;//right value is number of bars
+		int bars = 10;
+		int numbars = iterations * NUMTHREADS / bars;//right value is number of bars
 		for(int k = 0;k <= i / numbars;++k)
 			std::cout << "=";
 		for(int k = 0;k < bars - (i / numbars) - 1;++k)
 			std::cout << " ";
 		std::cout << "|  ";
-		std::cout << i << " " << nMutations << " " << nVal << "\r" << std::flush;
+		std::cout << i << " " << nMutations << " " << nVal << "              \r" << std::flush;
 		std::unique_lock<std::mutex> lk(lock);
         	while(!ready) cv.wait(lk);
 		ready = false;
@@ -49,13 +52,14 @@ void Trainer::dynamicTraining(int* end,Network &n){
 			i += *progress[j];
 		if(*end){
 			for(int j = 0;j < NUMTHREADS;++j)
-				*progress[j] = TRAINERITERATIONS;
+				*progress[j] = iterations;
 			*end = -1;
 		}
 	}
 	for(int i = 0;i < NUMTHREADS;++i){
 		threads[i].join();
 	}
+	std::cout << "\nTraining done\n";
 }
 
 void Trainer::dynamicTrainingThread(Network* sourceNetwork,int* sourceVal,std::condition_variable* cv,bool* ready,std::mutex* lock,int* nMutations,int** progress){
@@ -65,27 +69,27 @@ void Trainer::dynamicTrainingThread(Network* sourceNetwork,int* sourceVal,std::c
 	n = *sourceNetwork;
 	num = *nMutations;
 	(*lock).unlock();
-	int nVal = evaluate(n);
+	int nVal = *sourceVal;
 	int i = 0;
 	(*progress) = &i;
-	for(i = 0;i < TRAINERITERATIONS;++i){
+	for(i = 0;i < done;++i){
 		if(num < *nMutations){
 			(*lock).lock();
 			n = *sourceNetwork;
 			num = *nMutations;
 			(*lock).unlock();
-			nVal = evaluate(n);
+			nVal = *sourceVal;
 		}
 		Network c;//need copy constructor
 		c = n;
 		int m;
 		std::string deb = n.info();
 		if((m = mutate(c,-1)) != -1){
-				int cVal = evaluate(c);
+				int cVal = evaluate(c,n);
 				if(cVal == nVal && m == 2){
 					n = c;
 				}
-				if(cVal > nVal){
+				if(cVal > nVal || (!objective && cVal > 0)){
 					(*lock).lock();
 					if(num == *nMutations){//possible adjustment to avoid better mutations being ignored
 						*sourceNetwork = c;

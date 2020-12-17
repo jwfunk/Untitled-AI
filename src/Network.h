@@ -123,7 +123,7 @@ class Network {
 	 *@param Given List of 1's and 0's. Must be the same length as inputs list
 	 *@return The index of the output neuron that pulses or -1
 	 */
-	int process(std::forward_list<int>*);
+	int process(std::forward_list<int>);
 
 	/**
 	 *@return Information of the Network organized in a string

@@ -1,0 +1,26 @@
+//
+//StockTrainingMethods.cpp
+//
+
+#include "StockTrainingMethods.h"
+#include <fstream>
+#include <sstream>
+#include <stdlib.h>
+StockTrainingMethods::StockTrainingMethods(){
+	std::fstream fin;
+
+	fin.open("data/AAPL.csv", std::ios::in);
+
+	std::string temp;
+
+	while(fin >> temp){
+		std::stringstream ss(temp);
+		std::string val;
+		std::getline(ss,val,',');
+		openingVals.push_back(std::atof(val.c_str()));
+		std::getline(ss,val,',');
+		closingVals.push_back(std::atof(val.c_str()));
+	}
+	for(auto it = openingVals.begin();it != openingVals.end();++it)
+		std::cout << *it << "\n";
+}
